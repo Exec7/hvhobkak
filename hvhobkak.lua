@@ -4,6 +4,10 @@ end,function()
 	Derma_Message("need gmod x64 chromium brench, and gmod bin module gmcl_zxcmodule_win64.dll in Steam/steamapps/common/GarrysMod/garrysmod/lua/bin","hvh obkak","ok")
 end)
 require("zxcmodule")
+--need fix
+ded.UpdateClientAnimation=function()end
+
+
 jit.flush()
 
 local hvhobkak                          = {}
