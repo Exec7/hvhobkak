@@ -4,420 +4,198 @@ end,function()
 	Derma_Message("need gmod x64 chromium brench, and gmod bin module gmcl_zxcmodule_win64.dll in Steam/steamapps/common/GarrysMod/garrysmod/lua/bin","hvh obkak","ok")
 end)
 require("zxcmodule")
+ded.Write = nil
+ded.Read = nil
+local exechack_cc_hvh_obkak                          = {}
+local MetaPlayer                        = FindMetaTable("Player")
+local TraceHull                         = util.TraceHull    
+local TraceLine                         = util.TraceLine
+surface.CreateFont("Watermark_Bold", {
+    font = "Verdana",
+    size = 13,
+    weight = 1000,
+    antialias = true,
+    shadow = true
+})
+surface.CreateFont("Watermark_Symbols", {
+    font = "Verdana",
+    size = 14,
+    weight = 500,
+    antialias = true
+})
+surface.CreateFont( "veranda", { font = "Verdana", size = 12, antialias = false, outline = true } )
+surface.CreateFont( "veranda_s", { font = "Verdana", size = 12, antialias = false, shadow = true } )
+surface.CreateFont( "veranda_scr", { font = "Verdana", size = ScreenScale( 9 ), antialias = false, outline = true } )
+surface.CreateFont( "saddamhussein", { font = "Open Sans", size = 64, weight = 1000 } )
+exechack_cc_hvh_obkak.Colors = {}
+for i = 0,255 do  
+    exechack_cc_hvh_obkak.Colors[i] = Color( i, i, i )
+end
+exechack_cc_hvh_obkak.Colors["Red"] = Color( 255, 0, 0)
+exechack_cc_hvh_obkak.accent = Color( 255, 255, 255 )
+local settings = {
 
-jit.flush()
-
-local hvhobkak                          = {}
-local me                                = LocalPlayer()
-
-local global 		                    = _G //table.Copy( _G ) 
-
-local gRunCmd                           = global.RunConsoleCommand
-
-local Angle                             = Angle 
-local Material                          = Material 
-local Vector                            = Vector 
-local Color                             = Color
-local pairs                             = pairs
-local ipairs                            = ipairs 
-local IsValid                           = IsValid
-local tostring                          = tostring 
-local tonumber                          = tonumber
-local CurTime                           = CurTime
-local IsFirstTimePredicted              = IsFirstTimePredicted
-local Lerp                              = Lerp 
-local LerpAngle                         = LerpAngle
-
-local gFindMeta                         = global.FindMetaTable
-
-local MetaPlayer                        = gFindMeta("Player")
-
-local gVgui                             = global.vgui 
-local gGui                              = global.gui
-local gString                           = global.string
-local gTable                            = global.table
-local gUtil                             = global.util
-local gHttp                             = global.http
-local gFile                             = global.file
-local gSurface                          = global.surface
-local gDraw                             = global.draw
-local gRender                           = global.render
-local gCam                              = global.cam
-local gInput                            = global.input
-local gHook                             = global.hook
-local gNet                              = global.net
-local gMath                             = global.math
-local gBit                              = global.bit
-local gEnts                             = global.ents
-local gPlys                             = global.player
-local gGame                             = global.game
-local gEngine                           = global.engine
-local gTeam                             = global.team
-
-local gPlayer                            = global.Player
-local gEntity                            = global.Entity
-
-local team_GetColor                     = gTeam.GetColor 
-local team_GetName                      = gTeam.GetName
-
-local surface_DrawLine                  = gSurface.DrawLine
-local surface_DrawOutlinedRect          = gSurface.DrawOutlinedRect
-local surface_DrawPoly                  = gSurface.DrawPoly
-local surface_DrawRect                  = gSurface.DrawRect
-local surface_DrawText                  = gSurface.DrawText
-local surface_DrawTexturedRect          = gSurface.DrawTexturedRect
-local surface_DrawTexturedRectRotated   = gSurface.DrawTexturedRectRotated
-local surface_GetTextSize               = gSurface.GetTextSize
-local surface_PlaySound                 = gSurface.PlaySound
-local surface_SetAlphaMultiplier        = gSurface.SetAlphaMultiplier
-local surface_SetDrawColor              = gSurface.SetDrawColor
-local surface_SetFont                   = gSurface.SetFont
-local surface_SetMaterial               = gSurface.SetMaterial
-local surface_SetTextColor              = gSurface.SetTextColor
-local surface_SetTextPos                = gSurface.SetTextPos
-local surface_CreateFont                = gSurface.CreateFont
-local surface_DrawCircle                = gSurface.DrawCircle
-
-local math_abs                          = gMath.abs
-local math_Round                        = gMath.Round
-local math_floor                        = gMath.floor
-local math_ceil                         = gMath.ceil
-local math_min                          = gMath.min
-local math_max                          = gMath.max
-local math_Clamp                        = gMath.Clamp
-local math_sin                          = gMath.sin
-local math_cos                          = gMath.cos
-local math_tan                          = gMath.tan
-local math_rad                          = gMath.rad
-local math_Rand                         = gMath.Rand
-local math_randomseed                   = gMath.randomseed
-local math_deg                          = gMath.deg
-local math_atan                         = gMath.atan
-local math_atan2                        = gMath.atan2
-local math_random                       = gMath.random
-local math_huge                         = gMath.huge
-local math_sqrt                         = gMath.sqrt
-
-local math_Approach                     = gMath.Approach
-local math_NormalizeAngle               = gMath.NormalizeAngle
-local math_DistanceSqr                  = gMath.DistanceSqr
-
-local hook_Add                          = gHook.Add
-local hook_Remove                       = gHook.Remove
-local hook_GetTable                     = gHook.GetTable
-local hook_Call                         = gHook.Call
-local hook_Run                          = gHook.Run
-
-local bor                               = gBit.bor
-
-local vgui_Create                       = gVgui.Create
-local vgui_Register                     = gVgui.Register
-
-local table_Count                       = gTable.Count
-local table_Empty                      = gTable.Empty
-local table_concat                      = gTable.concat
-local table_insert                      = gTable.insert
-local table_remove                      = gTable.remove
-local table_RemoveByValue               = gTable.RemoveByValue
-local table_sort                        = gTable.sort
-
-function table.Empty( tbl ) 
-    if tbl == _G then return end
-
-    return table_Empty( tbl )
-end 
-
-local gui_ActivateGameUI                = gGui.ActivateGameUI
-local gui_HideGameUI                    = gGui.HideGameUI
-local gui_OpenURL                       = gGui.OpenURL
-
-local string_find                       = gString.find
-local string_format                     = gString.format
-local string_len                        = gString.len
-local string_sub                        = gString.sub
-local string_lower                      = gString.lower
-local StartsWith                        = gString.StartWith
-local string_ToColor                    = gString.ToColor
-
-local TraceHull                         = gUtil.TraceHull    
-local TraceLine                         = gUtil.TraceLine
-
-local file_Exists                       = gFile.Exists
-local file_Delete                       = gFile.Delete
-local file_Find                         = gFile.Find
-local file_Read                         = gFile.Read
-local file_Write                        = gFile.Write
-
-local cam_Start3D                       = gCam.Start3D
-local cam_End3D                         = gCam.End3D
-local cam_Start3D2D                     = gCam.Start3D2D
-local cam_End3D2D                       = gCam.End3D2D
-local cam_Start2D                       = gCam.Start2D
-local cam_End2D                         = gCam.End2D
-local cam_IgnoreZ                       = gCam.IgnoreZ
-
-local input_IsKeyDown                   = gInput.IsKeyDown
-local input_IsMouseDown                 = gInput.IsMouseDown
-local input_GetCursorPos                = gInput.GetCursorPos
-
-local TickInterval                      = gEngine.TickInterval()
-local ActiveGamemode                    = gEngine.ActiveGamemode()
-
-local render_MaterialOverride           = gRender.MaterialOverride
-local render_SetColorModulation         = gRender.SetColorModulation
-local render_SetBlend                   = gRender.SetBlend
-local render_SuppressEngineLighting     = gRender.SuppressEngineLighting
-local render_DrawBeam                   = gRender.DrawBeam
-local render_SetMaterial                = gRender.SetMaterial
-local render_DrawWireframeBox           = gRender.DrawWireframeBox
-local render_RenderView                 = gRender.RenderView
-local render_Clear                      = gRender.Clear
-local render_Capture                    = gRender.Capture
-local render_CapturePixels              = gRender.CapturePixels
-//render.CapturePixels                    = function() return end
-//render.ReadPixel                        = function( x, y ) return 255, 255, 255, nil end
-
-local player_GetAll                     = gPlys.GetAll
-local ents_GetAll                       = gEnts.GetAll
-
-local gDebugGetInfo                     = global.debug.getinfo
-
-local scrw                              = ScrW()
-local scrh                              = ScrH()
-local scrwc                             = scrw / 2
-local scrhc                             = scrh / 2
-
-hvhobkak.blockedcmds    = { 
-    "bind",
-    "bind_mac",
-    "bindtoggle",
-    "impulse",
-    "+forward",
-    "-forward",
-    "+back",
-    "-back",
-    "+moveleft",
-    "-moveleft",
-    "+moveright",
-    "-moveright",
-    "+left",
-    "-left",
-    "+right",
-    "-right",
-    "cl_yawspeed",
-    "pp_texturize",
-    "poster",
-    "pp_texturize_scale",
-    "mat_texture_limit",
-    "pp_bloom",
-    "pp_dof",
-    "pp_bokeh",
-    "pp_motionblur",
-    "pp_toytown",
-    "pp_stereoscopy",
-    "retry",
-    "connect",
-    "kill",
-    "+voicerecord",
-    "-voicerecord",
-    "startmovie",
-    "record",
-    "disconnect",
 }
+local theme = {
+    ["Frame background"] = Color(20, 10, 30),      
+    ["Frame foreground"] = Color(40, 20, 60),     
+    ["Frame title"] = Color(180, 120, 220),        
+}
+local pLocalPlayer = LocalPlayer()
+local screenWidth = ScrW()
+local screenHeight = ScrH()
+local traceResult = {}
+local traceStruct = { output = traceResult }
+local flTickInterval = engine.TickInterval()
+surface.CreateFont( "DermaSmall", {	
+    font = "Comic Sans MS", 
+    antialias = false,
+    size = 15
+} )
+exechack_cc_hvh_obkak.cached = {}
+exechack_cc_hvh_obkak.Materials = {}
+exechack_cc_hvh_obkak.Materials["Gradient"] = Material("gui/gradient_up", "noclamp smooth")
+exechack_cc_hvh_obkak.Materials["Gradient down"] = Material("gui/gradient_down", "noclamp smooth")
+exechack_cc_hvh_obkak.Materials["Gradient right"] = Material("gui/gradient", "noclamp smooth")
+exechack_cc_hvh_obkak.Materials["Alpha grid"] = Material("gui/alpha_grid.png", "noclamp smooth")
+exechack_cc_hvh_obkak.blur = Material("pp/blurscreen")
+exechack_cc_hvh_obkak.presets = {}
+exechack_cc_hvh_obkak.cfg = { vars = {}, binds = {}, colors = {} }
 
-/*
-if debug and debug.getinfo then
-    function debug.getinfo( func_or_stack, fields )
-        local data = gDebugGetInfo( func_or_stack, fields )
+exechack_cc_hvh_obkak.tesakParticles = {}
+exechack_cc_hvh_obkak.particleCount = 15
 
-        if(func_or_stack == _G.RunConsoleCommand || func_or_stack == _G.debug.getinfo) then
-            data.source = "=[C]"
-            data.what = "C"
-        end
+exechack_cc_hvh_obkak.cfg.vars["Enable aimbot"]              = false
+exechack_cc_hvh_obkak.cfg.binds["Aim on key"]                = 0
 
-        return data
-    end
-end
-*/
+exechack_cc_hvh_obkak.cfg.vars["Silent aim"]                 = true
+exechack_cc_hvh_obkak.cfg.vars["pSilent"]                    = false
 
-// custom funcs
+exechack_cc_hvh_obkak.cfg.vars["Auto reload"]                = false
+exechack_cc_hvh_obkak.cfg.vars["Auto fire"]                  = false
+exechack_cc_hvh_obkak.cfg.vars["Auto reload"]                = false
+exechack_cc_hvh_obkak.cfg.vars["Auto fire"]                  = false
+exechack_cc_hvh_obkak.cfg.vars["Rapid fire"]                 = false
+exechack_cc_hvh_obkak.cfg.vars["Alt Rapid fire"]             = false
 
-local function surface_SimpleRect(x,y,w,h,c)
-    surface_SetDrawColor(c)
-    surface_DrawRect(x,y,w,h)
-end
+exechack_cc_hvh_obkak.cfg.vars["Nospread"]                   = false
+exechack_cc_hvh_obkak.cfg.vars["Force seed"]                 = false
+exechack_cc_hvh_obkak.cfg.vars["Wait for seed"]              = false
+exechack_cc_hvh_obkak.cfg.vars["Norecoil"]                   = false
 
-local function surface_SimpleTexturedRect(x,y,w,h,c,m)
-    surface_SetDrawColor(c)
-    surface_SetMaterial(m)
-    surface_DrawTexturedRect(x,y,w,h)
-end
+exechack_cc_hvh_obkak.cfg.vars["Extrapolation"]              = false
+exechack_cc_hvh_obkak.cfg.vars["last update"]                = false
+exechack_cc_hvh_obkak.cfg.vars["Invalidate activity"]         = false
+exechack_cc_hvh_obkak.cfg.vars["Bone fix"]                   = false
+exechack_cc_hvh_obkak.cfg.vars["Update Client Anim fix"]     = false
+exechack_cc_hvh_obkak.cfg.vars["Wait for simulation"]    = false
+exechack_cc_hvh_obkak.cfg.vars["Disable interpolation"]      = true
+exechack_cc_hvh_obkak.cfg.vars["Disable Sequence interpolation"] = true
 
-local function surface_SimpleText(x,y,s,c)
-    surface_SetTextColor(c)
-	surface_SetTextPos(x,y) 
-	surface_DrawText(s) 
-end
+exechack_cc_hvh_obkak.cfg.vars["Target selection"]           = 2 
+exechack_cc_hvh_obkak.cfg.vars["Ignores-Friends"]            = false
+exechack_cc_hvh_obkak.cfg.vars["Target-Priority-Only"]       = false
+exechack_cc_hvh_obkak.cfg.vars["Ignores-Steam friends"]      = false
+exechack_cc_hvh_obkak.cfg.vars["Ignores-Teammates"]          = false
+exechack_cc_hvh_obkak.cfg.vars["Ignores-Admins"]             = false
+exechack_cc_hvh_obkak.cfg.vars["Ignores-Bots"]               = false
+exechack_cc_hvh_obkak.cfg.vars["Ignores-Frozen"]             = false
+exechack_cc_hvh_obkak.cfg.vars["Ignores-Nodraw"]             = false
+exechack_cc_hvh_obkak.cfg.vars["Ignores-Nocliping"]          = false
+exechack_cc_hvh_obkak.cfg.vars["Ignores-God time"]           = false
+exechack_cc_hvh_obkak.cfg.vars["Ignores-Head unhitable"]     = false
+exechack_cc_hvh_obkak.cfg.vars["Ignores-Driver"]             = false
+exechack_cc_hvh_obkak.cfg.vars["Wallz"]                      = false
 
-local function SmoothMaterial(path)
-    return Material( path, "noclamp smooth" )
-end
+exechack_cc_hvh_obkak.cfg.vars["Max targets"]                = 0
+exechack_cc_hvh_obkak.cfg.vars["Max distance"]               = 4096
 
-// fonts
+exechack_cc_hvh_obkak.cfg.vars["Hitbox selection"]           = 1
+exechack_cc_hvh_obkak.cfg.vars["Hitscan"]                    = false
+exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Head"]        = false
+exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Chest"]       = false
+exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Stomach"]     = false
+exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Arms"]        = false
+exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Legs"]        = false
+exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Generic"]     = false
+exechack_cc_hvh_obkak.cfg.vars["Hitscan mode"]               = 1
+exechack_cc_hvh_obkak.cfg.vars["Multipoint"]                 = false
+exechack_cc_hvh_obkak.cfg.vars["Multipoint scale"]           = 0.8
+exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Head"]     = false
+exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Chest"]    = false
+exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Stomach"]  = false
+exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Arms"]     = false
+exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Legs"]     = false
+exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Generic"]  = false
 
-surface_CreateFont( "tbfont", {	font = "Open Sans", extended = false,size = 15,weight = 100,additive = false,} )
-surface_CreateFont( "veranda", { font = "Verdana", size = 12, antialias = false, outline = true } )
-surface_CreateFont( "veranda_s", { font = "Verdana", size = 12, antialias = false, shadow = true } )
-surface_CreateFont( "veranda_scr", { font = "Verdana", size = ScreenScale( 9 ), antialias = false, outline = true } )
+exechack_cc_hvh_obkak.cfg.vars["Adjust tickcount"]           = false
+exechack_cc_hvh_obkak.cfg.vars["Gun switch"]                 = false
+exechack_cc_hvh_obkak.cfg.vars["Auto detonator"]             = false
+exechack_cc_hvh_obkak.cfg.vars["AutoD distance"]             = 96
 
-hvhobkak.Colors = {}
+exechack_cc_hvh_obkak.cfg.vars["Backtrack"]                  = false
+exechack_cc_hvh_obkak.cfg.vars["Always backtrack"]           = false
+exechack_cc_hvh_obkak.cfg.vars["Backtrack mode"]             = 1
+exechack_cc_hvh_obkak.cfg.vars["Sampling interval"]          = 0
+exechack_cc_hvh_obkak.cfg.vars["Backtrack time"]             = 200
 
-for i = 0,255 do  // 50 shades of grey
-    hvhobkak.Colors[i] = Color( i, i, i )
-end
+exechack_cc_hvh_obkak.cfg.vars["Aimbot smoothing"]           = false
+exechack_cc_hvh_obkak.cfg.vars["Smoothing"]                  = 0.05
 
-hvhobkak.Colors["Red"] = Color( 255, 0, 0, 255 )
+exechack_cc_hvh_obkak.cfg.vars["Fov limit"]                  = false
+exechack_cc_hvh_obkak.cfg.vars["Fov dynamic"]                = false
+exechack_cc_hvh_obkak.cfg.vars["Aimbot FOV"]                 = 30
+exechack_cc_hvh_obkak.cfg.vars["Show FOV"]                   = false
+exechack_cc_hvh_obkak.cfg.colors["Show FOV"]                 = "255 255 0 255"
+exechack_cc_hvh_obkak.cfg.colors["WaterMarkColor"]           = "255 255 255 255"
 
-hvhobkak.accent = Color( 255, 255, 255 )
-
-/*
-    Cached shit 
-*/
-
-hvhobkak.cached = {}
-
-hvhobkak.Materials = {}
-
-hvhobkak.Materials["Gradient"] = SmoothMaterial("gui/gradient_up")
-hvhobkak.Materials["Gradient down"] = SmoothMaterial("gui/gradient_down")
-hvhobkak.Materials["Gradient right"] = SmoothMaterial("gui/gradient")
-hvhobkak.Materials["Alpha grid"] = SmoothMaterial("gui/alpha_grid.png")
-hvhobkak.blur = Material("pp/blurscreen")
-
-// CONFIG 
-
-hvhobkak.presets = {}
-hvhobkak.cfg = { vars = {}, binds = {}, colors = {} }
-
-hvhobkak.cfg.vars["Enable aimbot"]              = false
-hvhobkak.cfg.binds["Aim on key"]                = 0
-
-hvhobkak.cfg.vars["Silent aim"]                 = true
-hvhobkak.cfg.vars["pSilent"]                    = false
-
-hvhobkak.cfg.vars["Auto reload"]                = false
-hvhobkak.cfg.vars["Auto fire"]                  = false
-hvhobkak.cfg.vars["Rapid fire"]                 = false
-hvhobkak.cfg.vars["Alt Rapid fire"]             = false
-hvhobkak.cfg.vars["Bullet time"]                = false
-
-hvhobkak.cfg.vars["Nospread"]                   = false
-hvhobkak.cfg.vars["Force seed"]                 = false
-hvhobkak.cfg.vars["Wait for seed"]              = false
-hvhobkak.cfg.vars["Norecoil"]                   = false
-
-hvhobkak.cfg.vars["Extrapolation"]              = false
-hvhobkak.cfg.vars["last update"]                = false
-hvhobkak.cfg.vars["Disable animations"]         = false
-hvhobkak.cfg.vars["Bone fix"]                   = false
-hvhobkak.cfg.vars["Update Client Anim fix"]     = false
-hvhobkak.cfg.vars["Wait for simtime update"]    = false
-hvhobkak.cfg.vars["Disable interpolation"]      = true
-hvhobkak.cfg.vars["Disable Sequence interpolation"] = true
-
-hvhobkak.cfg.vars["Target selection"]           = 2
-hvhobkak.cfg.vars["Ignores-Friends"]            = false
-hvhobkak.cfg.vars["Ignores-Steam friends"]      = false
-hvhobkak.cfg.vars["Ignores-Teammates"]          = false
-hvhobkak.cfg.vars["Ignores-Admins"]             = false
-hvhobkak.cfg.vars["Ignores-Bots"]               = false
-hvhobkak.cfg.vars["Ignores-Frozen"]             = false
-hvhobkak.cfg.vars["Ignores-Nodraw"]             = false
-hvhobkak.cfg.vars["Ignores-Nocliping"]          = false
-hvhobkak.cfg.vars["Ignores-God time"]           = false
-hvhobkak.cfg.vars["Ignores-Head unhitable"]     = false
-hvhobkak.cfg.vars["Ignores-Driver"]             = false
-hvhobkak.cfg.vars["Wallz"]                      = false
-hvhobkak.cfg.vars["Max targets"]                = 0
-
-hvhobkak.cfg.vars["Hitbox selection"]           = 1
-hvhobkak.cfg.vars["Hitscan"]                    = false
-hvhobkak.cfg.vars["Hitscan groups-Head"]        = false
-hvhobkak.cfg.vars["Hitscan groups-Chest"]       = false
-hvhobkak.cfg.vars["Hitscan groups-Stomach"]     = false
-hvhobkak.cfg.vars["Hitscan groups-Arms"]        = false
-hvhobkak.cfg.vars["Hitscan groups-Legs"]        = false
-hvhobkak.cfg.vars["Hitscan groups-Generic"]     = false
-hvhobkak.cfg.vars["Hitscan mode"]               = 1
-hvhobkak.cfg.vars["Multipoint"]                 = false
-hvhobkak.cfg.vars["Multipoint scale"]           = 0.8
-hvhobkak.cfg.vars["Multipoint groups-Head"]     = false
-hvhobkak.cfg.vars["Multipoint groups-Chest"]    = false
-hvhobkak.cfg.vars["Multipoint groups-Stomach"]  = false
-hvhobkak.cfg.vars["Multipoint groups-Arms"]     = false
-hvhobkak.cfg.vars["Multipoint groups-Legs"]     = false
-hvhobkak.cfg.vars["Multipoint groups-Generic"]  = false
-
-hvhobkak.cfg.vars["Adjust tickcount"]           = false
-hvhobkak.cfg.vars["Gun switch"]                 = false
-hvhobkak.cfg.vars["Auto detonator"]             = false
-hvhobkak.cfg.vars["AutoD distance"]             = 96
-
-hvhobkak.cfg.vars["Backtrack"]                  = false
-hvhobkak.cfg.vars["Always backtrack"]           = false
-hvhobkak.cfg.vars["Backtrack mode"]             = 1
-hvhobkak.cfg.vars["Sampling interval"]          = 0
-hvhobkak.cfg.vars["Backtrack time"]             = 200
-
-hvhobkak.cfg.vars["Aimbot smoothing"]           = false
-hvhobkak.cfg.vars["Smoothing"]                  = 0.05
-
-hvhobkak.cfg.vars["Fov limit"]                  = false
-hvhobkak.cfg.vars["Fov dynamic"]                = false
-hvhobkak.cfg.vars["Aimbot FOV"]                 = 30
-hvhobkak.cfg.vars["Show FOV"]                   = false
-hvhobkak.cfg.colors["Show FOV"]                 = "255 255 0 255"
-
-hvhobkak.cfg.vars["Aimbot snapline"]                   = false
-hvhobkak.cfg.colors["Aimbot snapline"]                 = "255 128 0 255"
-hvhobkak.cfg.vars["Aimbot marker"]                   = false
-hvhobkak.cfg.colors["Aimbot marker"]                 = "255 255 255 255"
+exechack_cc_hvh_obkak.cfg.vars["Aimbot snapline"]                   = false
+exechack_cc_hvh_obkak.cfg.colors["Aimbot snapline"]                 = "255 128 0 255"
+exechack_cc_hvh_obkak.cfg.vars["Aimbot marker"]                   = false
+exechack_cc_hvh_obkak.cfg.colors["Aimbot marker"]                 = "255 255 255 255"
 
 
 
-hvhobkak.cfg.vars["Trigger bot"]                = false
-hvhobkak.cfg.binds["Trigger bot"]               = 0
+exechack_cc_hvh_obkak.cfg.vars["Trigger bot"]                = false
+exechack_cc_hvh_obkak.cfg.binds["Trigger bot"]               = 0
 
-hvhobkak.cfg.vars["Prop aimbot"]                = false
-hvhobkak.cfg.vars["PA thrower"]                 = false
-hvhobkak.cfg.vars["PA thrower dist"]            = 128
-hvhobkak.cfg.vars["Prop max simtime"]           = 4
+exechack_cc_hvh_obkak.cfg.vars["Prop aimbot"]                = false
+exechack_cc_hvh_obkak.cfg.vars["PA thrower"]                 = false
+exechack_cc_hvh_obkak.cfg.vars["PA thrower dist"]            = 128
+exechack_cc_hvh_obkak.cfg.vars["Prop max simtime"]           = 4
+exechack_cc_hvh_obkak.cfg.vars["Sync mode"]                  = 1
 
-hvhobkak.cfg.vars["Crossbow prediction"]        = false
-hvhobkak.cfg.vars["Smg grenade prediction"]     = false
+exechack_cc_hvh_obkak.cfg.vars["Crossbow prediction"]        = false
+exechack_cc_hvh_obkak.cfg.vars["Smg grenade prediction"]     = false
 
-hvhobkak.cfg.vars["Simulation limit"]           = 4
+exechack_cc_hvh_obkak.cfg.vars["Simulation limit"]           = 4
 
-hvhobkak.cfg.vars["Baim low health"]            = false
-hvhobkak.cfg.vars["Baim health"]                = 65
+exechack_cc_hvh_obkak.cfg.vars["Baim low health"]            = false
+exechack_cc_hvh_obkak.cfg.vars["Baim health"]                = 65
 
-hvhobkak.cfg.vars["Auto healthkit"]             = false
-hvhobkak.cfg.vars["Healthkit-Self heal"]        = false
-hvhobkak.cfg.vars["Healthkit-Heal closest"]     = false
+exechack_cc_hvh_obkak.cfg.vars["Auto healthkit"]             = false
+exechack_cc_hvh_obkak.cfg.vars["Healthkit-Self heal"]        = false
+exechack_cc_hvh_obkak.cfg.vars["Healthkit-Heal closest"]     = false
 
-hvhobkak.cfg.vars["Knifebot"]                   = false
-hvhobkak.cfg.vars["Knifebot mode"]              = 1
-hvhobkak.presets["Knifebot mode"] = { "Damage", "Fast", "Fatal" }
+exechack_cc_hvh_obkak.cfg.vars["Knifebot"]                   = false
+exechack_cc_hvh_obkak.cfg.vars["Knifebot mode"]              = 1
+exechack_cc_hvh_obkak.presets["Knifebot mode"] = { "Damage", "Fast", "Fatal" }
 
-hvhobkak.cfg.vars["Facestab"]                   = false
+exechack_cc_hvh_obkak.cfg.vars["Facestab"]                   = false
 
-hvhobkak.cfg.vars["Projectile aimbot"]          = false
+exechack_cc_hvh_obkak.cfg.vars["Knifebot Range"]             = false
 
-hvhobkak.cfg.vars["Forwardtrack"]               = false
-hvhobkak.cfg.vars["Forwardtrack time"]          = 100
+exechack_cc_hvh_obkak.cfg.vars["Projectile aimbot"]          = false
+exechack_cc_hvh_obkak.cfg.vars["Predict fist"]               = false
+exechack_cc_hvh_obkak.cfg.vars["Debug mode"]                 = true
 
+exechack_cc_hvh_obkak.cfg.vars["Forwardtrack"]               = false
+exechack_cc_hvh_obkak.cfg.vars["Forwardtrack time"]          = 100
 
+exechack_cc_hvh_obkak.cfg.vars["NoAimLag"] = false
 
+exechack_cc_hvh_obkak.cfg.vars["Lag fix"]                    = false
+exechack_cc_hvh_obkak.cfg.vars["Backshoot"]                  = false
 
 
 
@@ -425,58 +203,76 @@ hvhobkak.cfg.vars["Forwardtrack time"]          = 100
 
 // Resolver 
 
-hvhobkak.cfg.vars["Resolver"] = false
-hvhobkak.cfg.vars["Yaw mode"] = 1
-hvhobkak.cfg.vars["Pitch resolver"] = false
-hvhobkak.cfg.vars["Taunt resolver"] = false
+exechack_cc_hvh_obkak.cfg.vars["left"] = false
+exechack_cc_hvh_obkak.cfg.vars["right"] = false
+exechack_cc_hvh_obkak.cfg.vars["pitchres"] = false
+
+exechack_cc_hvh_obkak.cfg.vars["Resolver"] = false
+exechack_cc_hvh_obkak.cfg.vars["Yaw mode"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Pitch resolver"] = false
+exechack_cc_hvh_obkak.cfg.vars["Taunt resolver"] = false
+exechack_cc_hvh_obkak.cfg.vars["Memory bullets"] = false
 
 
 
-hvhobkak.cfg.vars["Invert first shot"] = false
-hvhobkak.cfg.vars["Resolver max misses"] = 2
 
+exechack_cc_hvh_obkak.cfg.vars["Invert first shot"] = false
+exechack_cc_hvh_obkak.cfg.vars["Resolver max misses"] = 2
+exechack_cc_hvh_obkak.cfg.vars["add delta"] = 0
+exechack_cc_hvh_obkak.cfg.vars["add pitch"] = 0
 
 // Tickbase 
-hvhobkak.cfg.vars["Tickbase shift"] = false
-hvhobkak.cfg.vars["Wait for unlag"] = false
+exechack_cc_hvh_obkak.cfg.vars["Tickbase shift"] = false
+exechack_cc_hvh_obkak.cfg.vars["Wait for unlag"] = false
 
-hvhobkak.cfg.vars["Fakelag comp"] = 2
+exechack_cc_hvh_obkak.cfg.vars["Fakelag comp"] = 2
 
-hvhobkak.cfg.vars["Skip fire tick"] = false
-hvhobkak.cfg.vars["Double tap"] = false
-hvhobkak.cfg.vars["Dodge projectiles"] = false
-hvhobkak.cfg.vars["Passive recharge"] = false
+exechack_cc_hvh_obkak.cfg.vars["Skip fire tick"] = false
+exechack_cc_hvh_obkak.cfg.vars["Double tap"] = false
+exechack_cc_hvh_obkak.cfg.vars["Dodge projectiles"] = false
+exechack_cc_hvh_obkak.cfg.vars["Passive recharge"] = false
 
-hvhobkak.cfg.vars["Auto recharge"] = false
-hvhobkak.cfg.vars["Wait for charge"] = false
-hvhobkak.cfg.vars["Warp on peek"] = false
+exechack_cc_hvh_obkak.cfg.vars["Auto recharge"] = false
+exechack_cc_hvh_obkak.cfg.vars["Wait for charge"] = false
+exechack_cc_hvh_obkak.cfg.vars["Warp on peek"] = false
 
-hvhobkak.cfg.vars["Charge ticks"] = 48
-hvhobkak.cfg.vars["Shift ticks"] = 48
-hvhobkak.cfg.binds["Tickbase shift"] = 0
-hvhobkak.cfg.binds["Auto recharge"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Charge ticks"] = 48
+exechack_cc_hvh_obkak.cfg.vars["Shift ticks"] = 48
+exechack_cc_hvh_obkak.cfg.binds["Tickbase shift"] = 0
+exechack_cc_hvh_obkak.cfg.binds["Auto recharge"] = 0
 
 
-
-hvhobkak.cfg.vars["Anti aim"]                   = false
-hvhobkak.cfg.vars["Yaw randomisation"]          = false
-
-hvhobkak.cfg.vars["Custom real"]                = 75
-hvhobkak.cfg.vars["Custom fake"]                = 180
-hvhobkak.cfg.vars["Custom pitch"]               = 89
-hvhobkak.cfg.vars["Spin speed"]                 = 30
-hvhobkak.cfg.vars["LBY min delta"]              = 100
-hvhobkak.cfg.vars["LBY break delta"]            = 120
-hvhobkak.cfg.vars["Sin delta"]                  = 89
-hvhobkak.cfg.vars["Sin add"]                    = 11
-hvhobkak.cfg.vars["Jitter delta"]               = 45
+exechack_cc_hvh_obkak.cfg.vars["Engine pred"] = false
+exechack_cc_hvh_obkak.cfg.vars["GetManipulateInterp"] = false
+exechack_cc_hvh_obkak.cfg.vars["LerpTime"] = false
+exechack_cc_hvh_obkak.cfg.vars["LagCompensation"] = false
 
 
 
-hvhobkak.cfg.vars["Yaw base"]                   = 1
-hvhobkak.presets["Yaw base"] = { "Viewangles", "At targets" }
-hvhobkak.cfg.vars["Yaw"]                        = 1
-hvhobkak.presets["Yaw"] = { 
+
+exechack_cc_hvh_obkak.cfg.vars["Anti aim"]                   = false
+exechack_cc_hvh_obkak.cfg.vars["Yaw randomisation"]          = false
+
+exechack_cc_hvh_obkak.cfg.vars["Custom real"]                = 75
+exechack_cc_hvh_obkak.cfg.vars["Custom fake"]                = 180
+exechack_cc_hvh_obkak.cfg.vars["Fake switch"]                = 180
+exechack_cc_hvh_obkak.cfg.vars["Real switch"]                = 180
+exechack_cc_hvh_obkak.cfg.vars["Custom pitch"]               = 89
+exechack_cc_hvh_obkak.cfg.vars["Spin speed"]                 = 30
+exechack_cc_hvh_obkak.cfg.vars["LBY min delta"]              = 100
+exechack_cc_hvh_obkak.cfg.vars["LBY break delta"]            = 120
+exechack_cc_hvh_obkak.cfg.vars["Sin delta"]                  = 89
+exechack_cc_hvh_obkak.cfg.vars["Sin add"]                    = 11
+exechack_cc_hvh_obkak.cfg.vars["Jitter delta"]               = 45
+exechack_cc_hvh_obkak.cfg.vars["Low delta value"]            = 0
+exechack_cc_hvh_obkak.cfg.vars["Switch time"]                = 0.6
+
+exechack_cc_hvh_obkak.cfg.vars["Anti-BruteForce"]            = false
+
+exechack_cc_hvh_obkak.cfg.vars["Yaw base"]                   = 1
+exechack_cc_hvh_obkak.presets["Yaw base"] = { "Viewangles", "At targets" }
+exechack_cc_hvh_obkak.cfg.vars["Yaw"]                        = 1
+exechack_cc_hvh_obkak.presets["Yaw"] = { 
     "Backward", "Fake Forward", "Legit Delta",
     "Sideways", "Half Sideways",
     "Fake Spin", "LBY", "LBY Breaker",
@@ -484,432 +280,483 @@ hvhobkak.presets["Yaw"] = {
     "Fake Jitter", "Kappa Jitter", "Abu Jitter",
     "Satanic Spin", "Custom",
     "Hand Block", "Low delta",
-    "Fake Switch", "Tank AA",
+    "Desync", "Tank AA", "Fake switch",
+    "Dolphin Mode", "Freeze Frame",
+    "Invisible Man", "Matrix Glitch",
+    "Unhittable", "Unhittable2"
 }
-hvhobkak.cfg.vars["Pitch"]                      = 1
-hvhobkak.presets["Pitch"] = { 
+exechack_cc_hvh_obkak.cfg.vars["Pitch"]                      = 1
+exechack_cc_hvh_obkak.presets["Pitch"] = { 
     "Down", "Up", "Zero", 
     "Fake down", "Fake fake down", 
-    "Fake jitter", "Kizaru", 
-    "Custom"
+    "Fake jitter","Fake down break", "Kizaru", 
+    "Fake zero", "Fake Up jitter",
+    "Up jitter","Flicker +Up","Fucker Flicker +Up",
+    "Custom pitch"
 }
-hvhobkak.cfg.vars["Edge"]                       = 1
+exechack_cc_hvh_obkak.cfg.vars["Edge"]                       = 1
 
-hvhobkak.cfg.binds["Anti aim"]                   = 0
-
-
+exechack_cc_hvh_obkak.cfg.binds["Anti aim"]                   = 0
 
 
 
 
 
-hvhobkak.cfg.vars["Antiaim material"] = 1
-hvhobkak.cfg.vars["Antiaim fullbright"] = false
-hvhobkak.cfg.colors["Real chams"] = "128 128 255 255"
+
+
+exechack_cc_hvh_obkak.cfg.vars["Antiaim material"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Antiaim fullbright"] = false
+exechack_cc_hvh_obkak.cfg.colors["Real chams"] = "128 128 255 255"
 
 // Anim breakers 
 
-hvhobkak.cfg.vars["Taunt spam"] = false
-hvhobkak.cfg.vars["Taunt"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Taunt spam"] = false
+exechack_cc_hvh_obkak.cfg.vars["Taunt"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Taunt 2"] = false
+exechack_cc_hvh_obkak.cfg.vars["Taunt 2.1"] = 1
 
-hvhobkak.cfg.vars["Handjob"] = false
-hvhobkak.cfg.vars["Handjob mode"] = 1
-
-
-hvhobkak.cfg.vars["Micromovement"] = false
-hvhobkak.cfg.vars["On shot aa"] = false
-hvhobkak.cfg.vars["Freestanding"] = false
-hvhobkak.cfg.binds["freestand"] = 0
-hvhobkak.cfg.vars["Inverter"] = false
-hvhobkak.cfg.binds["Inverter"] = 0
-hvhobkak.cfg.vars["Anti aim chams"] = false
-
-hvhobkak.cfg.vars["Angle arrows"] = false
+exechack_cc_hvh_obkak.cfg.vars["Handjob"] = false
+exechack_cc_hvh_obkak.cfg.vars["Handjob mode"] = 1
 
 
+exechack_cc_hvh_obkak.cfg.vars["Micromovement"] = false
+exechack_cc_hvh_obkak.cfg.vars["On shot aa"] = false
+exechack_cc_hvh_obkak.cfg.vars["Freestanding"] = false
+exechack_cc_hvh_obkak.cfg.binds["freestand"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Inverter"] = false
+exechack_cc_hvh_obkak.cfg.binds["Inverter"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Anti aim chams"] = false
+
+exechack_cc_hvh_obkak.cfg.vars["Angle arrows"] = false
 
 
 
 
-hvhobkak.cfg.vars["Free standing"] = false
-hvhobkak.cfg.vars["Dancer"] = false
-    hvhobkak.cfg.vars["Dance"] = 1
-    hvhobkak.cfg.vars["Arm breaker"] = false
-    hvhobkak.cfg.vars["Arm breaker mode"] = 1
-    hvhobkak.cfg.vars["Fake duck"] = false
-    hvhobkak.cfg.vars["Fake duck mode"] = 1
-    hvhobkak.cfg.vars["Fake walk"] = false
-    hvhobkak.cfg.vars["Crimwalk"] = false
 
-    hvhobkak.cfg.vars["Air crouch"] = false
-    hvhobkak.cfg.vars["Air crouch mode"] = 1
+
+exechack_cc_hvh_obkak.cfg.vars["Free standing"] = false
+exechack_cc_hvh_obkak.cfg.vars["Dancer"] = false
+    exechack_cc_hvh_obkak.cfg.vars["Dance"] = 1
+    exechack_cc_hvh_obkak.cfg.vars["Arm breaker"] = false
+    exechack_cc_hvh_obkak.cfg.vars["Arm breaker mode"] = 1
+    exechack_cc_hvh_obkak.cfg.vars["Fake duck"] = false
+    exechack_cc_hvh_obkak.cfg.vars["Fake duck mode"] = 1
+    exechack_cc_hvh_obkak.cfg.vars["Fake walk"] = false
+    exechack_cc_hvh_obkak.cfg.vars["Crimwalk"] = false
+
+    exechack_cc_hvh_obkak.cfg.vars["Air crouch"] = false
+    exechack_cc_hvh_obkak.cfg.vars["Air crouch mode"] = 1
 
 // fake lag
-hvhobkak.cfg.vars["Fake lag"] = false
+exechack_cc_hvh_obkak.cfg.vars["Fake lag"] = false
 
-hvhobkak.cfg.vars["Fake lag options-Disable on ladder"] = false
-hvhobkak.cfg.vars["Fake lag options-Disable in attack"] = false
-hvhobkak.cfg.vars["Fake lag options-On peek"] = false
-hvhobkak.cfg.vars["Fake lag options-Randomise"] = false
+exechack_cc_hvh_obkak.cfg.vars["Fake lag options-Disable on ladder"] = false
+exechack_cc_hvh_obkak.cfg.vars["Fake lag options-Disable in attack"] = false
+exechack_cc_hvh_obkak.cfg.vars["Fake lag options-On peek"] = false
+exechack_cc_hvh_obkak.cfg.vars["Fake lag options-Randomise"] = false
 
-hvhobkak.cfg.vars["Lag mode"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Lag mode"] = 1
 
-hvhobkak.cfg.vars["Lag limit"] = 1
-hvhobkak.cfg.vars["Lag randomisation"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Lag limit"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Lag randomisation"] = 1
 
-hvhobkak.cfg.vars["Fake duck"] = false
-hvhobkak.cfg.binds["Fake duck"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Fake duck"] = false
+exechack_cc_hvh_obkak.cfg.binds["Fake duck"] = 0
 
-hvhobkak.cfg.vars["Air lag duck"] = false
-hvhobkak.cfg.vars["Jesus lag"] = false
+exechack_cc_hvh_obkak.cfg.vars["Air lag duck"] = false
+exechack_cc_hvh_obkak.cfg.vars["Jesus lag"] = false
+
+exechack_cc_hvh_obkak.cfg.vars["Indicators"] = false
 
 
-
-hvhobkak.cfg.vars["Allah fly"] = false
+exechack_cc_hvh_obkak.cfg.vars["Allah fly"] = false
 
     
 // Sequence manip
-hvhobkak.cfg.vars["Sequence manip"] = false
-hvhobkak.cfg.vars["OutSequence"] = 500
-hvhobkak.cfg.binds["Sequence manip"] = 0
-hvhobkak.cfg.vars["Sequence min random"] = false
-hvhobkak.cfg.vars["Sequence min"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Sequence manip"] = false
+exechack_cc_hvh_obkak.cfg.vars["OutSequence"] = 500
+exechack_cc_hvh_obkak.cfg.binds["Sequence manip"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Sequence min random"] = false
+exechack_cc_hvh_obkak.cfg.vars["Sequence min"] = 1
 
-hvhobkak.cfg.binds["Animation freezer"] = 0
-hvhobkak.cfg.vars["Animation freezer"] = false
+exechack_cc_hvh_obkak.cfg.binds["Animation freezer"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Animation freezer"] = false
 
-hvhobkak.cfg.vars["Freeze on peek"] = false
+exechack_cc_hvh_obkak.cfg.vars["Freeze on peek"] = false
 
-hvhobkak.cfg.vars["Allah walk"] = false
-hvhobkak.cfg.binds["allahwalk"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Allah walk"] = false
+exechack_cc_hvh_obkak.cfg.binds["allahwalk"] = 0
 
 // Animfix 
 
-hvhobkak.cfg.vars["Interpolation-Disable interpolation"] = false
-hvhobkak.cfg.vars["Interpolation-Fast sequences"] = false
+exechack_cc_hvh_obkak.cfg.vars["Interpolation-Disable interpolation"] = false
+exechack_cc_hvh_obkak.cfg.vars["Interpolation-Fast sequences"] = false
 
 
 
 
 
     // ESP
-    hvhobkak.cfg.vars["Bounding box"] = false
+    exechack_cc_hvh_obkak.cfg.vars["Bounding box"] = false
 
 
 
 // Movement
-hvhobkak.cfg.vars["Bhop"] = false
-hvhobkak.cfg.vars["Sprint"] = false
-hvhobkak.cfg.vars["Safe hop"] = false
-hvhobkak.cfg.vars["Edge jump"] = false
-hvhobkak.cfg.vars["Air duck"] = false
+exechack_cc_hvh_obkak.cfg.vars["Bhop"] = false
+exechack_cc_hvh_obkak.cfg.vars["Sprint"] = false
+exechack_cc_hvh_obkak.cfg.vars["Safe hop"] = false
+exechack_cc_hvh_obkak.cfg.vars["Edge jump"] = false
+exechack_cc_hvh_obkak.cfg.vars["Air duck"] = false
 
-hvhobkak.cfg.vars["Air strafer"] = false
-hvhobkak.cfg.vars["Strafe mode"] = 1
-hvhobkak.cfg.vars["Ground strafer"] = false
-hvhobkak.cfg.vars["Fast stop"] = false
-hvhobkak.cfg.vars["Z Hop"] = false
-hvhobkak.cfg.binds["Z Hop"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Air strafer"] = false
+exechack_cc_hvh_obkak.cfg.vars["Strafe mode"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Ground strafer"] = false
+exechack_cc_hvh_obkak.cfg.vars["Fast stop"] = false
+exechack_cc_hvh_obkak.cfg.vars["Z Hop"] = false
+exechack_cc_hvh_obkak.cfg.binds["Z Hop"] = 0
 
-hvhobkak.cfg.vars["Water jump"] = false
+exechack_cc_hvh_obkak.cfg.vars["Water jump"] = false
 
-hvhobkak.cfg.vars["Auto peak"] = false
-hvhobkak.cfg.binds["Auto peak"] = 0
-hvhobkak.cfg.vars["Auto peak tp"] = false
+exechack_cc_hvh_obkak.cfg.vars["Auto peak"] = false
+exechack_cc_hvh_obkak.cfg.binds["Auto peak"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Auto peak tp"] = false
 
-hvhobkak.cfg.vars["Circle strafe"] = false
-hvhobkak.cfg.binds["Circle strafe"] = 0
-hvhobkak.cfg.vars["CStrafe ticks"] = 64
-hvhobkak.cfg.vars["CStrafe angle step"] = 1
-hvhobkak.cfg.vars["CStrafe angle max step"] = 10
-hvhobkak.cfg.vars["CStrafe ground diff"] = 10
+exechack_cc_hvh_obkak.cfg.vars["Circle strafe"] = false
+exechack_cc_hvh_obkak.cfg.binds["Circle strafe"] = 0
+exechack_cc_hvh_obkak.cfg.vars["CStrafe ticks"] = 64
+exechack_cc_hvh_obkak.cfg.vars["CStrafe angle step"] = 1
+exechack_cc_hvh_obkak.cfg.vars["CStrafe angle max step"] = 10
+exechack_cc_hvh_obkak.cfg.vars["CStrafe ground diff"] = 10
 
-hvhobkak.cfg.vars["Cvar name"] = ""
-hvhobkak.cfg.vars["Cvar int"] = "1"
-hvhobkak.cfg.vars["Cvar str"] = ""
-hvhobkak.cfg.vars["Cvar mode"] = 1
-hvhobkak.cfg.vars["Cvar flag"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Cvar name"] = ""
+exechack_cc_hvh_obkak.cfg.vars["Cvar int"] = "1"
+exechack_cc_hvh_obkak.cfg.vars["Cvar str"] = ""
+exechack_cc_hvh_obkak.cfg.vars["Cvar mode"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Cvar flag"] = 1
 
-hvhobkak.cfg.vars["Net Convar"] = ""
-hvhobkak.cfg.vars["Net Convar str"] = ""
-hvhobkak.cfg.vars["Net Convar int"] = 1
-hvhobkak.cfg.vars["Net Convar mode"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Net Convar"] = ""
+exechack_cc_hvh_obkak.cfg.vars["Net Convar str"] = ""
+exechack_cc_hvh_obkak.cfg.vars["Net Convar int"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Net Convar mode"] = 1
 
-hvhobkak.cfg.vars["Name Convar"] = ""
-hvhobkak.cfg.vars["Disconnect reason"] = "VAC banned from secure server"
-hvhobkak.cfg.vars["Name stealer"] = false
-hvhobkak.cfg.vars["Auto reconnect"] = false
+exechack_cc_hvh_obkak.cfg.vars["Name Convar"] = ""
+exechack_cc_hvh_obkak.cfg.vars["Disconnect reason"] = "VAC banned from secure server"
+exechack_cc_hvh_obkak.cfg.vars["Name stealer"] = false
+exechack_cc_hvh_obkak.cfg.vars["Auto reconnect"] = false
 
-hvhobkak.cfg.vars["Chat spammer"]       = false
-hvhobkak.cfg.vars["Chat mode"]          = 1
-hvhobkak.cfg.vars["Chat group"]         = 1
-hvhobkak.cfg.vars["Chat delay"]         = 1
+exechack_cc_hvh_obkak.cfg.vars["Chat spammer"]       = false
+exechack_cc_hvh_obkak.cfg.vars["Chat mode"]          = 1
+exechack_cc_hvh_obkak.cfg.vars["Chat group"]         = 1
+exechack_cc_hvh_obkak.cfg.vars["Chat delay"]         = 1
 
-hvhobkak.cfg.vars["Killsay"]            = false
-hvhobkak.cfg.vars["Killsay mode"]          = 1
-hvhobkak.cfg.vars["Killsay group"]         = 1
+exechack_cc_hvh_obkak.cfg.vars["Killsay"]            = false
+exechack_cc_hvh_obkak.cfg.vars["Killsay mode"]          = 1
+exechack_cc_hvh_obkak.cfg.vars["Killsay group"]         = 1
+
+exechack_cc_hvh_obkak.cfg.vars["Retry on handcuff"] = false
 
 // FTPToPos abuse xd )))
-hvhobkak.cfg.vars["FSpec Teleport"] = false
-hvhobkak.cfg.binds["FSpec Teleport"] = 0
+exechack_cc_hvh_obkak.cfg.vars["FSpec Teleport"] = false
+exechack_cc_hvh_obkak.cfg.binds["FSpec Teleport"] = 0
 
-hvhobkak.cfg.vars["FSpec Masskill"] = false
-hvhobkak.cfg.binds["FSpec Masskill"] = 0
+exechack_cc_hvh_obkak.cfg.vars["FSpec Masskill"] = false
+exechack_cc_hvh_obkak.cfg.binds["FSpec Masskill"] = 0
 
-hvhobkak.cfg.vars["FSpec ClickTP"] = false
-hvhobkak.cfg.binds["FSpec ClickTP"] = 0
+exechack_cc_hvh_obkak.cfg.vars["FSpec ClickTP"] = false
+exechack_cc_hvh_obkak.cfg.binds["FSpec ClickTP"] = 0
 
-hvhobkak.cfg.vars["FSpec Velocity"] = false
-hvhobkak.cfg.binds["FSpec Velocity"] = 0
+exechack_cc_hvh_obkak.cfg.vars["FSpec Velocity"] = false
+exechack_cc_hvh_obkak.cfg.binds["FSpec Velocity"] = 0
 
 // Player visuals 
-hvhobkak.cfg.vars["Box esp"]                    = false
-hvhobkak.cfg.vars["Box style"]                  = 1
+exechack_cc_hvh_obkak.cfg.vars["Box esp"]                    = false
+exechack_cc_hvh_obkak.cfg.vars["Box style"]                  = 1
 
-hvhobkak.cfg.vars["Sight lines"]        = false
+exechack_cc_hvh_obkak.cfg.vars["Sight lines"]        = false
 
-hvhobkak.cfg.vars["ESP Font"]                  = 1
+exechack_cc_hvh_obkak.cfg.vars["ESP Font"]                  = 1
 
-hvhobkak.cfg.vars["Box gradient"]   = false
+exechack_cc_hvh_obkak.cfg.vars["Box gradient"]   = false
 
-hvhobkak.cfg.colors["Box esp"]      = "255 0 255 255"
-hvhobkak.cfg.colors["Box gradient"] = "0 255 255 255"
+exechack_cc_hvh_obkak.cfg.colors["Box esp"]      = "255 0 255 255"
+exechack_cc_hvh_obkak.cfg.colors["Box gradient"] = "0 255 255 255"
 
-hvhobkak.cfg.vars["Box team color"] = false
+exechack_cc_hvh_obkak.cfg.vars["Box team color"] = false
 
-hvhobkak.cfg.vars["Name"] = false
-hvhobkak.cfg.vars["Name pos"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Name"] = false
+exechack_cc_hvh_obkak.cfg.vars["Name pos"] = 1
 
-hvhobkak.cfg.vars["Usergroup"] = false
-hvhobkak.cfg.vars["Usergroup pos"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Mark"] = false
+exechack_cc_hvh_obkak.cfg.vars["Mark pos"] = 1
 
-hvhobkak.cfg.vars["Team"] = false
-hvhobkak.cfg.vars["Team pos"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Usergroup"] = false
+exechack_cc_hvh_obkak.cfg.vars["Usergroup pos"] = 1
 
-hvhobkak.cfg.vars["Health"] = false
-hvhobkak.cfg.vars["Health bar"] = false
-hvhobkak.cfg.vars["Health bar gradient"] = false
-hvhobkak.cfg.vars["Health pos"] = 4
-hvhobkak.cfg.colors["Health"] = "75 255 0 255"
-hvhobkak.cfg.colors["Health bar gradient"] = "255 45 0 255"
+exechack_cc_hvh_obkak.cfg.vars["Team"] = false
+exechack_cc_hvh_obkak.cfg.vars["Team pos"] = 1
+
+exechack_cc_hvh_obkak.cfg.vars["Health"] = false
+exechack_cc_hvh_obkak.cfg.vars["Health bar"] = false
+exechack_cc_hvh_obkak.cfg.vars["Health bar gradient"] = false
+exechack_cc_hvh_obkak.cfg.vars["Health pos"] = 4
+exechack_cc_hvh_obkak.cfg.colors["Health"] = "75 255 0 255"
+exechack_cc_hvh_obkak.cfg.colors["Health bar gradient"] = "255 45 0 255"
 
 
-hvhobkak.cfg.vars["Armor"] = false
-hvhobkak.cfg.vars["Armor bar"] = false
-hvhobkak.cfg.vars["Armor bar gradient"] = false
-hvhobkak.cfg.vars["Armor pos"] = 4
-hvhobkak.cfg.colors["Armor"] = "72 72 255 255"
-hvhobkak.cfg.colors["Armor bar gradient"] = "72 255 72 255"
+exechack_cc_hvh_obkak.cfg.vars["Armor"] = false
+exechack_cc_hvh_obkak.cfg.vars["Armor bar"] = false
+exechack_cc_hvh_obkak.cfg.vars["Armor bar gradient"] = false
+exechack_cc_hvh_obkak.cfg.vars["Armor pos"] = 4
+exechack_cc_hvh_obkak.cfg.colors["Armor"] = "72 72 255 255"
+exechack_cc_hvh_obkak.cfg.colors["Armor bar gradient"] = "72 255 72 255"
 
-hvhobkak.cfg.vars["DarkRP Money"] = false
-hvhobkak.cfg.vars["Money pos"] = 1
+exechack_cc_hvh_obkak.cfg.vars["DarkRP Money"] = false
+exechack_cc_hvh_obkak.cfg.vars["Money pos"] = 1
 
-hvhobkak.cfg.vars["Weapon"] = false
-hvhobkak.cfg.vars["Weapon pos"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Weapon"] = false
+exechack_cc_hvh_obkak.cfg.vars["Weapon pos"] = 1
 
-hvhobkak.cfg.vars["Show ammo"] = false
-hvhobkak.cfg.vars["Weapon printname"] = false
-hvhobkak.cfg.vars["Show reload"] = false 
+exechack_cc_hvh_obkak.cfg.vars["Show ammo"] = false
+exechack_cc_hvh_obkak.cfg.vars["Weapon printname"] = false
+exechack_cc_hvh_obkak.cfg.vars["Show reload"] = false 
 
-hvhobkak.cfg.vars["Break LC"] = false
-hvhobkak.cfg.vars["Break LC pos"] = 1
+exechack_cc_hvh_obkak.cfg.vars["FakeLag Show"] = false
+exechack_cc_hvh_obkak.cfg.vars["FakeLag Show pos"] = 1
+exechack_cc_hvh_obkak.cfg.colors["FakeLag Show"] = "255 255 0 255"
 
-hvhobkak.cfg.vars["Simtime updated"] = false
-hvhobkak.cfg.vars["Simtime pos"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Break LC"] = false
+exechack_cc_hvh_obkak.cfg.vars["Break LC pos"] = 1
 
-hvhobkak.cfg.colors["Skeleton"] = "255 255 255 255"
-hvhobkak.cfg.vars["Skeleton"] = false
+exechack_cc_hvh_obkak.cfg.vars["Simtime updated"] = false
+exechack_cc_hvh_obkak.cfg.vars["Simtime pos"] = 1
 
-hvhobkak.cfg.vars["Player flags"] = false
+exechack_cc_hvh_obkak.cfg.colors["Skeleton"] = "255 255 255 255"
+exechack_cc_hvh_obkak.cfg.vars["Skeleton"] = false
+
+exechack_cc_hvh_obkak.cfg.vars["Player flags"] = false
+exechack_cc_hvh_obkak.cfg.vars["Hitbox"] = false
+exechack_cc_hvh_obkak.cfg.colors["Hitbox"] = "255 255 255 255"
+
+
+exechack_cc_hvh_obkak.cfg.vars["WaterMark"] = false
+exechack_cc_hvh_obkak.cfg.vars["Player Hat"]    = false
 
 
 // Chams
-hvhobkak.cfg.vars["Visible chams"] = false
-hvhobkak.cfg.vars["Visible chams w"] = false
-hvhobkak.cfg.vars["Visible mat"] = 1
-hvhobkak.cfg.colors["Visible chams"] = "0 255 255 255"
+exechack_cc_hvh_obkak.cfg.vars["Visible chams"] = false
+exechack_cc_hvh_obkak.cfg.vars["Visible chams w"] = false
+exechack_cc_hvh_obkak.cfg.vars["Visible mat"] = 1
+exechack_cc_hvh_obkak.cfg.colors["Visible chams"] = "0 255 255 255"
 
-hvhobkak.cfg.vars["inVisible chams"] = false
-hvhobkak.cfg.vars["inVisible chams w"] = false
-hvhobkak.cfg.vars["inVisible mat"] = 1
-hvhobkak.cfg.colors["inVisible chams"] = "255 255 0 255"
+exechack_cc_hvh_obkak.cfg.vars["inVisible chams"] = false
+exechack_cc_hvh_obkak.cfg.vars["inVisible chams w"] = false
+exechack_cc_hvh_obkak.cfg.vars["inVisible mat"] = 1
+exechack_cc_hvh_obkak.cfg.colors["inVisible chams"] = "255 255 0 255"
 
-hvhobkak.cfg.vars["Supress lighting"] = false
+exechack_cc_hvh_obkak.cfg.vars["Supress lighting"] = false
 
-hvhobkak.cfg.vars["Self chams"] = false
-hvhobkak.cfg.vars["Self chams w"] = false
-hvhobkak.cfg.vars["Self mat"] = 1
-hvhobkak.cfg.colors["Self chams"] = "255 0 255 255"
+exechack_cc_hvh_obkak.cfg.vars["Self chams"] = false
+exechack_cc_hvh_obkak.cfg.vars["Self chams w"] = false
+exechack_cc_hvh_obkak.cfg.vars["Self mat"] = 1
+exechack_cc_hvh_obkak.cfg.colors["Self chams"] = "255 0 255 255"
 
-hvhobkak.cfg.vars["Supress self lighting"] = false
+exechack_cc_hvh_obkak.cfg.vars["Supress self lighting"] = false
 
-hvhobkak.cfg.vars["Show records"] = false
+exechack_cc_hvh_obkak.cfg.vars["Show records"] = false
 
-hvhobkak.cfg.vars["Backtrack chams"] = false
-hvhobkak.cfg.vars["Backtrack material"] = 1
-hvhobkak.cfg.vars["Backtrack fullbright"] = false
-hvhobkak.cfg.colors["Backtrack chams"] = "255 128 255 255"
-hvhobkak.cfg.vars["Backtrack skeleton"] = false
-hvhobkak.cfg.vars["OOF Arrows"] = false
-hvhobkak.cfg.vars["OOF Style"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Backtrack chams"] = false
+exechack_cc_hvh_obkak.cfg.vars["Backtrack material"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Backtrack fullbright"] = false
+exechack_cc_hvh_obkak.cfg.colors["Backtrack chams"] = "255 128 255 255"
+exechack_cc_hvh_obkak.cfg.vars["Backtrack skeleton"] = false
+exechack_cc_hvh_obkak.cfg.vars["OOF Arrows"] = false
+exechack_cc_hvh_obkak.cfg.vars["OOF Style"] = 1
 
 
 
-hvhobkak.cfg.vars["On screen logs"] = false
+exechack_cc_hvh_obkak.cfg.vars["On screen logs"] = false
 
-hvhobkak.cfg.colors["On screen logs"] = "69 255 69 255"
-hvhobkak.cfg.colors["Miss lagcomp"] = "69 69 255 255"
-hvhobkak.cfg.colors["Miss spread"] = "255 255 69 255"
-hvhobkak.cfg.colors["Miss fail"] = "255 69 69 255"
+exechack_cc_hvh_obkak.cfg.colors["On screen logs"] = "69 255 69 255"
+exechack_cc_hvh_obkak.cfg.colors["Miss lagcomp"] = "69 69 255 255"
+exechack_cc_hvh_obkak.cfg.colors["Miss spread"] = "255 255 69 255"
+exechack_cc_hvh_obkak.cfg.colors["Miss fail"] = "255 69 69 255"
 
-hvhobkak.cfg.vars["Entity chams"] = false
-hvhobkak.cfg.vars["Entity material"] = 1
-hvhobkak.cfg.vars["Entity fullbright"] = false
-hvhobkak.cfg.colors["Entity chams"] = "255 89 89 255"
+exechack_cc_hvh_obkak.cfg.vars["Entity chams"] = false
+exechack_cc_hvh_obkak.cfg.vars["Entity material"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Entity fullbright"] = false
+exechack_cc_hvh_obkak.cfg.colors["Entity chams"] = "255 89 89 255"
 
-hvhobkak.cfg.vars["Player outline"] = false
-hvhobkak.cfg.vars["Entity outline"] = false
-hvhobkak.cfg.colors["Player outline"] = "45 255 86 255"
-hvhobkak.cfg.colors["Entity outline"] = "255 86 45 255"
+exechack_cc_hvh_obkak.cfg.vars["Player outline"] = false
+exechack_cc_hvh_obkak.cfg.vars["Entity outline"] = false
+exechack_cc_hvh_obkak.cfg.colors["Player outline"] = "45 255 86 255"
+exechack_cc_hvh_obkak.cfg.colors["Entity outline"] = "255 86 45 255"
 
-hvhobkak.cfg.vars["Outline style"] = 1 
+exechack_cc_hvh_obkak.cfg.vars["Outline style"] = 1 
 
-hvhobkak.cfg.vars["ESP Distance"] = 3500
+exechack_cc_hvh_obkak.cfg.vars["ESP Distance"] = 3500
+
+exechack_cc_hvh_obkak.cfg.binds["Player add"] = 0
+exechack_cc_hvh_obkak.cfg.binds["Priority add"] = 0
 
 // Entity Esp
-hvhobkak.cfg.binds["Ent add"] = 0
-hvhobkak.cfg.vars["Ent box"] = false
-hvhobkak.cfg.vars["Ent box style"] = 1
-hvhobkak.cfg.vars["Ent class"] = false
-hvhobkak.cfg.vars["Ent ESP Distance"] = 3500
+exechack_cc_hvh_obkak.cfg.binds["Ent add"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Ent box"] = false
+exechack_cc_hvh_obkak.cfg.vars["Ent box style"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Ent class"] = false
+exechack_cc_hvh_obkak.cfg.vars["Ent ESP Distance"] = 3500
 
-hvhobkak.cfg.vars["Fresnel minimum illum"] = 0
-hvhobkak.cfg.vars["Fresnel maximum illum"] = 1
-hvhobkak.cfg.vars["Fresnel exponent"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Fresnel minimum illum"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Fresnel maximum illum"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Fresnel exponent"] = 1
 
 // Hitmarker
-hvhobkak.cfg.vars["Hitmarker"] = false
-hvhobkak.cfg.vars["Hit particles"] = false
-hvhobkak.cfg.vars["Hitnumbers"] = false
+exechack_cc_hvh_obkak.cfg.vars["Hitmarker"] = false
+exechack_cc_hvh_obkak.cfg.vars["Hit particles"] = false
+exechack_cc_hvh_obkak.cfg.vars["Hitnumbers"] = false
+exechack_cc_hvh_obkak.cfg.vars["Headshot indicator"] = false
 
-hvhobkak.cfg.vars["Hitsound"] = false
-hvhobkak.cfg.vars["Killsound"] = false
+exechack_cc_hvh_obkak.cfg.vars["Hitsound"] = false
+exechack_cc_hvh_obkak.cfg.vars["Killsound"] = false
+exechack_cc_hvh_obkak.cfg.vars["Killstreak"] = false
 
-hvhobkak.cfg.vars["Hitsound str"] = "phx/hmetal1.wav"
-hvhobkak.cfg.vars["Killsound str"] = "ambient/levels/canals/windchime2.wav"
+exechack_cc_hvh_obkak.cfg.vars["Hitsound str"] = "phx/hmetal1.wav"
+exechack_cc_hvh_obkak.cfg.vars["Killsound str"] = "ambient/levels/canals/windchime2.wav"
 
-hvhobkak.cfg.colors["Hit particles"] = "255 128 235 255"
-hvhobkak.cfg.colors["Hitmarker"] = "255 155 25 255"
-hvhobkak.cfg.colors["Hitnumbers"] = "255 255 255 255"
-hvhobkak.cfg.colors["Hitnumbers krit"] = "255 35 35 255"
+exechack_cc_hvh_obkak.cfg.colors["Hit particles"] = "255 128 235 255"
+exechack_cc_hvh_obkak.cfg.colors["Hitmarker"] = "255 155 25 255"
+exechack_cc_hvh_obkak.cfg.colors["Hitnumbers"] = "255 255 255 255"
+exechack_cc_hvh_obkak.cfg.colors["Hitnumbers krit"] = "255 35 35 255"
+exechack_cc_hvh_obkak.cfg.colors["Headshot indicator"] = "0 255 0 255"
 
 // Name hide / visual misc
 
-hvhobkak.cfg.vars["Hide name"] = false
-hvhobkak.cfg.vars["Custom name"] = "Your mom"
-hvhobkak.cfg.vars["Disable SADJ"] = false
-hvhobkak.cfg.vars["Screengrab image"] = false
+exechack_cc_hvh_obkak.cfg.vars["Hide name"] = false
+exechack_cc_hvh_obkak.cfg.vars["Custom name"] = "Your mom"
+exechack_cc_hvh_obkak.cfg.vars["Disable sensivity adjustment"] = false
+exechack_cc_hvh_obkak.cfg.vars["Screengrab image"] = false
 
 
 // Visuals 
-hvhobkak.cfg.vars["Tickbase indicator"] = false
-hvhobkak.cfg.vars["Spectator list"] = false
+exechack_cc_hvh_obkak.cfg.vars["Tickbase indicator"] = false
+exechack_cc_hvh_obkak.cfg.vars["Spectator list"] = false
 
+exechack_cc_hvh_obkak.cfg.vars["RusEliteDetector"]   = false
 
-hvhobkak.cfg.vars["Killsound"] = false
+exechack_cc_hvh_obkak.cfg.vars["Killsound"] = false
 
 // World 
-hvhobkak.cfg.vars["Custom sky"] = GetConVar("sv_skyname"):GetString()
-hvhobkak.cfg.vars["Sky color"] = false 
-hvhobkak.cfg.colors["Sky color"] = "145 185 245 255"
-hvhobkak.cfg.vars["Wall color"] = false 
-hvhobkak.cfg.colors["Wall color"] = "50 45 65 255"
-hvhobkak.cfg.vars["Fullbright"] = false 
-hvhobkak.cfg.vars["Fullbright mode"] = 1
-hvhobkak.cfg.binds["Fullbright"] = 0
-hvhobkak.cfg.vars["Disable shadows"] = false
-hvhobkak.cfg.vars["FogChanger"] = false
-hvhobkak.cfg.colors["FogChanger"] = "255 255 255 255"
-hvhobkak.cfg.vars["FogStart"] = 1500
-hvhobkak.cfg.vars["FogEnd"] = 3000
-hvhobkak.cfg.vars["Color Modify"] = false
-hvhobkak.cfg.vars["Color Modify Brightness"] = 0
-hvhobkak.cfg.vars["Color Modify Contrast"] = 1
-hvhobkak.cfg.vars["Color Modify Saturation"] = 3
-hvhobkak.cfg.vars["Color Modify Add Red"] = 0
-hvhobkak.cfg.vars["Color Modify Add Green"] = 0
-hvhobkak.cfg.vars["Color Modify Add Blue"] = 0
-hvhobkak.cfg.vars["Color Modify Mul Red"] = 0
-hvhobkak.cfg.vars["Color Modify Mul Green"] = 0
-hvhobkak.cfg.vars["Color Modify Mul Blue"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Custom sky"] = GetConVar("sv_skyname"):GetString()
+exechack_cc_hvh_obkak.cfg.vars["Sky color"] = false 
+exechack_cc_hvh_obkak.cfg.colors["Sky color"] = "145 185 245 255"
+exechack_cc_hvh_obkak.cfg.vars["Wall color"] = false 
+exechack_cc_hvh_obkak.cfg.colors["Wall color"] = "50 45 65 255"
+exechack_cc_hvh_obkak.cfg.vars["Fullbright"] = false 
+exechack_cc_hvh_obkak.cfg.vars["Fullbright mode"] = 1
+exechack_cc_hvh_obkak.cfg.binds["Fullbright"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Disable shadows"] = false
+exechack_cc_hvh_obkak.cfg.vars["FogChanger"] = false
+exechack_cc_hvh_obkak.cfg.colors["FogChanger"] = "255 255 255 255"
+exechack_cc_hvh_obkak.cfg.vars["FogStart"] = 1500
+exechack_cc_hvh_obkak.cfg.vars["FogEnd"] = 3000
+exechack_cc_hvh_obkak.cfg.vars["Color Modify"] = false
+exechack_cc_hvh_obkak.cfg.vars["Color Modify Brightness"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Color Modify Contrast"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Color Modify Saturation"] = 3
+exechack_cc_hvh_obkak.cfg.vars["Color Modify Add Red"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Color Modify Add Green"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Color Modify Add Blue"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Color Modify Mul Red"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Color Modify Mul Green"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Color Modify Mul Blue"] = 0
 
 // Effects
-hvhobkak.cfg.vars["Bullet tracers"] = false 
-hvhobkak.cfg.colors["Bullet tracers"] = "255 65 65 255"
-hvhobkak.cfg.vars["Bullet tracers material"] = "sprites/tp_beam001" 
-hvhobkak.cfg.vars["Tracers die time"] = 5 
-hvhobkak.cfg.vars["Bullet tracers muzzle"] = false 
+exechack_cc_hvh_obkak.cfg.vars["Bullet tracers"] = false 
+exechack_cc_hvh_obkak.cfg.colors["Bullet tracers"] = "255 65 65 255"
+exechack_cc_hvh_obkak.cfg.vars["Bullet tracers material"] = "sprites/tp_beam001" 
+exechack_cc_hvh_obkak.cfg.vars["Tracers die time"] = 5 
+exechack_cc_hvh_obkak.cfg.vars["Bullet tracers muzzle"] = false 
 
 // View 
-hvhobkak.cfg.vars["Third person"] = false
-hvhobkak.cfg.binds["Third person"] = 0
-hvhobkak.cfg.vars["Third person collision"] = false
-hvhobkak.cfg.vars["Third person smoothing"] = false
-hvhobkak.cfg.vars["Third person distance"] = 150
+exechack_cc_hvh_obkak.cfg.vars["Third person"] = false
+exechack_cc_hvh_obkak.cfg.binds["Third person"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Third person collision"] = false
+exechack_cc_hvh_obkak.cfg.vars["Third person smoothing"] = false
+exechack_cc_hvh_obkak.cfg.vars["Third person distance"] = 150
 
-hvhobkak.cfg.vars["Free camera"] = false
-hvhobkak.cfg.binds["Free camera"] = 0
-hvhobkak.cfg.vars["Free camera speed"] = 25
-hvhobkak.cfg.vars["Ghetto free cam"] = false
+exechack_cc_hvh_obkak.cfg.vars["Free camera"] = false
+exechack_cc_hvh_obkak.cfg.binds["Free camera"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Free camera speed"] = 25
+exechack_cc_hvh_obkak.cfg.vars["Ghetto free cam"] = false
+
+exechack_cc_hvh_obkak.cfg.vars["Override view"] = true
+
+exechack_cc_hvh_obkak.cfg.vars["Fov override"] = GetConVarNumber("fov_desired")
+
+exechack_cc_hvh_obkak.cfg.vars["Aspect ratio"] = 0
+
+exechack_cc_hvh_obkak.cfg.vars["Viewmodel changer"] = false
+
+exechack_cc_hvh_obkak.cfg.vars["Viewmodel fov"] = GetConVar("viewmodel_fov"):GetInt()
+
+exechack_cc_hvh_obkak.cfg.vars["Viewmodel chams"] = false
+exechack_cc_hvh_obkak.cfg.colors["Viewmodel chams"] = "75 95 128 255"
+exechack_cc_hvh_obkak.cfg.vars["Viewmodel chams type"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Fullbright viewmodel"] = false
 
 
-hvhobkak.cfg.vars["Fov override"] = GetConVarNumber("fov_desired")
-hvhobkak.cfg.vars["Aspect ratio"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Viewmodel x"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Viewmodel y"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Viewmodel z"] = 0
+exechack_cc_hvh_obkak.cfg.vars["Viewmodel r"] = 0
 
-hvhobkak.cfg.vars["Viewmodel changer"] = false
+exechack_cc_hvh_obkak.cfg.vars["Modelchanger"]   = false
+exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Player_modelchanger"] = false
+exechack_cc_hvh_obkak.cfg.vars["Player_modelchanger_agent"] = 1
 
-hvhobkak.cfg.vars["Viewmodel fov"] = GetConVar("viewmodel_fov"):GetInt()
-
-hvhobkak.cfg.vars["Viewmodel chams"] = false
-hvhobkak.cfg.colors["Viewmodel chams"] = "75 95 128 255"
-hvhobkak.cfg.vars["Viewmodel chams type"] = 1
-hvhobkak.cfg.vars["Fullbright viewmodel"] = false
-
-
-hvhobkak.cfg.vars["Viewmodel x"] = 0
-hvhobkak.cfg.vars["Viewmodel y"] = 0
-hvhobkak.cfg.vars["Viewmodel z"] = 0
-hvhobkak.cfg.vars["Viewmodel r"] = 0
-
-hvhobkak.cfg.vars["Ghost follower"] = false
-hvhobkak.cfg.vars["GFID"] = "SteamID"
+exechack_cc_hvh_obkak.cfg.vars["Ghost follower"] = false
+exechack_cc_hvh_obkak.cfg.vars["GFID"] = "SteamID"
 
 // Misc
 
-hvhobkak.cfg.vars["Use spam"] = false
-hvhobkak.cfg.vars["Flashlight spam"] = false
-hvhobkak.cfg.vars["Auto GTA"] = false
-hvhobkak.cfg.vars["Camera spam"] = false
-hvhobkak.cfg.vars["Fast lockpick"] = false
+exechack_cc_hvh_obkak.cfg.vars["Use spam"] = false
+exechack_cc_hvh_obkak.cfg.vars["Flashlight spam"] = false
+exechack_cc_hvh_obkak.cfg.vars["Auto GTA"] = false
+exechack_cc_hvh_obkak.cfg.vars["Camera spam"] = false
+exechack_cc_hvh_obkak.cfg.vars["Fast lockpick"] = false
 
 
-hvhobkak.cfg.vars["Config name"] = "new"
-hvhobkak.cfg.vars["Selected config"] = 1
+exechack_cc_hvh_obkak.cfg.vars["Config name"] = "new"
+exechack_cc_hvh_obkak.cfg.vars["Selected config"] = 1
 
-hvhobkak.cfg.colors["Menu color"] = "0 0 0 255"
+exechack_cc_hvh_obkak.cfg.vars["Russian Ultimate"] = false
+exechack_cc_hvh_obkak.cfg.vars["Ukrainian Ultimate"] = false
+exechack_cc_hvh_obkak.cfg.vars["Navalny Ultimate"] = false
+
+exechack_cc_hvh_obkak.originalTitle = "EXECHACK.CC: HVH OBKAK"
+exechack_cc_hvh_obkak.currentTitle = exechack_cc_hvh_obkak.originalTitle
+exechack_cc_hvh_obkak.backgroundImage = nil
+exechack_cc_hvh_obkak.musicChannel = nil
+
+exechack_cc_hvh_obkak.cfg.colors["Menu color"] = "0 0 0 255"
+
+exechack_cc_hvh_obkak.cfg.friends = {}
+exechack_cc_hvh_obkak.cfg.priorityList = {}
+exechack_cc_hvh_obkak.cfg.ents = {}
+
 
 do 
     local maxshift = GetConVar("sv_maxusrcmdprocessticks"):GetInt() - 1
-    local tickrate = tostring(math_Round(1 / TickInterval))
+    local tickrate = tostring(math.Round(1 / flTickInterval))
 
-	gRunCmd("cl_cmdrate", tickrate)
-	gRunCmd("cl_updaterate", tickrate)
+	RunConsoleCommand("cl_cmdrate", tickrate)
+	RunConsoleCommand("cl_updaterate", tickrate)
 
-	gRunCmd("cl_interp", "0")
-	gRunCmd("cl_interp_ratio", "0")
+	RunConsoleCommand("cl_interp", "0")
+	RunConsoleCommand("cl_interp_ratio", "0")
 
-    hvhobkak.cfg.vars["Shift ticks"] = maxshift
-    hvhobkak.cfg.vars["Charge ticks"] = maxshift
+    exechack_cc_hvh_obkak.cfg.vars["Shift ticks"] = maxshift
+    exechack_cc_hvh_obkak.cfg.vars["Charge ticks"] = maxshift
     
     ded.SetInterpolation( true )
     ded.SetSequenceInterpolation( true )
@@ -921,41 +768,30 @@ end
 
 /*
     Miss / Hit logs
-*/
-
-hvhobkak.onScreenLogs = {}
-hvhobkak.firedShots = 0
-hvhobkak.HitLogsWhite = Color( 255, 105, 180 )
-hvhobkak.MissReasons = {
+exechack_cc_hvh_obkak.onScreenLogs = {}
+exechack_cc_hvh_obkak.firedShots = 0
+exechack_cc_hvh_obkak.HitLogsWhite = Color( 225, 225, 225 )
+exechack_cc_hvh_obkak.MissReasons = {
     [ 1 ] =     { str = "spread", var = "Miss spread" },
-    [ 2 ] =     { str = "occlusion", var = "Miss spread" },
-    [ 3 ] =     { str = "desync", var = "Miss lagcomp" },
-    [ 4 ] =     { str = "lagcomp", var = "Miss lagcomp" },
-    [ 5 ] =     { str = "resolver", var = "Miss fail" },
+    [ 2 ] =     { str = "resolver", var = "Miss fail" },
+    [ 3 ] =     { str = "fake lag", var = "Miss lagcomp" },
+    [ 4 ] =     { str = "fast shooting", var = "Miss spread" },
+    [ 5 ] =     { str = "taunt", var = "Miss fail" },
 }
 
- 
-
-
-
-
-
-// Config save / load
-
-if not file.Exists( "data/hvhobkak", "GAME" ) then 
-    file.CreateDir("hvhobkak") 
+if not file.Exists( "data/exechack_cc_hvh_obkak", "GAME" ) then 
+    file.CreateDir("exechack_cc_hvh_obkak") 
 end
 
-if not file.Exists( "hvhobkak/default.txt", "DATA" ) then 
-    file.Write( "hvhobkak/default.txt", util.TableToJSON( hvhobkak.cfg, false ) ) 
+if not file.Exists( "exechack_cc_hvh_obkak/default.txt", "DATA" ) then 
+    file.Write( "exechack_cc_hvh_obkak/default.txt", util.TableToJSON( exechack_cc_hvh_obkak.cfg, false ) ) 
 end
 
+exechack_cc_hvh_obkak.cfgTable = {}
 
-hvhobkak.cfgTable = {}
-
-function hvhobkak.fillConfigTable()
-    local ftbl = file.Find("hvhobkak/*.txt", "DATA")
-    hvhobkak.cfgTable = {}
+function exechack_cc_hvh_obkak.fillConfigTable()
+    local ftbl = file.Find("exechack_cc_hvh_obkak/*.txt", "DATA")
+    exechack_cc_hvh_obkak.cfgTable = {}
 
     if not ftbl or #ftbl == 0 then return end
 
@@ -964,123 +800,149 @@ function hvhobkak.fillConfigTable()
         local len = string.len(str)
         local f = string.sub(str, 1, len - 4) -- Remove .txt extension
 
-        hvhobkak.cfgTable[#hvhobkak.cfgTable + 1] = f
+        exechack_cc_hvh_obkak.cfgTable[#exechack_cc_hvh_obkak.cfgTable + 1] = f
     end
 end
 
-hvhobkak.fillConfigTable()
+exechack_cc_hvh_obkak.fillConfigTable()
 
-function hvhobkak.SaveConfig()
-    local tojs = util.TableToJSON(hvhobkak.cfg, false)
-    local str = hvhobkak.cfgTable[hvhobkak.cfg.vars["Selected config"]]
+function exechack_cc_hvh_obkak.SaveConfig()
+    local tojs = util.TableToJSON(exechack_cc_hvh_obkak.cfg, false)
+    local str = exechack_cc_hvh_obkak.cfgTable[exechack_cc_hvh_obkak.cfg.vars["Selected config"]]
 
     if str then
-        file.Write("hvhobkak/" .. str .. ".txt", tojs)
+        file.Write("exechack_cc_hvh_obkak/" .. str .. ".txt", tojs)
     else
         print("Error: Selected config not found.")
     end
 end
 
-function hvhobkak.LoadConfig()
-    local str = hvhobkak.cfgTable[hvhobkak.cfg.vars["Selected config"]]
-    //print(hvhobkak.cfg.vars["Selected config"])
+function exechack_cc_hvh_obkak.LoadConfig()
+    local str = exechack_cc_hvh_obkak.cfgTable[exechack_cc_hvh_obkak.cfg.vars["Selected config"]]
+    //print(exechack_cc_hvh_obkak.cfg.vars["Selected config"])
 
-    if not str or not file.Exists("hvhobkak/" .. str .. ".txt", "DATA") then
+    if not str or not file.Exists("exechack_cc_hvh_obkak/" .. str .. ".txt", "DATA") then
         print("Error: Config file not found.")
         return
     end
 
-    local read = file.Read("hvhobkak/" .. str .. ".txt", "DATA")
+    local read = file.Read("exechack_cc_hvh_obkak/" .. str .. ".txt", "DATA")
     local totbl = util.JSONToTable(read)
     if not totbl then
         print("Error: Failed to parse config file.")
         return
     end
 
-    local ConfigName = hvhobkak.cfg.vars["Config name"]
-    local SelectedConfig = hvhobkak.cfg.vars["Selected config"]
+    local ConfigName = exechack_cc_hvh_obkak.cfg.vars["Config name"]
+    local SelectedConfig = exechack_cc_hvh_obkak.cfg.vars["Selected config"]
 
-    for k, v in pairs(totbl) do
-        for key, value in pairs(v) do
-            local tbl = hvhobkak.cfg
+exechack_cc_hvh_obkak.cfg.friends = {}
+exechack_cc_hvh_obkak.cfg.ents = {}
+exechack_cc_hvh_obkak.cfg.binds = {}
+exechack_cc_hvh_obkak.cfg.priorityList = {}
 
-            if k == "vars" then
-                tbl = hvhobkak.cfg.vars
-            elseif k == "colors" then
-                tbl = hvhobkak.cfg.colors
-            elseif k == "binds" then
-                tbl = hvhobkak.cfg.binds
-            end
-            
-            tbl[key] = value
+for k, v in pairs(totbl or {}) do  
+    for key, value in pairs(v or {}) do 
+        local tbl = exechack_cc_hvh_obkak.cfg
+        
+        if k == "vars" then
+            tbl = exechack_cc_hvh_obkak.cfg.vars or {} 
+        elseif k == "colors" then
+            tbl = exechack_cc_hvh_obkak.cfg.colors or {}  
+        elseif k == "binds" then
+            tbl = exechack_cc_hvh_obkak.cfg.binds 
+        elseif k == "friends" then
+            tbl = exechack_cc_hvh_obkak.cfg.friends
+        elseif k == "ents" then
+            tbl = exechack_cc_hvh_obkak.cfg.ents
+        elseif k == "priorityList" then
+            tbl = exechack_cc_hvh_obkak.cfg.priorityList
         end
+        
+        tbl[key] = value 
     end
-
-    hvhobkak.cfg.vars["Config name"] = ConfigName
-    hvhobkak.cfg.vars["Selected config"] = SelectedConfig
-
-    ded.SetInterpolation(hvhobkak.cfg.vars["Disable interpolation"])
-    ded.SetSequenceInterpolation(hvhobkak.cfg.vars["Disable Sequence interpolation"])
-    ded.EnableAnimFix(hvhobkak.cfg.vars["Update Client Anim fix"])
-    ded.EnableBoneFix(hvhobkak.cfg.vars["Bone fix"])
-
-    ded.SetMaxShift(hvhobkak.cfg.vars["Charge ticks"])
-    ded.SetMinShift(hvhobkak.cfg.vars["Shift ticks"])
-    ded.EnableTickbaseShifting(hvhobkak.cfg.vars["Tickbase shift"])
 end
 
-function hvhobkak.CreateConfig()
-    local str = hvhobkak.cfg.vars["Config name"]
+    exechack_cc_hvh_obkak.cfg.vars["Config name"] = ConfigName
+    exechack_cc_hvh_obkak.cfg.vars["Selected config"] = SelectedConfig
+
+    ded.SetInterpolation(exechack_cc_hvh_obkak.cfg.vars["Disable interpolation"])
+    ded.SetSequenceInterpolation(exechack_cc_hvh_obkak.cfg.vars["Disable Sequence interpolation"])
+    ded.EnableAnimFix(exechack_cc_hvh_obkak.cfg.vars["Update Client Anim fix"])
+    ded.EnableBoneFix(exechack_cc_hvh_obkak.cfg.vars["Bone fix"])
+
+    ded.SetMaxShift(exechack_cc_hvh_obkak.cfg.vars["Charge ticks"])
+    ded.SetMinShift(exechack_cc_hvh_obkak.cfg.vars["Shift ticks"])
+    ded.EnableTickbaseShifting(exechack_cc_hvh_obkak.cfg.vars["Tickbase shift"])
+end
+
+function exechack_cc_hvh_obkak.CreateConfig()
+    local str = exechack_cc_hvh_obkak.cfg.vars["Config name"]
 
     if str then
-        file.Write("hvhobkak/" .. str .. ".txt", "")
-        hvhobkak.fillConfigTable()
-        hvhobkak.initTab("Config")
+        file.Write("exechack_cc_hvh_obkak/" .. str .. ".txt", "")
+        exechack_cc_hvh_obkak.fillConfigTable()
+        exechack_cc_hvh_obkak.initTab("Config")
     else
         print("Error: Config name not specified.")
     end
 end
 
-function hvhobkak.DeleteConfig()
-    local selectedConfigId = hvhobkak.cfg.vars["Selected config"]
-    local str = hvhobkak.cfgTable[selectedConfigId]
+function exechack_cc_hvh_obkak.DeleteConfig()
+    local selectedConfigId = exechack_cc_hvh_obkak.cfg.vars["Selected config"]
+    local str = exechack_cc_hvh_obkak.cfgTable[selectedConfigId]
 
     if str then
-        file.Delete("hvhobkak/" .. str .. ".txt")
+        file.Delete("exechack_cc_hvh_obkak/" .. str .. ".txt")
 
-        table.remove(hvhobkak.cfgTable, selectedConfigId)
+        table.remove(exechack_cc_hvh_obkak.cfgTable, selectedConfigId)
 
-        if #hvhobkak.cfgTable > 0 then
-            hvhobkak.cfg.vars["Selected config"] = 1
+        if #exechack_cc_hvh_obkak.cfgTable > 0 then
+            exechack_cc_hvh_obkak.cfg.vars["Selected config"] = 1
         else
-            hvhobkak.cfg.vars["Selected config"] = nil
+            exechack_cc_hvh_obkak.cfg.vars["Selected config"] = nil
         end
 
-        hvhobkak.fillConfigTable()
-        hvhobkak.initTab("Config")
+        exechack_cc_hvh_obkak.fillConfigTable()
+        exechack_cc_hvh_obkak.initTab("Config")
     else
-        print("Error: Selected config not found.")
+        print("Error: Config not found.")
     end
 end
 
-
-function hvhobkak.TIME_TO_TICKS(time)
-	return math_floor(0.5 + time / TickInterval)
+function exechack_cc_hvh_obkak.TIME_TO_TICKS(time)
+	return math.floor(0.5 + time / flTickInterval)
 end
 
-function hvhobkak.TICKS_TO_TIME(ticks)
-    return TickInterval * ticks
+function exechack_cc_hvh_obkak.TICKS_TO_TIME(ticks)
+    return flTickInterval * ticks
 end
 
-function hvhobkak.ROUND_TO_TICK(time)
-    return hvhobkak.TICKS_TO_TIME(hvhobkak.TIME_TO_TICKS(time))
+function exechack_cc_hvh_obkak.ROUND_TO_TICK(time)
+    return exechack_cc_hvh_obkak.TICKS_TO_TIME(exechack_cc_hvh_obkak.TIME_TO_TICKS(time))
 end
 
-/*
-    Materials 
-*/
 
-hvhobkak.chamsMaterials = {
+
+
+
+
+
+
+
+
+
+
+
+
+local Utility = {}
+
+function Utility.TimeToTicks( flTime )
+    return math.floor( 0.5 + flTime / flTickInterval )
+end
+
+
+exechack_cc_hvh_obkak.chamsMaterials = {
     "Flat",
     "Wireframe",
     "Selfillum",
@@ -1089,31 +951,6 @@ hvhobkak.chamsMaterials = {
     "Glass",
     "Glowing glass"
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*
@@ -1129,8 +966,8 @@ do
 
     function PLAYER:Name()
 
-        if hvhobkak.cfg.vars["Hide name"] and self == me then
-            return hvhobkak.cfg.vars["Custom name"]
+        if exechack_cc_hvh_obkak.cfg.vars["Hide name"] and self == pLocalPlayer then
+            return exechack_cc_hvh_obkak.cfg.vars["Custom name"]
         end
 
         return Name_( self )
@@ -1138,8 +975,8 @@ do
 
     function PLAYER:Nick()
 
-        if hvhobkak.cfg.vars["Hide name"] and self == me then
-            return hvhobkak.cfg.vars["Custom name"]
+        if exechack_cc_hvh_obkak.cfg.vars["Hide name"] and self == pLocalPlayer then
+            return exechack_cc_hvh_obkak.cfg.vars["Custom name"]
         end
 
         return Nick_( self )
@@ -1147,8 +984,8 @@ do
 
     function PLAYER:GetName()
 
-        if hvhobkak.cfg.vars["Hide name"] and self == me then
-            return hvhobkak.cfg.vars["Custom name"]
+        if exechack_cc_hvh_obkak.cfg.vars["Hide name"] and self == pLocalPlayer then
+            return exechack_cc_hvh_obkak.cfg.vars["Custom name"]
         end
 
         return GetName_( self )
@@ -1156,33 +993,26 @@ do
 end
 
 
+exechack_cc_hvh_obkak.ui = {}
+
+exechack_cc_hvh_obkak.validsnd = false 
 
 
+exechack_cc_hvh_obkak.activetab = "Aimbot"
+exechack_cc_hvh_obkak.multicombo = false
 
 
-
-
-
-hvhobkak.ui = {}
-
-hvhobkak.validsnd = false 
-
-
-hvhobkak.activetab = "Aimbot"
-hvhobkak.multicombo = false
-
-
-hvhobkak.hint = false
-hvhobkak.hintText = ""
-hvhobkak.hintX = 0
-hvhobkak.hintY = 0
+exechack_cc_hvh_obkak.hint = false
+exechack_cc_hvh_obkak.hintText = ""
+exechack_cc_hvh_obkak.hintX = 0
+exechack_cc_hvh_obkak.hintY = 0
 
 do
     StoredCursorPos = {}
 
     function RememberCursorPosition()
 
-        local x, y = input_GetCursorPos()
+        local x, y = input.GetCursorPos()
 
         if ( x == 0 && y == 0 ) then return end
 
@@ -1201,114 +1031,164 @@ end
 do
     local PANEL = {}
 
+    local function LerpColor(frac, from, to)
+        if not from or not to then return from or to end
+        return Color(
+            Lerp(frac, from.r or 255, to.r or 255),
+            Lerp(frac, from.g or 255, to.g or 255),
+            Lerp(frac, from.b or 255, to.b or 255),
+            Lerp(frac, from.a or 255, to.a or 255)
+        )
+    end
+
     PANEL.FadeTime = 0
+    PANEL.Animations = {}
 
     function PANEL:Init()
-        self:SetFocusTopLevel( true )
-        self:SetSize( 800, 500 )
-
-        self:SetPaintBackgroundEnabled( false )
-        self:SetPaintBorderEnabled( false )
-        self:DockPadding( 5, 60, 5, 5 )
+        self:SetFocusTopLevel(true)
+        self:SetSize(800, 500)
+        self:SetPaintBackgroundEnabled(false)
+        self:SetPaintBorderEnabled(false)
+        self:DockPadding(5, 60, 5, 5)
         self:MakePopup()
-        self:Center( true )
+        self:Center(true)
 
-        PANEL.TopPanel = self:Add( "DPanel" )
-        PANEL.TopPanel:SetPos( 5, 30 )
-        PANEL.TopPanel:SetSize( 800-10, 25 )
+        self:SetAlpha(0)
+        self:SetSize(800, 0)
+        self.Animations.FadeIn = Derma_Anim("FadeIn", self, function(p, anim, delta, data)
+            p:SetAlpha(delta * 255)
+            p:SetSize(800, 500 * delta)
+            if delta == 1 then
+                p:Center()
+            end
+        end)
+        self.Animations.FadeIn:Start(0.3)
+
+        PANEL.TopPanel = self:Add("DPanel")
+        PANEL.TopPanel:SetPos(5, 30)
+        PANEL.TopPanel:SetSize(790, 25)
+        PANEL.TopPanel.lineProgress = 0
         
-        function PANEL.TopPanel:Paint( w, h )
-            surface_SimpleRect( 0, 24, w, 1, hvhobkak.Colors[ 54 ] )
+        function PANEL.TopPanel:Paint(w, h)
+            self.lineProgress = Lerp(FrameTime() * 3, self.lineProgress or 0, 1)
+            surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
+            surface.DrawRect(0, 24, w * self.lineProgress, 1)
         end
     end
 
     function PANEL:Think()
-        local x,y = input_GetCursorPos()
-        local mousex = math_Clamp( x, 1, scrw - 1 )
-        local mousey = math_Clamp( y, 1, scrh - 1 )
-
-        if ( self.Dragging ) then
-
-            local x = mousex - self.Dragging[1]
-            local y = mousey - self.Dragging[2]
-
-            self:SetPos( x, y )
-
+        for name, anim in pairs(self.Animations) do
+            if anim:Active() then
+                anim:Run()
+            end
         end
 
-        self:SetCursor( "arrow" )
+        local x,y = input.GetCursorPos()
+        local mousex = math.Clamp(x, 1, ScrW() - 1)
+        local mousey = math.Clamp(y, 1, ScrH() - 1)
 
-        hvhobkak.accent = HSVToColor(  ( CurTime() * 25 ) % 360, 1, 1 )
+        if self.Dragging then
+            local x = mousex - self.Dragging[1]
+            local y = mousey - self.Dragging[2]
+            self:SetPos(x, y)
+        end
 
-        hvhobkak.accent.r = math_Clamp( hvhobkak.accent.r, 128, 255 )
-        hvhobkak.accent.g = math_Clamp( hvhobkak.accent.g, 128, 255 )
-        hvhobkak.accent.b = math_Clamp( hvhobkak.accent.b, 128, 255 )
+        self:SetCursor("arrow")
+
+        if not self.Animations.ColorChange or not self.Animations.ColorChange:Active() then
+            local target_color = HSVToColor((CurTime() * 20) % 360, 1, 1) or Color(255,255,255)
+            target_color.r = math.Clamp(target_color.r, 150, 255)
+            target_color.g = math.Clamp(target_color.g, 150, 255)
+            target_color.b = math.Clamp(target_color.b, 150, 255)
+            
+            if not exechack_cc_hvh_obkak.accent then exechack_cc_hvh_obkak.accent = target_color end
+            
+            self.Animations.ColorChange = Derma_Anim("ColorChange", self, function(p, anim, delta, data)
+                if exechack_cc_hvh_obkak.accent and target_color then
+                    exechack_cc_hvh_obkak.accent = LerpColor(delta, exechack_cc_hvh_obkak.accent, target_color)
+                end
+            end)
+            self.Animations.ColorChange:Start(0.8)
+        end
+    end
+	local function surface_SimpleRect(x,y,w,h,c)
+		surface.SetDrawColor(c)
+		surface.DrawRect(x,y,w,h)
+	end
+	local function surface_SimpleText(x,y,s,c)
+		surface.SetTextColor(c)
+		surface.SetTextPos(x,y) 
+		surface.DrawText(s) 
+	end
+	surface.CreateFont( "tbfont", {	font = "Open Sans", extended = false,size = 15,weight = 100,additive = false,} )
+    function PANEL:Paint(w, h)
+        surface_SimpleRect(0, 0, w, h, exechack_cc_hvh_obkak.Colors[24])
+        
+        if exechack_cc_hvh_obkak.backgroundMaterial then
+            surface.SetDrawColor(255, 255, 255, 100)
+            surface.SetMaterial(exechack_cc_hvh_obkak.backgroundMaterial)
+            surface.DrawTexturedRect(0, 25, w, h - 25)
+        elseif exechack_cc_hvh_obkak.backgroundType == "russian_flag" then
+            local stripHeight = (h - 25) / 3
+            surface.SetDrawColor(255, 255, 255, 150)
+            surface.DrawRect(0, 25, w, stripHeight)
+            surface.SetDrawColor(0, 57, 166, 150)
+            surface.DrawRect(0, 25 + stripHeight, w, stripHeight)
+            surface.SetDrawColor(213, 43, 30, 150)
+            surface.DrawRect(0, 25 + stripHeight * 2, w, stripHeight)
+        elseif exechack_cc_hvh_obkak.backgroundType == "ukrainian_flag" then
+            local stripHeight = (h - 25) / 2
+            surface.SetDrawColor(0, 87, 183, 150)
+            surface.DrawRect(0, 25, w, stripHeight)
+            surface.SetDrawColor(255, 215, 0, 150)
+            surface.DrawRect(0, 25 + stripHeight, w, stripHeight)
+        end
+        
+        surface_SimpleRect(0, 0, w, 25, exechack_cc_hvh_obkak.Colors[54])
+        surface.SetFont("tbfont")
+        surface_SimpleText(8,4,exechack_cc_hvh_obkak.currentTitle,color_white)
+        
+        if exechack_cc_hvh_obkak.cfg.vars["Tesak Ultimate"] then
+            exechack_cc_hvh_obkak.UpdateTesakParticles()
+            
+            surface.SetFont("DermaLarge")
+            for i, particle in ipairs(exechack_cc_hvh_obkak.tesakParticles) do
+                local alpha = math.Clamp((particle.life / particle.maxLife) * 255, 0, 255)
+                surface.SetTextColor(255, 0, 0, alpha)
+                surface.SetTextPos(particle.x, particle.y)
+                surface.DrawText("1488")
+            end
+        end
     end
 
     function PANEL:IsActive()
-
-        if ( self:HasFocus() ) then return true end
-        if ( vgui.FocusedHasParent( self ) ) then return true end
-    
+        if self:HasFocus() then return true end
+        if vgui.FocusedHasParent(self) then return true end
         return false
-    
     end
-    
 
     function PANEL:OnMousePressed()
-        local x,y = input_GetCursorPos()
-        local screenX, screenY = self:LocalToScreen( 0, 0 )
+        local x,y = input.GetCursorPos()
+        local screenX, screenY = self:LocalToScreen(0, 0)
 
-        if (  y < ( screenY + 850 ) ) then
-            self.Dragging = { x - self.x, y - self.y }
-            self:MouseCapture( true )
-            return
+        if y < (screenY + 850) then
+            self.Dragging = {x - self.x, y - self.y}
+            self:MouseCapture(true)
         end
-
     end
 
     function PANEL:OnMouseReleased()
-
         self.Dragging = nil
-        self.Sizing = nil
-        self:MouseCapture( false )
-
-    end
-
-    local bgmat = Material("despair/bg.png", "noclamp smooth")
-    function PANEL:Paint(w, h)
-        //local x, y = self:LocalToScreen( 0, 0 )
-
-        //surface_SetDrawColor( 255, 255, 255 )
-        //surface_SetMaterial( bgmat )
-
-        //render.SetScissorRect( 0, 0, w, h, true)
-        //    surface_DrawTexturedRect(0, 0, scrw, scrh)
-        //render.SetScissorRect(0, 0, 0, 0, false)
-
-        //for i = 1, 4 do
-        //    hvhobkak.blur:SetFloat( "$blur", (i / 3) * 4 )
-        //    hvhobkak.blur:Recompute()
-//
-        //    render.UpdateScreenEffectTexture()
-        //    surface_DrawTexturedRect( x * -1, y * -1, scrw, scrh )
-        //end
-
-
-        surface_SimpleRect(0, 0, w, h, hvhobkak.Colors[24])
-        surface_SimpleRect(0, 0, w, 25, hvhobkak.Colors[54])
-        surface_SetFont("tbfont")
-        surface_SimpleText(8,4,"HVH OBKAK",color_white) 
-
-        
+        self:MouseCapture(false)
     end
 
     function PANEL:GetTopPanel()
         return PANEL.TopPanel
     end
 
-    vgui_Register( "UFrame", PANEL, "EditablePanel" )
+    vgui.Register("UFrame", PANEL, "EditablePanel")
 end
+
 
 do
     local PANEL = {}
@@ -1324,77 +1204,121 @@ do
         vbar.btnDown.Paint = nil
     
         function vbar.btnGrip:Paint( w, h ) 
-            surface_SetDrawColor( hvhobkak.Colors[54] )
-            surface_DrawRect( 0, 0, w, h )
+            local target_color = self:IsHovered() and exechack_cc_hvh_obkak.Colors[255] or exechack_cc_hvh_obkak.Colors[54]
+            if not self.current_color then self.current_color = target_color end
+            
+            if self.current_color ~= target_color then
+                Derma_Anim("ScrollbarColor", self, function(panel, animation, delta, data)
+                    panel.current_color = LerpColor(delta, panel.current_color, target_color)
+                end):Start(0.15)
+            end
+            
+            surface.SetDrawColor(self.current_color)
+            surface.DrawRect(0, 0, w, h)
         end
-    end
+    end       
 
     function PANEL:Paint( w, h )
     end
 
     function PANEL:OnMousePressed()
-        hvhobkak.frame:OnMousePressed()
+        exechack_cc_hvh_obkak.frame:OnMousePressed()
     end
 
     function PANEL:OnMouseReleased()
-        hvhobkak.frame:OnMouseReleased()
+        exechack_cc_hvh_obkak.frame:OnMouseReleased()
     end
 
-    vgui_Register( "UScroll", PANEL, "DScrollPanel" )
+    vgui.Register( "UScroll", PANEL, "DScrollPanel" )
 end
 
 do
     local PANEL = {}
 
     function PANEL:Init()
-        self.ItemPanel = vgui_Create( "DPanel", self )
-        self.ItemPanel:Dock( FILL )
-        self.ItemPanel:DockMargin( 3, 23, 3, 3 )
-
+        self.ItemPanel = vgui.Create("DPanel", self)
+        self.ItemPanel:Dock(FILL)
+        self.ItemPanel:DockMargin(3, 23, 3, 3)
         self.ItemPanel.Paint = nil
 
-        function self.ItemPanel:OnMousePressed()
-            hvhobkak.frame:OnMousePressed()
+        self.ItemPanel.hover_progress = 0
+        self.ItemPanel.wave = 0
+        
+        function self.ItemPanel:Think()
+            local target = self:IsHovered() and 1 or 0
+            self.hover_progress = Lerp(FrameTime() * 8, self.hover_progress or 0, target)
+            
+            if self:IsHovered() then
+                self.wave = self.wave + FrameTime() * 2
+            else
+                self.wave = 0
+            end
         end
-    
-        function self.ItemPanel:OnMouseReleased()
-            hvhobkak.frame:OnMouseReleased()
+
+        function self.ItemPanel:PaintOver(w, h)
+            if self.hover_progress > 0 then
+                local col = exechack_cc_hvh_obkak.Colors[35] or Color(50,50,50)
+                
+                surface.SetDrawColor(col.r, col.g, col.b, 50 * self.hover_progress)
+                surface.DrawRect(0, 0, w, h)
+
+                if self.wave > 0 and self.wave < 1 then
+                    local waveHeight = h * 0.1
+                    local waveY = h * self.wave
+                    surface.SetDrawColor(col.r + 40, col.g + 40, col.b + 40, 80 * (1 - self.wave))
+                    surface.DrawRect(0, waveY - waveHeight/2, w, waveHeight)
+                end
+            end
         end
     end
 
-    function PANEL:Paint( w, h )
-        surface_SetDrawColor( hvhobkak.Colors[54] )
-        surface_DrawOutlinedRect( 0, 0, w, h, 1 )
+    function PANEL:Paint(w, h)
+        local borderAlpha = Lerp(FrameTime() * 5, self.borderAlpha or 0, 255)
+        self.borderAlpha = borderAlpha
+        
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54].r, exechack_cc_hvh_obkak.Colors[54].g, exechack_cc_hvh_obkak.Colors[54].b, borderAlpha)
+        surface.DrawOutlinedRect(0, 0, w, h, 1)
    
-        surface_SetFont( "tbfont" )
-        surface_SimpleText( 8, 2, self.txt, hvhobkak.Colors[165] )
+        surface.SetFont("DermaSmall")
+        local text = self.txt or ""
+        local text_w, text_h = surface.GetTextSize(text)
+        
+        local textAlpha = 200 + math.sin(CurTime() * 2) * 55
+        surface.SetTextColor(exechack_cc_hvh_obkak.Colors[165].r, exechack_cc_hvh_obkak.Colors[165].g, exechack_cc_hvh_obkak.Colors[165].b, textAlpha)
+        surface.SetTextPos(8, 2)
+        surface.DrawText(text)
 
-        surface_SimpleRect( 6, 20, w-12, 1, hvhobkak.Colors[54] )
+        local lineProgress = Lerp(FrameTime() * 6, self.lineProgress or 0, 1)
+        self.lineProgress = lineProgress
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54].r, exechack_cc_hvh_obkak.Colors[54].g, exechack_cc_hvh_obkak.Colors[54].b, borderAlpha)
+        surface.DrawRect(6, 20, (w - 12) * lineProgress, 1)
     end
 
     function PANEL:OnMousePressed()
-        hvhobkak.frame:OnMousePressed()
+        exechack_cc_hvh_obkak.frame:OnMousePressed()
     end
 
     function PANEL:OnMouseReleased()
-        hvhobkak.frame:OnMouseReleased()
+        exechack_cc_hvh_obkak.frame:OnMouseReleased()
     end
 
     function PANEL:GetItemPanel()
         return self.ItemPanel
     end
     
-    vgui_Register( "UPanel", PANEL, "Panel" )
+    vgui.Register("UPanel", PANEL, "Panel")
 end
+
 
 do
     local PANEL = {}
 
     function PANEL:Paint( w, h )
-        surface_SimpleRect( 0, 0, w, h, hvhobkak.Colors[54] )
+        surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[ 54 ] )
+        surface.DrawRect( 0, 0, w, h )
     end
     
-    vgui_Register( "UPaintedPanel", PANEL, "Panel" )
+    vgui.Register( "UPaintedPanel", PANEL, "Panel" )
 end
 
 do
@@ -1410,34 +1334,34 @@ do
         
     end
     
-    vgui_Register( "UCBPanel", PANEL, "DPanel" )
+    vgui.Register( "UCBPanel", PANEL, "DPanel" )
 end
 
 do
     local PANEL = {}
 
     function PANEL:Init()
-        self.Label:SetFont("tbfont")
-        self.Label:SetTextColor(hvhobkak.Colors[165])
+        self.Label:SetFont("DermaSmall")
+        self.Label:SetTextColor(exechack_cc_hvh_obkak.Colors[165])
 
         self.Button:SetSize( 18, 18 )
 
         function self.Button:Paint(w,h)
             local v = self:GetChecked()
 
-            surface_SetDrawColor(hvhobkak.Colors[54])
+            surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
 
-            surface_DrawOutlinedRect(0,0,w,h,1)
+            surface.DrawOutlinedRect(0,0,w,h,1)
 
             if !v and !self:IsHovered() then return end
 
             if v then
-                surface_SetDrawColor(hvhobkak.Colors[54])
+                surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
             else
-                surface_SetDrawColor(hvhobkak.Colors[40])
+                surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[40])
             end
                 
-            surface_DrawRect(3,3,w-6,h-6)
+            surface.DrawRect(3,3,w-6,h-6)
         end
     end
 
@@ -1446,14 +1370,14 @@ do
         local x = self.m_iIndent || 0
     
         self.Button:SetSize( 18, 18 )
-        self.Button:SetPos( x, math_floor( ( self:GetTall() - self.Button:GetTall() ) / 2 ) )
+        self.Button:SetPos( x, math.floor( ( self:GetTall() - self.Button:GetTall() ) / 2 ) )
     
         self.Label:SizeToContents()
-        self.Label:SetPos( x + self.Button:GetWide() + 9, math_floor( ( self:GetTall() - self.Label:GetTall() ) / 2 ) )
+        self.Label:SetPos( x + self.Button:GetWide() + 9, math.floor( ( self:GetTall() - self.Label:GetTall() ) / 2 ) )
     
     end
     
-    vgui_Register( "UCheckboxLabel", PANEL, "DCheckBoxLabel" )
+    vgui.Register( "UCheckboxLabel", PANEL, "DCheckBoxLabel" )
 end
 
 do
@@ -1484,11 +1408,11 @@ do
     
         local w, h = self:GetSize()
     
-        x = math_Clamp(x, 0, w) / w
-        y = math_Clamp(y, 0, h) / h
+        x = math.Clamp(x, 0, w) / w
+        y = math.Clamp(y, 0, h) / h
     
         local value = self.Min + (self.Max - self.Min) * x
-        value = math_Round(value, self:GetDecimals())
+        value = math.Round(value, self:GetDecimals())
     
         self:SetValue(value)
         self:SetSlideX(x)
@@ -1518,59 +1442,94 @@ do
     function PANEL:Paint(w,h)
         local min, max = self:GetMin(), self:GetMax()
 
-        surface_SetDrawColor(hvhobkak.Colors[54])
-        surface_DrawOutlinedRect(0,0,w,h,1)
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
+        surface.DrawOutlinedRect(0,0,w,h,1)
     
-        surface_SetDrawColor(hvhobkak.Colors[54])
-        surface_DrawRect(2, 2, self:GetSlideX()*w-4, h-4)
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
+        surface.DrawRect(2, 2, self:GetSlideX()*w-4, h-4)
     end
     
-    vgui_Register("USlider", PANEL, "Panel")
+    vgui.Register("USlider", PANEL, "Panel")
 end
 
 do
     local PANEL = {}
 
-    function PANEL:Init()
-        self:Dock(TOP)
-        self:DockMargin(4,4,4,0)
-
-        self:SetTextColor(hvhobkak.Colors[165])
-        self:SetFont("tbfont")
-    end
-
-    function PANEL:Paint(w,h)
-        if self:IsHovered() then
-            surface_SetDrawColor(hvhobkak.Colors[35])
-            surface_DrawRect(0, 0, w, h)
+    local function DrawCircle(x, y, radius, segments)
+        local circle = {}
+        for i = 1, segments do
+            local angle = math.rad((i / segments) * -360)
+            circle[i] = {
+                x = x + math.sin(angle) * radius,
+                y = y + math.cos(angle) * radius
+            }
         end
-
-        surface_SetDrawColor(hvhobkak.Colors[54])
-        surface_DrawOutlinedRect(0,0,w,h,1)    
+        
+        surface.DrawPoly(circle)
     end
-
-    vgui_Register( "UButton", PANEL, "DButton" )
-end
-
-do
-    local PANEL = {}
 
     function PANEL:Init()
         self:Dock(TOP)
-        self:DockMargin(1,1,1,0)
-
-        self:SetTextColor(hvhobkak.Colors[245])
-        self:SetFont("tbfont")
-    end
-
-    function PANEL:Paint(w,h)
-        if self:IsHovered() then
-            surface_SetDrawColor(hvhobkak.Colors[35])
-            surface_DrawRect(0, 0, w, h)
+        self:DockMargin(4, 4, 4, 0)
+        self:SetTall(18)
+        
+        self.click_progress = 0
+        self.hover_progress = 0
+        self.ripple = {progress = 0}
+        
+        self.textColor = exechack_cc_hvh_obkak.Colors[165] or Color(200, 200, 200)
+        
+        function self:Think()
+            local clickTarget = self:IsDown() and 1 or 0
+            self.click_progress = Lerp(FrameTime() * 15, self.click_progress or 0, clickTarget)
+            
+            local hoverTarget = self:IsHovered() and 1 or 0
+            self.hover_progress = Lerp(FrameTime() * 6, self.hover_progress or 0, hoverTarget)
+            
+            if self:IsDown() then
+                self.ripple.progress = math.min(self.ripple.progress + FrameTime() * 3, 1)
+            else
+                self.ripple.progress = 0
+            end
         end
     end
 
-    vgui_Register( "UESPPButton", PANEL, "DButton" )
+    function PANEL:Paint(w, h)
+        if self.hover_progress > 0 then
+            local col = exechack_cc_hvh_obkak.Colors[35] or Color(50,50,50)
+            surface.SetDrawColor(col.r, col.g, col.b, 100 * self.hover_progress)
+            surface.DrawRect(0, 0, w, h)
+        end
+        
+        if self.ripple.progress > 0 then
+            local rippleSize = w * 1.5 * self.ripple.progress
+            local rippleAlpha = (1 - self.ripple.progress) * 120
+            surface.SetDrawColor(255, 255, 255, rippleAlpha)
+            draw.NoTexture()
+            DrawCircle(w/2, h/2, rippleSize, 24)
+        end
+
+        if self.click_progress > 0 then
+            local pressCol = exechack_cc_hvh_obkak.Colors[54] or Color(100,100,100)
+            surface.SetDrawColor(pressCol.r, pressCol.g, pressCol.b, 150 * self.click_progress)
+            surface.DrawRect(0, 0, w, h)
+        end
+
+        local borderAlpha = Lerp(self.hover_progress, 150, 255)
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54].r, exechack_cc_hvh_obkak.Colors[54].g, exechack_cc_hvh_obkak.Colors[54].b, borderAlpha)
+        surface.DrawOutlinedRect(0, 0, w, h, 1)
+        
+        local textGlow = math.sin(CurTime() * 3) * 30 * self.hover_progress
+        local textCol = Color(
+            math.Clamp(self.textColor.r + textGlow, 0, 255),
+            math.Clamp(self.textColor.g + textGlow, 0, 255),
+            math.Clamp(self.textColor.b + textGlow, 0, 255)
+        )
+        self:SetTextColor(textCol)
+        self:SetFont("DermaSmall")
+    end
+
+    vgui.Register("UButton", PANEL, "DButton")
 end
 
 do
@@ -1579,91 +1538,130 @@ do
     function PANEL:Init()
         self:SetTall(20)
         self.DropButton.Paint = nil
-    end
+        
+        self.open_progress = 0
+        self.menu_alpha = 0
+        self.text_alpha = 0
 
-    function PANEL:Paint(w,h)
-        surface_SetDrawColor(hvhobkak.Colors[25])
-        surface_DrawRect(0,0,w,h)
-    
-        surface_SetDrawColor(hvhobkak.Colors[32])
-        surface_DrawRect(w-25,0,25,25)
-    
-        surface_SetTextColor(hvhobkak.Colors[222])
-        surface_SetTextPos(w-20,20/2-15/2)
-        surface_SetFont("tbfont")
-        surface_DrawText("▼")
-
-        surface_SetDrawColor(hvhobkak.Colors[54])
-        surface_DrawOutlinedRect(0,0,w,h)
-    end
-
-    function PANEL:OpenMenu( pControlOpener )
-
-        if ( pControlOpener && pControlOpener == self.TextEntry ) then
-            return
+        self.item_appear_order = {}
+        self.item_appear_timer = 0
+        self.item_appear_speed = 0.15
+        
+        function self:Think()
+            local target = self:IsMenuOpen() and 1 or 0
+            self.open_progress = Lerp(FrameTime() * 10, self.open_progress, target)
+            
+            if IsValid(self.Menu) then
+                local target_alpha = self:IsMenuOpen() and 255 or 0
+                self.menu_alpha = Lerp(FrameTime() * 15, self.menu_alpha, target_alpha)
+                self.Menu:SetAlpha(self.menu_alpha)
+                
+                if self:IsMenuOpen() then
+                    self.item_appear_timer = self.item_appear_timer + FrameTime()
+                    
+                    for k, item in pairs(self.item_appear_order) do
+                        if item and IsValid(item) then
+                            local delay = (k-1) * 0.08
+                            local progress = math.Clamp((self.item_appear_timer - delay) / self.item_appear_speed, 0, 1)
+                            item.alpha = progress * 255
+                            item.y_offset = Lerp(progress, 10, 0)
+                        end
+                    end
+                end
+            end
+            
+            self.text_alpha = Lerp(FrameTime() * 8, self.text_alpha, self:GetText() ~= "" and 255 or 0)
         end
+    end
+
+    function PANEL:Paint(w, h)
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[25])
+        surface.DrawRect(0, 0, w, h)
     
-        -- Don't do anything if there aren't any options..
-        if ( #self.Choices == 0 ) then return end
+        surface.SetTextColor(exechack_cc_hvh_obkak.Colors[222])
+        surface.SetTextPos(w-20, h/2-7)
+        surface.SetFont("DermaSmall")
+        surface.DrawText(self.open_progress > 0.5 and "▲" or "▼")
+
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
+        surface.DrawOutlinedRect(0, 0, w, h)
+
+        if self:GetText() ~= "" and self.text_alpha > 0 then
+            surface.SetTextColor(exechack_cc_hvh_obkak.Colors[165].r, exechack_cc_hvh_obkak.Colors[165].g, exechack_cc_hvh_obkak.Colors[165].b, self.text_alpha)
+            surface.SetFont("DermaSmall")
+            surface.SetTextPos(8, h/2 - 7)
+            surface.DrawText(self:GetText())
+        end
+    end
+
+    function PANEL:OpenMenu(pControlOpener)
+        if (pControlOpener and pControlOpener == self.TextEntry) then return end
+        if (#self.Choices == 0) then return end
     
-        -- If the menu still exists and hasn't been deleted
-        -- then just close it and don't open a new one.
-        if ( IsValid( self.Menu ) ) then
+        if (IsValid(self.Menu)) then
             self.Menu:Remove()
             self.Menu = nil
         end
     
-        -- If we have a modal parent at some level, we gotta parent to that or our menu items are not gonna be selectable
         local parent = self
-        while ( IsValid( parent ) && !parent:IsModal() ) do
+        while (IsValid(parent) and not parent:IsModal()) do
             parent = parent:GetParent()
         end
-        if ( !IsValid( parent ) ) then parent = self end
+        if (not IsValid(parent)) then parent = self end
     
-        self.Menu = DermaMenu( false, parent )
-
-        function self.Menu:Paint(w,h)
-            surface_SetDrawColor(hvhobkak.Colors[24])
-            surface_DrawRect(0,0,w,h)
-            surface_SetDrawColor(hvhobkak.Colors[54])
-            surface_DrawOutlinedRect(0,-1,w,h+1)
+        self.Menu = DermaMenu(false, parent)
+        self.Menu:SetAlpha(0)
+        self.item_appear_order = {}
+        self.item_appear_timer = 0
+        
+        function self.Menu:Paint(w, h)
+            surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[24].r, exechack_cc_hvh_obkak.Colors[24].g, exechack_cc_hvh_obkak.Colors[24].b, self:GetAlpha())
+            surface.DrawRect(0, 0, w, h)
+            surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54].r, exechack_cc_hvh_obkak.Colors[54].g, exechack_cc_hvh_obkak.Colors[54].b, self:GetAlpha())
+            surface.DrawOutlinedRect(0, 0, w, h)
         end
 
-        for k, v in pairs( self.Choices ) do
-            local option = self.Menu:AddOption( v, function() self:ChooseOption( v, k ) end )
+        for k, v in pairs(self.Choices) do
+            local option = self.Menu:AddOption(v, function() 
+                self:ChooseOption(v, k) 
+            end)
+            
             option.txt = option:GetText()
             option:SetText("")
+            option.alpha = 0
+            option.y_offset = 10
+            
+            table.insert(self.item_appear_order, option)
 
-            function option:Paint(w,h)
+            function option:Paint(w, h)
                 if self:IsHovered() then 
-                    surface_SimpleRect(1,1,w-2,h-2,hvhobkak.Colors[32])
+                    surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[32].r, exechack_cc_hvh_obkak.Colors[32].g, exechack_cc_hvh_obkak.Colors[32].b, self.alpha)
+                    surface.DrawRect(1, 1, w-2, h-2)
                 end
+                
+                surface.SetTextColor(exechack_cc_hvh_obkak.Colors[165].r, exechack_cc_hvh_obkak.Colors[165].g, exechack_cc_hvh_obkak.Colors[165].b, self.alpha)
+                surface.SetTextPos(10, 4 + self.y_offset)
+                surface.DrawText(self.txt)
+            end
 
-                surface_SetTextColor(hvhobkak.Colors[165])
-                surface_SimpleText(10,4,option.txt,hvhobkak.Colors[165])
-            end   
-
-            if ( self.Spacers[ k ] ) then
+            if (self.Spacers[k]) then
                 self.Menu:AddSpacer()
             end
         end
 
-    
-        local x, y = self:LocalToScreen( 0, self:GetTall() )
-    
-        self.Menu:SetMinimumWidth( self:GetWide() )
-        self.Menu:Open( x, y, false, self )
-    
-        self:OnMenuOpened( self.Menu )
-    
+        local x, y = self:LocalToScreen(0, self:GetTall())
+        self.Menu:SetMinimumWidth(self:GetWide())
+        self.Menu:Open(x, y, false, self)
+        
+        self:OnMenuOpened(self.Menu)
     end
     
     function PANEL:PerformLayout(s)
-        self:SetTextColor(hvhobkak.Colors[165])
-        self:SetFont("tbfont")
+        self:SetTextColor(exechack_cc_hvh_obkak.Colors[165])
+        self:SetFont("DermaSmall")
     end
 
-    vgui_Register( "UComboBox", PANEL, "DComboBox" )
+    vgui.Register("UComboBox", PANEL, "DComboBox")
 end
 
 
@@ -1692,13 +1690,13 @@ do
         str = language.GetPhrase( str )
 
         self:SetText( "["..str.."]" )
-        self:SetTextColor(hvhobkak.Colors[165])
-        self:SetFont("tbfont")
+        self:SetTextColor(exechack_cc_hvh_obkak.Colors[165])
+        self:SetFont("DermaSmall")
     end
 
     function PANEL:Paint(w,h)
-        surface_SetDrawColor(hvhobkak.Colors[54])
-        surface_DrawOutlinedRect(0,0,w,h,1)
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
+        surface.DrawOutlinedRect(0,0,w,h,1)
     end
 
     function PANEL:DoClick()
@@ -1764,7 +1762,7 @@ do
     function PANEL:OnChange()
     end
 
-    vgui_Register( "UBinder", PANEL, "DButton" )
+    vgui.Register( "UBinder", PANEL, "DButton" )
 end
 
 do
@@ -1783,14 +1781,16 @@ do
 
     function PANEL:Paint(w,h)
         if self.Color.a < 255 then
-            surface_SimpleTexturedRect(0,0,w,h,hvhobkak.Colors[255],hvhobkak.Materials["Alpha grid"])  
+            surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[255] )
+            surface.SetMaterial( exechack_cc_hvh_obkak.Materials["Alpha grid"] )
+            surface.DrawTexturedRect( 0, 0, w, h )
         end
 
-        surface_SetDrawColor(self.Color)
-        surface_DrawRect(0,0,w,h)
+        surface.SetDrawColor(self.Color)
+        surface.DrawRect(0,0,w,h)
     end
 
-    vgui_Register( "UCPicker", PANEL, "DButton" )
+    vgui.Register( "UCPicker", PANEL, "DButton" )
 end
 
 do
@@ -1799,10 +1799,11 @@ do
     PANEL.lifeTime = 0
 
     function PANEL:Paint( w, h )
-        surface_SimpleRect( 0, 0, w, h, hvhobkak.Colors[25] )
+        surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[ 25 ] )
+        surface.DrawRect( 0, 0, w, h )
 
-        surface_SetDrawColor( hvhobkak.Colors[54] )
-        surface_DrawOutlinedRect( 0, 0, w, h, 1 )
+        surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[54] )
+        surface.DrawOutlinedRect( 0, 0, w, h, 1 )
     end
 
     function PANEL:Init()
@@ -1818,24 +1819,32 @@ do
         end
     end
 
-    vgui_Register( "ULifeTimeBase", PANEL, "EditablePanel" )
+    vgui.Register( "ULifeTimeBase", PANEL, "EditablePanel" )
 end
 
 do
     local PANEL = {}
 
     function PANEL:Init()
-        self:SetSize(200,200)
+        self:SetSize(200, 200)
+        self:SetAlpha(0)
+        
+        self.Animations = {}
+        self.Animations.FadeIn = Derma_Anim("FadeIn", self, function(panel, animation, delta, data)
+            panel:SetAlpha(delta * 255)
+        end)
+        self.Animations.FadeIn:Start(0.15)
     end 
 
-    function PANEL:Paint( w, h )
-        surface_SimpleRect( 0, 0, w, h, hvhobkak.Colors[25] )
+    function PANEL:Paint(w, h)
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[25])
+        surface.DrawRect(0, 0, w, h)
 
-        surface_SetDrawColor( hvhobkak.Colors[54] )
-        surface_DrawOutlinedRect( 0, 0, w, h, 1 )
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
+        surface.DrawOutlinedRect(0, 0, w, h, 1)
     end
 
-    vgui_Register( "UColorPanel", PANEL, "ULifeTimeBase" )
+    vgui.Register("UColorPanel", PANEL, "ULifeTimeBase")
 end
 
 do
@@ -1848,7 +1857,7 @@ do
         self:SetWangs( false )
     end
 
-    vgui_Register( "UColorMixer", PANEL, "DColorMixer" )
+    vgui.Register( "UColorMixer", PANEL, "DColorMixer" )
 end
 
 do
@@ -2162,8 +2171,8 @@ do
 
         function Line:Paint( w, h )
             
-            surface_SetDrawColor( c, c, c )
-            surface_DrawRect( 0, 0, w, h )
+            surface.SetDrawColor( c, c, c )
+            surface.DrawRect( 0, 0, w, h )
         end
 
         local ID = table.insert( self.Lines, Line )
@@ -2437,7 +2446,7 @@ do
 
     end
 
-    vgui_Register( "UListView", PANEL, "DPanel" )
+    vgui.Register( "UListView", PANEL, "DPanel" )
 end
 
 
@@ -2445,14 +2454,14 @@ do
     local PANEL = {}
 
     function PANEL:Paint( w, h )
-        surface_SetDrawColor( hvhobkak.Colors[24] )
-        surface_DrawRect( 0, 0, w, h )
+        surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[24] )
+        surface.DrawRect( 0, 0, w, h )
 
-        surface_SetDrawColor( hvhobkak.Colors[54] )
-        surface_DrawOutlinedRect( 0, 0, w, h, 1 )
+        surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[54] )
+        surface.DrawOutlinedRect( 0, 0, w, h, 1 )
     end
 
-    vgui_Register( "USettingsPanel", PANEL, "ULifeTimeBase" )
+    vgui.Register( "USettingsPanel", PANEL, "ULifeTimeBase" )
 end
 
 do
@@ -2466,7 +2475,7 @@ do
         self:SetText( "..." )
     end
 
-    vgui_Register( "USPanelButton", PANEL, "UButton" )
+    vgui.Register( "USPanelButton", PANEL, "UButton" )
 end
 
 do
@@ -2474,12 +2483,12 @@ do
 
     function PANEL:Init()
 
-        self.ButtonPanel = vgui_Create( "DPanel", self )
+        self.ButtonPanel = vgui.Create( "DPanel", self )
         self.ButtonPanel:Dock( TOP )
         self.ButtonPanel:DockMargin(3,3,3,2)
         self.ButtonPanel:SetTall(18)
 
-        self.ItemPanel = vgui_Create( "DPanel", self )
+        self.ItemPanel = vgui.Create( "DPanel", self )
         self.ItemPanel:Dock( FILL )
         self.ItemPanel:DockMargin( 3, 0, 3, 3 )
 
@@ -2489,30 +2498,34 @@ do
         self.ActiveTab = "NIL"
 
         function self.ItemPanel:OnMousePressed()
-            hvhobkak.frame:OnMousePressed()
+            exechack_cc_hvh_obkak.frame:OnMousePressed()
         end
     
         function self.ItemPanel:OnMouseReleased()
-            hvhobkak.frame:OnMouseReleased()
+            exechack_cc_hvh_obkak.frame:OnMouseReleased()
         end
     end
 
     function PANEL:Paint( w, h )
-        surface_SetDrawColor( hvhobkak.Colors[54] )
-        surface_DrawOutlinedRect( 0, 0, w, h, 1 )
+        surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[54] )
+        surface.DrawOutlinedRect( 0, 0, w, h, 1 )
    
-        surface_SetFont( "tbfont" )
-        surface_SimpleText( 8, 2, self.txt, hvhobkak.Colors[165] )
+        surface.SetFont( "DermaSmall" )
 
-        surface_SimpleRect( 6, 20, w-12, 1, hvhobkak.Colors[54] )
+        surface.SetTextColor( exechack_cc_hvh_obkak.Colors[165] )
+        surface.SetTextPos( 8, 2 ) 
+        surface.DrawText( self.txt ) 
+
+        surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[ 54 ] )
+        surface.DrawRect( 6, 20, w - 12, 1 )
     end
 
     function PANEL:OnMousePressed()
-        hvhobkak.frame:OnMousePressed()
+        exechack_cc_hvh_obkak.frame:OnMousePressed()
     end
 
     function PANEL:OnMouseReleased()
-        hvhobkak.frame:OnMouseReleased()
+        exechack_cc_hvh_obkak.frame:OnMouseReleased()
     end
 
     function PANEL:GetItemPanel()
@@ -2523,7 +2536,7 @@ do
         return self.ButtonPanel
     end
 
-    vgui_Register( "UButtonBarPanel", PANEL, "Panel" )
+    vgui.Register( "UButtonBarPanel", PANEL, "Panel" )
 end
 
 
@@ -2531,84 +2544,104 @@ end
 
 // GUI FUNCS
 
-hvhobkak.ui.ColorWindow = false
-hvhobkak.ui.SettingsPan = false
-hvhobkak.ui.MultiComboP = false
+exechack_cc_hvh_obkak.ui.ColorWindow = false
+exechack_cc_hvh_obkak.ui.SettingsPan = false
+exechack_cc_hvh_obkak.ui.MultiComboP = false
 
-function hvhobkak.ui.RemovePanel( pan )
+function exechack_cc_hvh_obkak.ui.RemovePanel( pan )
     if not pan then return end 
 
     pan:Remove()
     pan = false
 end
 
-function hvhobkak.ui.Binder( cfg, par )
-    local b = vgui_Create( "UBinder", par )
-    b:SetValue( hvhobkak.cfg.binds[ cfg ] )
+function exechack_cc_hvh_obkak.ui.Binder( cfg, par )
+    local b = vgui.Create( "UBinder", par )
+    b:SetValue( exechack_cc_hvh_obkak.cfg.binds[ cfg ] )
 
     function b:OnChange()
-        hvhobkak.cfg.binds[ cfg ] = b:GetValue()
+        exechack_cc_hvh_obkak.cfg.binds[ cfg ] = b:GetValue()
     end
 
     return b
 end
 
-function hvhobkak.ui.ColorPicker( cfg, par, onChange )
-    local b = vgui_Create( "UCPicker", par )
+function exechack_cc_hvh_obkak.ui.ColorPicker(cfg, par, onChange)
+    local b = vgui.Create("UCPicker", par)
+    b.Color = string.ToColor(exechack_cc_hvh_obkak.cfg.colors[cfg] or "255 255 255 255")
 
     function b:DoClick()
-        local x, y = self:LocalToScreen( 0, self:GetTall() )
+        local x, y = self:LocalToScreen(0, self:GetTall())
 
-        hvhobkak.ui.RemovePanel( hvhobkak.ui.ColorWindow )
-
-        hvhobkak.ui.ColorWindow = vgui_Create( "UColorPanel" )
-        hvhobkak.ui.ColorWindow:SetPos( x+25, y-100 )
-
-        local c = vgui_Create( "UColorMixer", hvhobkak.ui.ColorWindow )
-        c:SetColor( string_ToColor( hvhobkak.cfg.colors[cfg] ) )
-
-        c.HSV.Knob:SetSize( 5, 5 )
-
-        function c.HSV.Knob:Paint( w, h )
-            surface_SimpleRect( 0, 0, w, h, b.Color )
-
-            surface_SetDrawColor( hvhobkak.Colors[255] )
-            surface_DrawOutlinedRect( 0, 0, w, h, 1 )
+        if IsValid(exechack_cc_hvh_obkak.ui.ColorWindow) then
+            exechack_cc_hvh_obkak.ui.ColorWindow:Remove()
         end
 
-        function c:ValueChanged( col )
-            b.Color = col 
-            hvhobkak.cfg.colors[cfg] = tostring(col.r) .. " " .. tostring(col.g) .. " " .. tostring(col.b) .. " " .. tostring(col.a)
-            if onChange then onChange( col ) end
+        exechack_cc_hvh_obkak.ui.ColorWindow = vgui.Create("UColorPanel")
+        exechack_cc_hvh_obkak.ui.ColorWindow:SetPos(x+25, y-100)
+        exechack_cc_hvh_obkak.ui.ColorWindow:SetSize(200, 200)
+
+        exechack_cc_hvh_obkak.ui.ColorWindow:SetAlpha(0)
+        exechack_cc_hvh_obkak.ui.ColorWindow:AlphaTo(255, 0.2, 0, function() end)
+
+        local c = vgui.Create("UColorMixer", exechack_cc_hvh_obkak.ui.ColorWindow)
+        c:Dock(FILL)
+        c:SetColor(b.Color)
+        
+        c.HSV.Knob:SetSize(5, 5)
+        
+        function c.HSV.Knob:Paint(w, h)
+            surface.SetDrawColor(b.Color.r, b.Color.g, b.Color.b, 255)
+            surface.DrawRect(0, 0, w, h)
+            surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[255] or color_white)
+            surface.DrawOutlinedRect(0, 0, w, h, 1)
         end
 
+        function c:ValueChanged(col)
+            b.Color = col
+            exechack_cc_hvh_obkak.cfg.colors[cfg] = string.format("%d %d %d %d", col.r, col.g, col.b, col.a)
+            if onChange then 
+                onChange(col) 
+            end
+            
+            if IsValid(b) then
+                b:SetColor(col)
+            end
+        end
     end
 
-    b.Color = string_ToColor( hvhobkak.cfg.colors[cfg] )
+    function b:SetColor(col)
+        self.Color = col
+        self:SetTooltip(string.format("R: %d G: %d B: %d A: %d", col.r, col.g, col.b, col.a))
+    end
+
+    b:SetColor(b.Color)
+    
+    return b
 end
 
-function hvhobkak.ui.SPanel( func, p )
-    local b = vgui_Create( "USPanelButton", p )
+function exechack_cc_hvh_obkak.ui.SPanel( func, p )
+    local b = vgui.Create( "USPanelButton", p )
 
     function b:DoClick()
-        local mx, my = input_GetCursorPos()
+        local mx, my = input.GetCursorPos()
 
-        hvhobkak.ui.RemovePanel( hvhobkak.ui.SettingsPan )
+        exechack_cc_hvh_obkak.ui.RemovePanel( exechack_cc_hvh_obkak.ui.SettingsPan )
 
-        hvhobkak.ui.SettingsPan = vgui_Create( "USettingsPanel" )
-        hvhobkak.ui.SettingsPan:SetPos( mx+25, my-10 )
+        exechack_cc_hvh_obkak.ui.SettingsPan = vgui.Create( "USettingsPanel" )
+        exechack_cc_hvh_obkak.ui.SettingsPan:SetPos( mx+25, my-10 )
 
         func()
     end
 end
 
-function hvhobkak.ui.Label( pan, str, postCreate )
-    local p = vgui_Create( "UCBPanel", pan )
+function exechack_cc_hvh_obkak.ui.Label( pan, str, postCreate )
+    local p = vgui.Create( "UCBPanel", pan )
 
-    local lbl = vgui_Create( "DLabel", p )
+    local lbl = vgui.Create( "DLabel", p )
     lbl:SetText( str )
-    lbl:SetFont( "tbfont" )
-    lbl:SetTextColor( hvhobkak.Colors[165] )
+    lbl:SetFont( "DermaSmall" )
+    lbl:SetTextColor( exechack_cc_hvh_obkak.Colors[165] )
     lbl:Dock( LEFT )
     lbl:DockMargin( 4, 2, 4, 0 )
     lbl:SizeToContents()
@@ -2616,79 +2649,83 @@ function hvhobkak.ui.Label( pan, str, postCreate )
     if postCreate then postCreate( p ) end
 end
     
-function hvhobkak.ui.CheckBox( par, lbl, cfg, hint, bind, color, spanel, onToggle, postCreate )
-    local p = vgui_Create( "UCBPanel", par )
+function exechack_cc_hvh_obkak.ui.CheckBox( par, lbl, cfg, hint, bind, color, spanel, onToggle, postCreate )
+    local p = vgui.Create( "UCBPanel", par )
 
-    local c = vgui_Create( "UCheckboxLabel", p )
+    local c = vgui.Create( "UCheckboxLabel", p )
     c:SetText( lbl )
     c:SetPos( 0, 0 )
-    c:SetValue( hvhobkak.cfg.vars[cfg] )
+    c:SetValue( exechack_cc_hvh_obkak.cfg.vars[cfg] )
 
     function c:OnChange( bval )
-        hvhobkak.cfg.vars[cfg] = bval
+        exechack_cc_hvh_obkak.cfg.vars[cfg] = bval
 
         if onToggle then onToggle(bval) end
     end
 
     if postCreate then postCreate( p ) end
 
-    if bind then hvhobkak.ui.Binder( cfg, p ) end
-    if color then hvhobkak.ui.ColorPicker( cfg, p ) end
-    if spanel then hvhobkak.ui.SPanel( spanel, p ) end
+    if bind then exechack_cc_hvh_obkak.ui.Binder( cfg, p ) end
+    if color then exechack_cc_hvh_obkak.ui.ColorPicker( cfg, p ) end
+    if spanel then exechack_cc_hvh_obkak.ui.SPanel( spanel, p ) end
 
     if hint then
         function c.Label:Paint()
             if self:IsHovered() then
-                local x, y = input_GetCursorPos()
+                local x, y = input.GetCursorPos()
 
-                hvhobkak.hint = true
-                hvhobkak.hintText = hint
-                hvhobkak.hintX = x + 45
-                hvhobkak.hintY = y - 5
+                exechack_cc_hvh_obkak.hint = true
+                exechack_cc_hvh_obkak.hintText = hint
+                exechack_cc_hvh_obkak.hintX = x + 45
+                exechack_cc_hvh_obkak.hintY = y - 5
             end
         end
     end
 end
 
-function hvhobkak.ui.Slider( p, str, cfg, min, max, dec, onChange )
-    local pan = vgui_Create( "DPanel", p )
+function exechack_cc_hvh_obkak.ui.Slider( p, str, cfg, min, max, dec, onChange )
+    local pan = vgui.Create( "DPanel", p )
     pan:Dock( TOP )
     pan:DockMargin( 4, 2, 4, 0 )
     pan:SetTall( 20 )
 
     function pan:Paint( w, h )
-        surface_SetFont("tbfont")
+        surface.SetFont("DermaSmall")
 
-        local s = hvhobkak.cfg.vars[cfg]
-        local tw, th = surface_GetTextSize(s)
+        local s = exechack_cc_hvh_obkak.cfg.vars[cfg]
+        local tw, th = surface.GetTextSize(s)
         
-        surface_SimpleText(2,4,str,hvhobkak.Colors[165])
+        surface.SetTextColor( exechack_cc_hvh_obkak.Colors[165] )
 
-        surface_SimpleText(w-tw-2,4,hvhobkak.cfg.vars[cfg],hvhobkak.Colors[165])
+        surface.SetTextPos( 2, 4 ) 
+        surface.DrawText( str ) 
+
+        surface.SetTextPos( w - tw - 2, 4 ) 
+        surface.DrawText( exechack_cc_hvh_obkak.cfg.vars[cfg] ) 
     end
 
-    local c = vgui_Create( "USlider", p )
+    local c = vgui.Create( "USlider", p )
     c:Dock( TOP )
     c:DockMargin( 4, 2, 4, 0 )
     c:SetMax( max )
     c:SetMin( min )
     c:SetDecimals( dec )
 
-    c:SetValue( hvhobkak.cfg.vars[cfg] )
+    c:SetValue( exechack_cc_hvh_obkak.cfg.vars[cfg] )
 
     local value, min, max = c:GetValue(), c:GetMin(), c:GetMax()
 
 	c:SetSlideX((value - min) / (max - min))
 
     function c:OnValueChanged( val )
-        hvhobkak.cfg.vars[cfg] = val
+        exechack_cc_hvh_obkak.cfg.vars[cfg] = val
 
         if onChange then onChange(val) end
     end
 end
 
-function hvhobkak.ui.Button( str, func, p ) 
-    local b = vgui_Create( "UButton", p )
+function exechack_cc_hvh_obkak.ui.Button( str, func, p ) 
+    local b = vgui.Create( "UButton", p )
     b:SetText( str )
 
     function b:DoClick()
@@ -2696,53 +2733,53 @@ function hvhobkak.ui.Button( str, func, p )
     end
 end
 
-function hvhobkak.ui.TextEntry( str, cfg, pan, chars, postCreate )
-    local lbl = vgui_Create("DLabel",pan)
+function exechack_cc_hvh_obkak.ui.TextEntry( str, cfg, pan, chars, postCreate )
+    local lbl = vgui.Create("DLabel",pan)
     lbl:Dock(TOP)
     lbl:DockMargin(4,2,4,0)
     lbl:SetText(str)
-    lbl:SetFont("tbfont")
-    lbl:SetColor(hvhobkak.Colors[165])
+    lbl:SetFont("DermaSmall")
+    lbl:SetColor(exechack_cc_hvh_obkak.Colors[165])
 
-    local p = vgui_Create("DPanel",pan)
+    local p = vgui.Create("DPanel",pan)
     p:SetTall(25)
     p:Dock(TOP)
     p:DockMargin(4,2,4,0)
 
     p.Paint = function(s,w,h)
-        surface_SetDrawColor(hvhobkak.Colors[54])
-        surface_DrawOutlinedRect(0,0,w,h)
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
+        surface.DrawOutlinedRect(0,0,w,h)
     end
 	
-	local txt = vgui_Create("DTextEntry",p)
+	local txt = vgui.Create("DTextEntry",p)
 	txt:Dock(FILL)
 	txt:DockMargin(4,4,4,4) 
 	txt:IsMultiline( false )
 	txt:SetMaximumCharCount(chars)
 	txt:SetPlaceholderText(str)
-	txt:SetFont( "tbfont" )
+	txt:SetFont( "DermaSmall" )
     txt:SetPaintBackground(false)
-    txt:SetTextColor(hvhobkak.Colors[165])
+    txt:SetTextColor(exechack_cc_hvh_obkak.Colors[165])
 
-	if hvhobkak.cfg.vars[cfg] != nil and hvhobkak.cfg.vars[cfg] != "" then
-		txt:SetValue(hvhobkak.cfg.vars[cfg])
+	if exechack_cc_hvh_obkak.cfg.vars[cfg] != nil and exechack_cc_hvh_obkak.cfg.vars[cfg] != "" then
+		txt:SetValue(exechack_cc_hvh_obkak.cfg.vars[cfg])
 	end
 
 	function txt.Think()
 		if txt:IsEditing() then return end
-        if hvhobkak.cfg.vars[cfg] == txt:GetValue() then return end
+        if exechack_cc_hvh_obkak.cfg.vars[cfg] == txt:GetValue() then return end
 
-		hvhobkak.cfg.vars[cfg] = txt:GetValue()
+		exechack_cc_hvh_obkak.cfg.vars[cfg] = txt:GetValue()
 	end 
 
 	function txt.OnValueChange()
-		hvhobkak.cfg.vars[cfg] = txt:GetValue()
+		exechack_cc_hvh_obkak.cfg.vars[cfg] = txt:GetValue()
 	end
 
     if postCreate then postCreate(p) end
 end
 
-function hvhobkak.ui.dropdownButton( str, v, p, a )
+function exechack_cc_hvh_obkak.ui.dropdownButton( str, v, p, a )
     local b = p:Add("DButton")
     b:Dock(TOP)
     b:SetTall(20)
@@ -2751,34 +2788,35 @@ function hvhobkak.ui.dropdownButton( str, v, p, a )
     
     function b:Paint(w,h)
         if self:IsHovered() then 
-            surface_SimpleRect(1,1,w-2,h-2,hvhobkak.Colors[32])
+            surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[ 32 ] )
+            surface.DrawRect( 1, 1, w - 2, h - 2 )
         end
 
-        surface_SetTextColor(hvhobkak.Colors[165])
+        surface.SetTextColor(exechack_cc_hvh_obkak.Colors[165])
 
-        if hvhobkak.cfg.vars[str.."-"..v] then
-            surface_SetTextColor(hvhobkak.Colors[235]) 
+        if exechack_cc_hvh_obkak.cfg.vars[str.."-"..v] then
+            surface.SetTextColor(exechack_cc_hvh_obkak.Colors[235]) 
         end
 
-        surface_SetTextPos(5,3)
-        surface_SetFont("tbfont")
-        surface_DrawText(v)
+        surface.SetTextPos(5,3)
+        surface.SetFont("DermaSmall")
+        surface.DrawText(v)
     end
 
     function b:DoClick()
-        hvhobkak.cfg.vars[str.."-"..v] = not hvhobkak.cfg.vars[str.."-"..v] 
+        exechack_cc_hvh_obkak.cfg.vars[str.."-"..v] = not exechack_cc_hvh_obkak.cfg.vars[str.."-"..v] 
     end
 end
 
-function hvhobkak.ui.MultiCombo( pan, str, choices )
-    local lbl = vgui_Create("DLabel",pan)
+function exechack_cc_hvh_obkak.ui.MultiCombo( pan, str, choices )
+    local lbl = vgui.Create("DLabel",pan)
     lbl:Dock(TOP)
     lbl:DockMargin(4,1,4,0)
     lbl:SetText(str)
-    lbl:SetFont("tbfont")
-    lbl:SetColor(hvhobkak.Colors[165])
+    lbl:SetFont("DermaSmall")
+    lbl:SetColor(exechack_cc_hvh_obkak.Colors[165])
 
-    local d = vgui_Create("DButton",pan)
+    local d = vgui.Create("DButton",pan)
     d:Dock(TOP)
     d:DockMargin(4,1,4,0)
     d:SetTall(20)
@@ -2790,69 +2828,71 @@ function hvhobkak.ui.MultiCombo( pan, str, choices )
         local preview = ""
 
         for k, v in pairs(choices) do
-            if hvhobkak.cfg.vars[str.."-"..v] == true and (d.preview[v] == false or d.preview[v] == nil) and not table.HasValue(d.preview, v) then
-                table_insert(d.preview,v) 
-            elseif hvhobkak.cfg.vars[str.."-"..v] == false and (d.preview[v] == true or d.preview[v] == nil) and table.HasValue(d.preview, v) then
-                table_RemoveByValue(d.preview,v)
+            if exechack_cc_hvh_obkak.cfg.vars[str.."-"..v] == true and (d.preview[v] == false or d.preview[v] == nil) and not table.HasValue(d.preview, v) then
+                table.insert(d.preview,v) 
+            elseif exechack_cc_hvh_obkak.cfg.vars[str.."-"..v] == false and (d.preview[v] == true or d.preview[v] == nil) and table.HasValue(d.preview, v) then
+                table.RemoveByValue(d.preview,v)
             elseif d.preview[v] == false then 
-                table_RemoveByValue(d.preview,v)
+                table.RemoveByValue(d.preview,v)
             end
         end
 
-        preview = table_concat(d.preview,", ")
+        preview = table.concat(d.preview,", ")
 
-        surface_SetDrawColor(hvhobkak.Colors[25])
-        surface_DrawRect(0,0,w,h)
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[25])
+        surface.DrawRect(0,0,w,h)
     
-        surface_SetTextColor(hvhobkak.Colors[165])
-        surface_SetTextPos(8,20/2-15/2)
-        surface_SetFont("tbfont")
-        surface_DrawText(preview)
+        surface.SetTextColor(exechack_cc_hvh_obkak.Colors[165])
+        surface.SetTextPos(8,20/2-15/2)
+        surface.SetFont("DermaSmall")
+        surface.DrawText(preview)
     
-        surface_SetDrawColor(hvhobkak.Colors[32])
-        surface_DrawRect(w-25,0,25,25)
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[32])
+        surface.DrawRect(w-25,0,25,25)
     
-        surface_SetTextColor(hvhobkak.Colors[165])
-        surface_SetTextPos(w-20,20/2-15/2)
-        surface_SetFont("tbfont")
-        surface_DrawText("▼")
+        surface.SetTextColor(exechack_cc_hvh_obkak.Colors[165])
+        surface.SetTextPos(w-20,20/2-15/2)
+        surface.SetFont("DermaSmall")
+        surface.DrawText("▼")
 
-        surface_SetDrawColor(hvhobkak.Colors[54])
-        surface_DrawOutlinedRect(0,0,w,h,1)
+        surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
+        surface.DrawOutlinedRect(0,0,w,h,1)
     end
 
     function d:DoClick()
         local x,y = self:LocalToScreen( 0, self:GetTall() )
 
-        hvhobkak.ui.RemovePanel( hvhobkak.ui.MultiComboP )
+        exechack_cc_hvh_obkak.ui.RemovePanel( exechack_cc_hvh_obkak.ui.MultiComboP )
 
         local ctoh = #choices
     
-        hvhobkak.ui.MultiComboP = vgui_Create( "ULifeTimeBase" )
-        hvhobkak.ui.MultiComboP:SetPos( x, y - 1 )
-        hvhobkak.ui.MultiComboP:SetSize( 243, ctoh * 22 + 2 )
+        exechack_cc_hvh_obkak.ui.MultiComboP = vgui.Create( "ULifeTimeBase" )
+        exechack_cc_hvh_obkak.ui.MultiComboP:SetPos( x, y - 1 )
+        exechack_cc_hvh_obkak.ui.MultiComboP:SetSize( 243, ctoh * 22 + 2 )
     
         for k, v in pairs(choices) do
-            hvhobkak.ui.dropdownButton( str, v, hvhobkak.ui.MultiComboP, d.preview )
+            exechack_cc_hvh_obkak.ui.dropdownButton( str, v, exechack_cc_hvh_obkak.ui.MultiComboP, d.preview )
         end
     end
 end
 
-function hvhobkak.ui.ComboBox( pan, str, cfg, choices )
-    local lbl = vgui_Create("DLabel",pan)
+function exechack_cc_hvh_obkak.ui.ComboBox( pan, str, cfg, choices )
+    local lbl = vgui.Create("DLabel",pan)
     lbl:Dock(TOP)
     lbl:DockMargin(4,1,4,0)
     lbl:SetText(str)
-    lbl:SetFont("tbfont")
-    lbl:SetColor(hvhobkak.Colors[165])
+    lbl:SetFont("DermaSmall")
+    lbl:SetColor(exechack_cc_hvh_obkak.Colors[165])
 
-    local dropdown = vgui_Create("UComboBox",pan)
+    local dropdown = vgui.Create("UComboBox",pan)
     dropdown:Dock(TOP)
     dropdown:DockMargin(4,1,4,0)
     
-    if hvhobkak.presets[ cfg ] then
-        choices = hvhobkak.presets[ cfg ]
+    if exechack_cc_hvh_obkak.presets[ cfg ] then
+        choices = exechack_cc_hvh_obkak.presets[ cfg ]
     end 
+    
+    if not choices then choices = {} end
     
     for k, v in ipairs( choices ) do
         dropdown:AddChoice( v )
@@ -2860,23 +2900,25 @@ function hvhobkak.ui.ComboBox( pan, str, cfg, choices )
     
     dropdown:SetSortItems(false)
 
-    if hvhobkak.cfg.vars[cfg] <= #choices then
-        dropdown:ChooseOptionID(hvhobkak.cfg.vars[cfg])
-    else
-        dropdown:ChooseOptionID(1)
+    if #choices > 0 then
+        if exechack_cc_hvh_obkak.cfg.vars[cfg] <= #choices then
+            dropdown:ChooseOptionID(exechack_cc_hvh_obkak.cfg.vars[cfg])
+        else
+            dropdown:ChooseOptionID(1)
+        end
     end
 
     function dropdown:OnSelect(index, value, data)
-        hvhobkak.cfg.vars[cfg] = index
+        exechack_cc_hvh_obkak.cfg.vars[cfg] = index
     end
 
     return lbl, dropdown
 end
 
-function hvhobkak.ui.InitMT( p, postCreate )
+function exechack_cc_hvh_obkak.ui.InitMT( p, postCreate )
     p.ItemPanel:Remove()
 
-    p.ItemPanel = vgui_Create( "DPanel", p )
+    p.ItemPanel = vgui.Create( "DPanel", p )
     p.ItemPanel:Dock( FILL )
     p.ItemPanel:DockMargin( 3, 0, 3, 3 )
 
@@ -2885,9 +2927,9 @@ function hvhobkak.ui.InitMT( p, postCreate )
     if postCreate then postCreate( p.ItemPanel ) end
 end
 
-function hvhobkak.ui.MTButton( p, str, postCreate )
-    surface_SetFont("tbfont")
-    local w, h = surface_GetTextSize(str)
+function exechack_cc_hvh_obkak.ui.MTButton( p, str, postCreate )
+    surface.SetFont("DermaSmall")
+    local w, h = surface.GetTextSize(str)
 
     local fw = w + 5
 
@@ -2901,28 +2943,28 @@ function hvhobkak.ui.MTButton( p, str, postCreate )
     
     function b:DoClick()
         p.ActiveTab = str
-        hvhobkak.ui.InitMT( p, postCreate )
+        exechack_cc_hvh_obkak.ui.InitMT( p, postCreate )
     end
 
     function b:Paint(width,height)
         if p.ActiveTab == str then
-            surface_SetTextColor(235,235,235,255)
+            surface.SetTextColor(235,235,235,255)
         else
-            surface_SetTextColor(165,165,165,255)
+            surface.SetTextColor(165,165,165,255)
         end
         
-        surface_DrawRect(0,0,width,height)
+        surface.DrawRect(0,0,width,height)
 
-        surface_SetFont("tbfont")
-        surface_SetTextPos(tx,ty)
-        surface_DrawText(str)
+        surface.SetFont("DermaSmall")
+        surface.SetTextPos(tx,ty)
+        surface.DrawText(str)
     end
 
     p.ActiveTab = str
-    hvhobkak.ui.InitMT( p, postCreate )
+    exechack_cc_hvh_obkak.ui.InitMT( p, postCreate )
 end
 
-hvhobkak.pty = { 5, 5, 5 }
+exechack_cc_hvh_obkak.pty = { 5, 5, 5 }
 do
     local xt = { 
         [1] = 5,
@@ -2930,26 +2972,26 @@ do
         [3] = 529
     }
 
-    function hvhobkak.itemPanel( str, tbl, h )
-        local p = vgui_Create( "UPanel", hvhobkak.scrollpanel )
-        p:SetPos( xt[tbl], hvhobkak.pty[tbl] )
+    function exechack_cc_hvh_obkak.itemPanel( str, tbl, h )
+        local p = vgui.Create( "UPanel", exechack_cc_hvh_obkak.scrollpanel )
+        p:SetPos( xt[tbl], exechack_cc_hvh_obkak.pty[tbl] )
         p:SetSize( 257, h )
         p.txt = str
 
-        hvhobkak.pty[ tbl ] = hvhobkak.pty[ tbl ] + h + 5
+        exechack_cc_hvh_obkak.pty[ tbl ] = exechack_cc_hvh_obkak.pty[ tbl ] + h + 5
 
         return p
     end
 
-    function hvhobkak.itemPanelB( str, tbl, h, buttonsFunc )
-        local p = vgui_Create( "UButtonBarPanel", hvhobkak.scrollpanel )
-        p:SetPos( xt[tbl], hvhobkak.pty[tbl] )
+    function exechack_cc_hvh_obkak.itemPanelB( str, tbl, h, buttonsFunc )
+        local p = vgui.Create( "UButtonBarPanel", exechack_cc_hvh_obkak.scrollpanel )
+        p:SetPos( xt[tbl], exechack_cc_hvh_obkak.pty[tbl] )
         p:SetSize( 257, h )
         p.txt = str
 
         if buttonsFunc then buttonsFunc( p ) end
 
-        hvhobkak.pty[ tbl ] = hvhobkak.pty[ tbl ] + h + 5
+        exechack_cc_hvh_obkak.pty[ tbl ] = exechack_cc_hvh_obkak.pty[ tbl ] + h + 5
 
         return p
     end
@@ -2960,12 +3002,12 @@ end
     Drag n drop 
 */
 
-hvhobkak.espposes = {"Up","Down","Right","Left"}
-hvhobkak.espelements = {"Name pos","Usergroup pos","Health pos","Armor pos","Money pos","Weapon pos","Team pos","Break LC pos","Simtime pos"}
-hvhobkak.lastdrag = ""
-hvhobkak.esppans = {}
+exechack_cc_hvh_obkak.espposes = {"Up","Down","Right","Left"}
+exechack_cc_hvh_obkak.espelements = {"Name pos","Mark pos","Usergroup pos","Health pos","Armor pos","Money pos","Weapon pos","Team pos","Break LC pos","Simtime pos"}
+exechack_cc_hvh_obkak.lastdrag = ""
+exechack_cc_hvh_obkak.esppans = {}
 
-hvhobkak.esppansposes = {
+exechack_cc_hvh_obkak.esppansposes = {
     [1] = {
         x = 85,
         y = 0,
@@ -2985,517 +3027,406 @@ hvhobkak.esppansposes = {
 }
 
 for i = 1, 4 do
-    hvhobkak.esppans[i] = {}
+    exechack_cc_hvh_obkak.esppans[i] = {}
 end
 
-function hvhobkak.DoDrop( self, panels, bDoDrop, Command, x, y )
+function exechack_cc_hvh_obkak.DoDrop( self, panels, bDoDrop, Command, x, y )
     if ( bDoDrop ) then
         local newpos = self.pos
         
         for i = 1, #panels do
             local v = panels[i]
 
-            hvhobkak.cfg.vars[ v:GetText() ] = newpos
+            exechack_cc_hvh_obkak.cfg.vars[ v:GetText() ] = newpos
             v:SetParent( self )
         end
     end
 end
     
-hvhobkak.spfuncs = {}
+exechack_cc_hvh_obkak.spfuncs = {}
 
 // PANEL CREATION
 
-hvhobkak.frame = vgui_Create("UFrame")
-hvhobkak.scrollpanel = vgui_Create("UScroll",hvhobkak.frame)
+exechack_cc_hvh_obkak.frame = vgui.Create("UFrame")
+exechack_cc_hvh_obkak.scrollpanel = vgui.Create("UScroll",exechack_cc_hvh_obkak.frame)
 
-hvhobkak.tabs = {}
+exechack_cc_hvh_obkak.tabs = {}
 
 // Aimbot
 
-hvhobkak.spfuncs[30] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,200)
+exechack_cc_hvh_obkak.spfuncs[30] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,200)
 
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Force seed", "Force seed" )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Wait for seed", "Wait for seed" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Force seed", "Force seed" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Wait for seed", "Wait for seed" )
 
     
 end
 
-hvhobkak.spfuncs[32] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,200)
+exechack_cc_hvh_obkak.spfuncs[32] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,200)
 
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Max simulation time", "Crossbow max simtime", 1, 10, 2 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Max simulation time", "Crossbow max simtime", 1, 10, 2 )
 
 end
 
-function hvhobkak.tabs.Aimbot()
+function exechack_cc_hvh_obkak.tabs.Aimbot()
 
-    local p = hvhobkak.itemPanel("Main",1,160):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("Main",1,145):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Enable aimbot", "Enable aimbot", false, false, false, false, false, function( p ) hvhobkak.ui.Binder( "Aim on key", p ) end )
-    hvhobkak.ui.CheckBox( p, "Silent aim", "Silent aim" )
-    hvhobkak.ui.CheckBox( p, "pSilent", "pSilent", "Make aim completely invisible." )
-    hvhobkak.ui.CheckBox( p, "Auto fire", "Auto fire", "Automatically fires when targets can be damaged.", false, false, hvhobkak.spfuncs[2] )
-    hvhobkak.ui.CheckBox( p, "Auto reload", "Auto reload", "Automatically reloads weapon when clip is empty." )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Enable aimbot", "Enable aimbot", false, false, false, false, false, function( p ) exechack_cc_hvh_obkak.ui.Binder( "Aim on key", p ) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Silent aim", "Silent aim" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "pSilent", "pSilent", "Make aim completely invisible." )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Auto fire", "Auto fire", "Automatically fires when targets can be damaged.", false, false, exechack_cc_hvh_obkak.spfuncs[2] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Auto reload", "Auto reload", "Automatically reloads weapon when clip is empty." )
 
-    local p = hvhobkak.itemPanel("Legit",1,120):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("Legit",1,100):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Aimbot smoothing", "Aimbot smoothing", false, false, false, hvhobkak.spfuncs[4] )
-    hvhobkak.ui.CheckBox( p, "Fov limit", "Fov limit", false, false, false, hvhobkak.spfuncs[5] )
-    hvhobkak.ui.CheckBox( p, "Triggerbot", "Trigger bot", false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Aimbot smoothing", "Aimbot smoothing", false, false, false, exechack_cc_hvh_obkak.spfuncs[4] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Fov limit", "Fov limit", false, false, false, exechack_cc_hvh_obkak.spfuncs[5] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Triggerbot", "Trigger bot", false, true )
 
-    local p = hvhobkak.itemPanel( "Visualisation", 1, 100 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Visualisation", 1, 120 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "FOV Circle", "Show FOV", false, false, true )
-    hvhobkak.ui.CheckBox( p, "Snapline", "Aimbot snapline", false, false, true )
-    hvhobkak.ui.CheckBox( p, "Marker", "Aimbot marker", false, false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "FOV Circle", "Show FOV", false, false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Snapline", "Aimbot snapline", false, false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Marker", "Aimbot marker", false, false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Knifebot Range", "Knifebot Range" )
 
-    local p = hvhobkak.itemPanel( "Accuracy", 2, 80 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Accuracy", 2, 80 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Compensate recoil", "Norecoil" )
-    hvhobkak.ui.CheckBox( p, "Compensate spread", "Nospread", "Supported HL2, M9K, FAS2, CW2, SWB", false, false, hvhobkak.spfuncs[30] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Compensate recoil", "Norecoil" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Compensate spread", "Nospread", "Supported HL2, M9K, FAS2, CW2, SWB", false, false, exechack_cc_hvh_obkak.spfuncs[30] )
 
-    local p = hvhobkak.itemPanel( "Prediction", 2, 100 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Prediction", 2, 100 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Crossbow prediction", "Crossbow prediction" )
-    hvhobkak.ui.Slider( p, "Simulation limit", "Simulation limit", 1, 10, 2 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Crossbow prediction", "Crossbow prediction" )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Simulation limit", "Simulation limit", 1, 10, 2 )
+    --exechack_cc_hvh_obkak.ui.CheckBox( p, "Predict fist", "Predict fist" )
 
-    local p = hvhobkak.itemPanel("Knife bot",2,120):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("Knife bot",2,120):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Knife bot", "Knifebot", false, false, false )
-    hvhobkak.ui.ComboBox( p, "Knifebot mode", "Knifebot mode"  )
-    hvhobkak.ui.CheckBox( p, "Facestab", "Facestab" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Knife bot", "Knifebot", false, false, false )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Knifebot mode", "Knifebot mode"  )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Facestab", "Facestab" )
 
+    --local p = exechack_cc_hvh_obkak.itemPanel( "Tickbase", 2, 100 ):GetItemPanel()
 
-
-
-    //hvhobkak.ui.CheckBox( p, "Prop aimbot", "Prop aimbot" )
-    //hvhobkak.ui.CheckBox( p, "Auto throw", "PA thrower" )
-    //hvhobkak.ui.Slider( p, "Throw distance", "PA thrower dist", 1, 640, 0 )
-    //hvhobkak.ui.Slider( p, "Max simulation time", "Prop max simtime", 1, 10, 2 )
-    //hvhobkak.ui.CheckBox( p, "Projectile aimbot", "Projectile aimbot" )
-
-    local p = hvhobkak.itemPanel( "Target selection", 3, 175 ):GetItemPanel()
-
-    hvhobkak.ui.ComboBox( p, "Target selection", "Target selection", { "Distance", "FOV" } )
-    hvhobkak.ui.MultiCombo( p, "Ignores", { "Friends", "Steam friends", "Teammates", "Driver", "Head unhitable", "God time", "Nocliping", "Nodraw", "Frozen", "Bots", "Admins" } )
-    hvhobkak.ui.CheckBox( p, "Wallz", "Wallz" ) 
-    hvhobkak.ui.Slider( p, "Max targets", "Max targets", 0, 10, 0 )
-
-    local p = hvhobkak.itemPanel( "Hitbox selection", 3, 280 ):GetItemPanel()
-
-    hvhobkak.ui.ComboBox( p, "Hitbox selection", "Hitbox selection", { "Head", "Chest", "Penis" } )
-    hvhobkak.ui.CheckBox( p, "Hitscan", "Hitscan" ) 
-    //hvhobkak.ui.ComboBox( p, "Hitscan mode", { "Damage", "Safety", "Scale" }, "Hitscan mode" )
-    hvhobkak.ui.MultiCombo( p, "Hitscan groups", { "Head", "Chest", "Stomach", "Arms", "Legs", "Generic" } )
-    hvhobkak.ui.CheckBox( p, "Multipoint", "Multipoint" ) 
-    hvhobkak.ui.MultiCombo( p, "Multipoint groups", { "Head", "Chest", "Stomach", "Arms", "Legs", "Generic" } )
-    hvhobkak.ui.Slider( p, "Multipoint scale", "Multipoint scale", 0.5, 1, 1 )
-
-    
-
-    
-
-    /*
+    --exechack_cc_hvh_obkak.ui.CheckBox( p, "Engine pred", "Engine pred" )
+    //exechack_cc_hvh_obkak.ui.Slider( p, "TicksTime", "tickfix_time", 0, 6, 2 )
+    --exechack_cc_hvh_obkak.ui.CheckBox( p, "NoPlyLag", "NoAimLag", "Off comp lag" )
+    //exechack_cc_hvh_obkak.ui.CheckBox( p, "GetManipulateInterp", "GetManipulateInterp" )
+    --exechack_cc_hvh_obkak.ui.CheckBox( p, "LagCompensation", "LagCompensation", "Compensate ping loss" )
+    --exechack_cc_hvh_obkak.ui.CheckBox( p, "LerpTime abjust", "LerpTime", "abuse lerptime target" )
 
 
-    
-    
-    
 
-    hvhobkak.ui.CheckBox( p, "", "Disable interpolation", false, false, false, hvhobkak.spfuncs[9])
-    
+    local p = exechack_cc_hvh_obkak.itemPanel( "Target selection", 3, 260 ):GetItemPanel()
 
-    local p = hvhobkak.itemPanel("Prediction",2,200):GetItemPanel()
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Target selection", "Target selection", { "Distance", "FOV" } )
+    exechack_cc_hvh_obkak.ui.MultiCombo( p, "Ignores", { "Friends", "Steam friends", "Teammates", "Driver", "Head unhitable", "God time", "Nocliping", "Nodraw", "Frozen", "Bots", "Admins" } )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Wallz", "Wallz" ) 
+    exechack_cc_hvh_obkak.ui.Slider( p, "Max targets", "Max targets", 0, 10, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Max distance", "Max distance", 0, 4096, 0 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Target-Priority-Only", "Target-Priority-Only" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "auto dist for ruselit", "RusEliteDetector" )
 
-    
-    hvhobkak.ui.CheckBox( p, "Crossbow prediction", "Crossbow prediction", false, false, false, hvhobkak.spfuncs[32] )
+    local p = exechack_cc_hvh_obkak.itemPanel( "Hitbox selection", 3, 240 ):GetItemPanel()
 
-
-*/
-
-    /*
-    func = function()
-        hvhobkak.settingspan:SetSize(250,64)
-
-        hvhobkak.slider("Forwardtrack time","",0,200,0,hvhobkak.settingspan)
-    end
-    
-    //hvhobkak.checkbox("Backshoot","Backshoot",p) 
-    hvhobkak.checkbox("Auto healthkit","Auto healthkit",p:GetItemPanel())
-    hvhobkak.multiCombo("Healthkit",{"Self heal","Heal closest"},p:GetItemPanel())
-    */
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Hitbox selection", "Hitbox selection", { "Head", "Chest", "Penis" } )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Hitscan", "Hitscan" ) 
+    //exechack_cc_hvh_obkak.ui.ComboBox( p, "Hitscan mode", { "Damage", "Safety", "Scale" }, "Hitscan mode" )
+    exechack_cc_hvh_obkak.ui.MultiCombo( p, "Hitscan groups", { "Head", "Chest", "Stomach", "Arms", "Legs", "Generic" } )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Multipoint", "Multipoint" ) 
+    exechack_cc_hvh_obkak.ui.MultiCombo( p, "Multipoint groups", { "Head", "Chest", "Stomach", "Arms", "Legs", "Generic" } )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Multipoint scale", "Multipoint scale", 0.5, 1, 1 )
 end
 
 
 
-hvhobkak.spfuncs[22] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,200)
+exechack_cc_hvh_obkak.spfuncs[22] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,200)
 
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Lag limit","Lag limit",1,23,0 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Random min","Lag randomisation",1,23,0 )
-    hvhobkak.ui.ComboBox( hvhobkak.ui.SettingsPan, "Lag mode", "Lag mode", {"Static","Adaptive","Hybrid"})
-    hvhobkak.ui.MultiCombo( hvhobkak.ui.SettingsPan, "Fake lag options", {"Disable on ladder","Disable in attack","Randomise","On peek"} )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Lag limit","Lag limit",1,23,0 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Random min","Lag randomisation",1,23,0 )
+    exechack_cc_hvh_obkak.ui.ComboBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Lag mode", "Lag mode", {"Static","Adaptive","Hybrid"})
+    exechack_cc_hvh_obkak.ui.MultiCombo( exechack_cc_hvh_obkak.ui.SettingsPan, "Fake lag options", {"Disable on ladder","Disable in attack","Randomise","On peek"} )
 end
 
-hvhobkak.spfuncs[24] = function( p )
+exechack_cc_hvh_obkak.spfuncs[24] = function( p )
    
-
-    // "Runs act command to make your model dance for other clients"
-    //"Forcing istyping for animation desync"
 end
 
-hvhobkak.spfuncs[36] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,200)
-    hvhobkak.ui.ComboBox( hvhobkak.ui.SettingsPan, "Material", "Antiaim material", hvhobkak.chamsMaterials)
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Fullbright", "Antiaim fullbright" )
+exechack_cc_hvh_obkak.spfuncs[36] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,200)
+    exechack_cc_hvh_obkak.ui.ComboBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Material", "Antiaim material", exechack_cc_hvh_obkak.chamsMaterials)
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Fullbright", "Antiaim fullbright" )
 end
 
-function hvhobkak.tabs.Rage()
-    local p = hvhobkak.itemPanel( "Angles", 1, 245 ):GetItemPanel()
+function exechack_cc_hvh_obkak.tabs.Rage()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Angles", 1, 245 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Enable Anti-Aim", "Anti aim", false, true )
-    hvhobkak.ui.CheckBox( p, "Inverter", "Inverter", false, true )
-    hvhobkak.ui.ComboBox( p, "Yaw base", "Yaw base" )
-    hvhobkak.ui.ComboBox( p, "Yaw", "Yaw" )
-    hvhobkak.ui.ComboBox( p, "Pitch", "Pitch" )
-    hvhobkak.ui.ComboBox( p, "Edge", "Edge", { "Disabled", "Hide", "Show", "Jitter" } )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Enable Anti-Aim", "Anti aim", false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Inverter", "Inverter", false, true )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Yaw base", "Yaw base" )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Yaw", "Yaw" )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Pitch", "Pitch" )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Edge", "Edge", { "Disabled", "Hide", "Show", "Jitter" } )
 
-    local p = hvhobkak.itemPanel( "Tweaks", 1, 185 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Tweaks", 1, 140 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "On shot aa", "On shot aa" )
-    hvhobkak.ui.CheckBox( p, "Yaw randomisation", "Yaw randomisation" )
-    hvhobkak.ui.CheckBox( p, "Freestanding", "Freestanding" )
-    hvhobkak.ui.CheckBox( p, "Micromovement", "Micromovement" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "On shot aa", "On shot aa" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Yaw randomisation", "Yaw randomisation" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Freestanding", "Freestanding" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Micromovement", "Micromovement" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Anti BruteForce", "Anti-BruteForce" )
 
-    local p = hvhobkak.itemPanel( "Custom angles", 1, 400 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Custom angles", 1, 500 ):GetItemPanel()
 
-    hvhobkak.ui.Slider( p, "Custom real","Custom real", -180, 180, 0 )
-    hvhobkak.ui.Slider( p, "Custom fake","Custom fake", -180, 180, 0 )
-    hvhobkak.ui.Slider( p, "Custom pitch","Custom pitch", -360, 360, 0 )
-    hvhobkak.ui.Slider( p, "Spin speed","Spin speed", -50, 50, 0 )
-    hvhobkak.ui.Slider( p, "Min Lby Delta","LBY min delta", 0, 360, 0 )
-    hvhobkak.ui.Slider( p, "Break Lby Delta","LBY break delta", 0, 360, 0 )
-    hvhobkak.ui.Slider( p, "Sin delta","Sin delta", -360, 360, 0 )
-    hvhobkak.ui.Slider( p, "Sin add","Sin add", -180, 180, 0 )
-    hvhobkak.ui.Slider( p, "Jitter delta","Jitter delta", -180, 180, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Custom real","Custom real", -180, 180, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Custom fake","Custom fake", -180, 180, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Fake switch","Fake switch", -180, 180, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Switch time","Switch time", 0, 10, 1 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Custom pitch","Custom pitch", -360, 360, 0 )    
+    exechack_cc_hvh_obkak.ui.Slider( p, "Spin speed","Spin speed", -50, 50, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Min Lby Delta","LBY min delta", 0, 360, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Break Lby Delta","LBY break delta", 0, 360, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Sin delta","Sin delta", -360, 360, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Sin add","Sin add", -180, 180, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Jitter delta","Jitter delta", -180, 180, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Low delta value","Low delta value", -180, 180, 0 )
 
-    local p = hvhobkak.itemPanel( "Fake lag",2,110 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Fake lag", "Fake lag", false, false, false, hvhobkak.spfuncs[22] )
-    hvhobkak.ui.CheckBox( p, "Fake duck", "Fake duck", false, true )
-    hvhobkak.ui.CheckBox( p, "Mohammad exploit", "Air lag duck" )
-    hvhobkak.ui.CheckBox( p, "Jesus exploit", "Jesus lag" )
+    local p = exechack_cc_hvh_obkak.itemPanel( "Fake lag",2,120 ):GetItemPanel()
 
-    local p = hvhobkak.itemPanel( "Visualisation", 2,75 ):GetItemPanel()
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Fake lag", "Fake lag", false, false, false, exechack_cc_hvh_obkak.spfuncs[22] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Fake duck", "Fake duck", false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Mohammad exploit", "Air lag duck" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Jesus exploit", "Jesus lag" )
 
-    hvhobkak.ui.CheckBox( p, "Fake angle chams", "Anti aim chams", false, false, false, hvhobkak.spfuncs[36], false, function( p ) hvhobkak.ui.ColorPicker( "Real chams", p ) end ) 
-    hvhobkak.ui.CheckBox( p, "Angle arrows", "Angle arrows" )
+    local p = exechack_cc_hvh_obkak.itemPanel( "Visualisation", 2,125 ):GetItemPanel()
 
-    local p = hvhobkak.itemPanel( "Animation breaker", 2, 160 ):GetItemPanel()
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Fake angle chams", "Anti aim chams", false, false, false, exechack_cc_hvh_obkak.spfuncs[36], false, function( p ) exechack_cc_hvh_obkak.ui.ColorPicker( "Real chams", p ) end ) 
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Angle arrows", "Angle arrows" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Hitbox", "Hitbox",false,false,true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Indicators", "Indicators" )
 
-    hvhobkak.ui.CheckBox( p, "Taunt spam", "Taunt spam" )
-    hvhobkak.ui.ComboBox( p, "Taunt", "Taunt", hvhobkak.actCommands )
-    hvhobkak.ui.CheckBox( p, "Handjob", "Handjob" )
-    hvhobkak.ui.ComboBox( p, "Handjob mode", "Handjob mode", {"Up","Parkinson","Ultra cum"} )
+    local p = exechack_cc_hvh_obkak.itemPanel( "Animation breaker", 2, 230 ):GetItemPanel()
 
-    local p = hvhobkak.itemPanel( "Tickbase", 2, 265 ):GetItemPanel()
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Taunt spam", "Taunt spam" )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Taunt", "Taunt", exechack_cc_hvh_obkak.actCommands )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Handjob", "Handjob" )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Handjob mode", "Handjob mode", {"Up","Parkinson","Ultra cum"} )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Taunt 2", "Taunt 2" )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Taunt 2.1", "Taunt 2.1", exechack_cc_hvh_obkak.act2Commands )
 
-    hvhobkak.ui.CheckBox( p, "Enable shift", "Tickbase shift", false, true, false, false, function(b) ded.EnableTickbaseShifting(b) end )
+    local p = exechack_cc_hvh_obkak.itemPanel( "Tickbase", 2, 265 ):GetItemPanel()
 
-    hvhobkak.ui.ComboBox( p, "Fakelag comp", "Fakelag comp", {"Disable","Compensate"} )
-    hvhobkak.ui.CheckBox( p, "Warp on peek", "Warp on peek" )
-    hvhobkak.ui.CheckBox( p, "Double tap", "Double tap" )
-    //hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Passive recharge", "Passive recharge" )
-    hvhobkak.ui.CheckBox( p, "Dodge projectiles", "Dodge projectiles" )
-    //hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Wait for charge", "Wait for charge", false, false, false, false, function(b) ded.WaitForCharge(b) end ) 
-    hvhobkak.ui.CheckBox( p, "Auto recharge", "Auto recharge", false, true ) 
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Enable shift", "Tickbase shift", false, true, false, false, function(b) ded.EnableTickbaseShifting(b) end )
+
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Fakelag comp", "Fakelag comp", {"Disable","Compensate"} )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Warp on peek", "Warp on peek" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Double tap", "Double tap" )
+    //exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Passive recharge", "Passive recharge" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Dodge projectiles", "Dodge projectiles" )
+    //exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Wait for charge", "Wait for charge", false, false, false, false, function(b) ded.WaitForCharge(b) end ) 
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Auto recharge", "Auto recharge", false, true ) 
     
-    hvhobkak.ui.Slider( p, "Shift ticks", "Shift ticks", 1, 99, 0, function( val ) ded.SetMinShift(val) end )
-    hvhobkak.ui.Slider( p, "Charge ticks", "Charge ticks", 1, 99, 0, function( val ) ded.SetMaxShift(val) end )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Shift ticks", "Shift ticks", 1, 99, 0, function( val ) ded.SetMinShift(val) end )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Charge ticks", "Charge ticks", 1, 99, 0, function( val ) ded.SetMaxShift(val) end )
 
-    local p = hvhobkak.itemPanel( "Sequence", 2, 175 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Sequence", 2, 175 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Sequence manip", "Sequence manip", false, true )
-    hvhobkak.ui.Slider( p, "Out Sequence", "OutSequence", 1, 5000, 0 )
-    hvhobkak.ui.CheckBox( p, "Randomise", "Sequence min random" )
-    hvhobkak.ui.Slider( p, "Min sequence", "Sequence min", 1, 5000, 0 )
-    hvhobkak.ui.CheckBox( p, "Animation freezer", "Animation freezer", false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Sequence manip", "Sequence manip", false, true )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Out Sequence", "OutSequence", 1, 128, 0 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Randomise", "Sequence min random" )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Min sequence", "Sequence min", 1, 128, 0 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Animation freezer", "Animation freezer", false, true )
 
-    local p = hvhobkak.itemPanel( "Player adjustments", 3, 185 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Player adjustments", 3, 160 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Interpolation", "Disable interpolation", false, false, false, false, function( bval ) ded.SetInterpolation( bval ) end )
-    hvhobkak.ui.CheckBox( p, "Sequence interpolation", "Disable Sequence interpolation", false, false, false, false, function( bval ) ded.SetSequenceInterpolation( bval ) end )
-    hvhobkak.ui.CheckBox( p, "Disable animations", "Disable animations" )
-    hvhobkak.ui.CheckBox( p, "Fix bones", "Bone fix", false, false, false, false, function( bval ) ded.EnableBoneFix( bval ) end )
-    hvhobkak.ui.CheckBox( p, "Fix animations", "Update Client Anim fix", false, false, false, false, function( bval ) ded.EnableAnimFix( bval ) end )
-    hvhobkak.ui.CheckBox( p, "Extrapolation", "Extrapolation" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Interpolation", "Disable interpolation", false, false, false, false, function( bval ) ded.SetInterpolation( bval ) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Sequence interpolation", "Disable Sequence interpolation", false, false, false, false, function( bval ) ded.SetSequenceInterpolation( bval ) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Invalidate activity", "Invalidate activity" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Fix bones", "Bone fix", false, false, false, false, function( bval ) ded.EnableBoneFix( bval ) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Fix animations", "Update Client Anim fix", false, false, false, false, function( bval ) ded.EnableAnimFix( bval ) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Extrapolation", "Extrapolation" )
+    --exechack_cc_hvh_obkak.ui.CheckBox( p, "Lag fix" , "Lag fix", false, false, false, exechack_cc_hvh_obkak.spfuncs[254] )
 
-    local p = hvhobkak.itemPanel( "Resolver", 3, 95 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Resolver | Fixed", 3, 120 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Resolver", "Resolver" )
-    hvhobkak.ui.CheckBox( p, "Pitch resolver", "Pitch resolver" )
-    hvhobkak.ui.CheckBox( p, "Taunt resolver", "Taunt resolver" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Resolver", "Resolver" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Pitch resolver", "Pitch resolver" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Taunt resolver", "Taunt resolver" )
+    --exechack_cc_hvh_obkak.ui.CheckBox( p, "Memory bullets", "Memory bullets" )    
+    --exechack_cc_hvh_obkak.ui.Slider( p, "Resolver max misses", "Resolver max misses", 0, 10, 0 )
+    --exechack_cc_hvh_obkak.ui.Slider( p, "add delta", "add delta", -180, 180, 0 )
+    --exechack_cc_hvh_obkak.ui.Slider( p, "add pitch", "add pitch", -90, 90, 0 )
 
-    local p = hvhobkak.itemPanel( "Position adjustment", 3, 215 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Position adjustment", 3, 215 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Adjust tickcount", "Adjust tickcount" )
-    hvhobkak.ui.CheckBox( p, "Backtrack", "Backtrack" )
-    hvhobkak.ui.ComboBox( p, "Backtrack mode", "Backtrack mode", { "Last ticks", "Closest", "Scan" } ) // , "Backshoot"
-    hvhobkak.ui.Slider( p, "Sampling interval", "Sampling interval", 0, 200, 0 )
-    hvhobkak.ui.Slider( p, "Backtrack time", "Backtrack time", 0, 1000, 0 )
-    hvhobkak.ui.CheckBox( p, "Always backtrack", "Always backtrack" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Adjust tickcount", "Adjust tickcount" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Backtrack", "Backtrack" )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Backtrack mode", "Backtrack mode", { "Last ticks", "Closest", "Scan" } ) // , "Backshoot"
+    exechack_cc_hvh_obkak.ui.Slider( p, "Sampling interval", "Sampling interval", 0, 200, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Backtrack time", "Backtrack time", 0, 1000, 0 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Always backtrack", "Always backtrack" )
 
-    local p = hvhobkak.itemPanel( "Misc", 3, 215 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Misc", 3, 120 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Auto detonator", "Auto detonator" )
-    hvhobkak.ui.Slider( p, "Detonation distance", "AutoD distance", 16, 128, 0 )
-    
-
-    hvhobkak.ui.CheckBox( p, "Gun switch", "Gun switch" )
-    /*
-    local function func( p )
-        hvhobkak.ui.MTButton( p, "Custom", hvhobkak.spfuncs[37] )
-        hvhobkak.ui.MTButton( p, "Anim breakers", hvhobkak.spfuncs[24] )
-        hvhobkak.ui.MTButton( p, "Angles", hvhobkak.spfuncs[23] )
-    end
-
-    hvhobkak.itemPanelB( "Anti aim",1,300, func )
-
-
-
-
-    local p = hvhobkak.itemPanel("Fake lag",2,105):GetItemPanel()
-
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Auto detonator", "Auto detonator" )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Detonation distance", "AutoD distance", 16, 128, 0 )
     
 
-    
-
-
-
-    
-
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Gun switch", "Gun switch" )
    
-
-   
-
-
-    
-*/
-
-    //end
-    
-
-     /*
-hvhobkak.cfg.vars["Resolver"] = false
-hvhobkak.cfg.vars["Yaw mode"] = 1
-hvhobkak.cfg.vars["Pitch resolver"] = false
-hvhobkak.cfg.vars["Invert first shot"] = false
-hvhobkak.cfg.vars["Resolver max misses"] = 2
-
-    hvhobkak.combobox("Edge", {"None","Hide","Jitter"}, "Edge", p:GetItemPanel())
-
-    hvhobkak.checkbox("Show AA","Anti aim chams",p:GetItemPanel())
-
-    local p = hvhobkak.itemPanel("Animation breakers",1,200)
-
-    
-    
-
-    local p = hvhobkak.itemPanel("Animfix",3,223)
-
-    hvhobkak.cfg.vars["Interpolation-Disable interpolation"] = false
-    hvhobkak.cfg.vars["Interpolation-Fast sequences"] = false
-
-
-    hvhobkak.checkbox("Disable taunts","Disable taunts",p:GetItemPanel())
-    hvhobkak.checkbox("Extrapolation","Extrapolation",p:GetItemPanel())
-    hvhobkak.checkbox("test","last update",p:GetItemPanel())
-    
-
-    
-
-    local p = hvhobkak.itemPanel("Fake lag",2,320)
-
-
-
-    
-
-    hvhobkak.checkbox("Fly hacks","Allah fly",p:GetItemPanel())
-
-    //hvhobkak.checkbox("Fake lag","Fake lag",p:GetItemPanel())
-    //hvhobkak.slider("Lag limit","Lag limit",0,23,0,p:GetItemPanel())
-    //hvhobkak.slider("Lag randomisation","Lag randomisation",0,23,0,p:GetItemPanel())
-    //hvhobkak.combobox("Lag mode", {"Static","Adaptive"}, "Lag mode", p:GetItemPanel())
-   
-    hvhobkak.checkbox("Michael Jackson exploit","Allah walk",p:GetItemPanel(),"allahwalk")
-    hvhobkak.checkbox("","Fake duck",p:GetItemPanel(),"Fake duck")
-   
-    local p = hvhobkak.itemPanel("Tickbase",2,250)
-
-
-    hvhobkak.multiCombo("Triggers",{"In Attack","On Peek","After peek"},p:GetItemPanel())
-
-    // hvhobkak.checkbox("Skip fire tick","Skip fire tick",p:GetItemPanel())
-    
-
-    local p = hvhobkak.itemPanel( "Resolver", 3, 178 )
-
-    hvhobkak.checkbox( "Enable resolver", "Resolver", p:GetItemPanel() )
-    hvhobkak.combobox( "Yaw mode", { "Step", "Delta brute" }, "Yaw mode", p:GetItemPanel() )
-    hvhobkak.slider( "Max misses", "Resolver max misses", 1, 6, 0, p:GetItemPanel() )
-    hvhobkak.checkbox( "Pitch resolver", "Pitch resolver", p:GetItemPanel() )
-    hvhobkak.checkbox( "Invert first shot", "Invert first shot", p:GetItemPanel() )
-*/
 end
 
-/*local p = vgui_Create("UPanel",hvhobkak.scrollpanel)
-    p:SetPos(5,y[1])
-    p:SetSize(257,200)
-    p.txt = "LBY Settings"
-
-    hvhobkak.slider("LBY min delta","LBY min delta",0,360,0,p:GetItemPanel())
-    hvhobkak.slider("LBY break delta","LBY break delta",0,360,0,p:GetItemPanel())
-    */
-
-
-hvhobkak.spfuncs[2] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,100)
+exechack_cc_hvh_obkak.spfuncs[2] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,100)
         
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Rapid fire", "Rapid fire", "Allows to quickly fire semi-automatic weapons." )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Bullet time", "Bullet time", "Aim will not work until weapon can fire." )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Wait for simtime update", "Wait for simtime update" )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Alt Rapid fire", "Alt Rapid fire" )
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize( 300, 350 )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Rapid fire", "Rapid fire", "Allows to quickly fire semi-automatic weapons." )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Bullet time", "Bullet time", "Aim will not work until weapon can fire." )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Wait for simulation", "Wait for simulation" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Alt Rapid fire", "Alt Rapid fire" )
 end
 
-hvhobkak.spfuncs[4] = function()
-    hvhobkak.ui.SettingsPan:SetSize( 250, 85 )
+exechack_cc_hvh_obkak.spfuncs[4] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize( 250, 85 )
 
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Smooth amount", "Smoothing", 0, 1, 2 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Smooth amount", "Smoothing", 0, 1, 2 )
 end
 
-hvhobkak.spfuncs[5] = function()
-    hvhobkak.ui.SettingsPan:SetSize( 250, 68 )
+exechack_cc_hvh_obkak.spfuncs[5] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize( 250, 68 )
 
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Dynamic fov", "Fov dynamic" )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Aimbot FOV", "Aimbot FOV", 0, 180, 0 )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Dynamic fov", "Fov dynamic" )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Aimbot FOV", "Aimbot FOV", 0, 180, 0 )
 end
 
-hvhobkak.spfuncs[11] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,200)
+exechack_cc_hvh_obkak.spfuncs[11] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,200)
     
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Team color", "Box team color" )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Gradient", "Box gradient" )
-    hvhobkak.ui.ComboBox( hvhobkak.ui.SettingsPan, "Style", "Box style", { "Default", "Corner", "Hex", "Poly", "3D" })
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Team color", "Box team color" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Gradient", "Box gradient" )
+    exechack_cc_hvh_obkak.ui.ComboBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Style", "Box style", { "Default", "Corner", "Hex", "Poly", "3D" })
 
 
 end
 
-hvhobkak.spfuncs[12] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,48)
+exechack_cc_hvh_obkak.spfuncs[12] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,48)
     
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Health bar", "Health bar" )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Gradient", "Health bar gradient" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Health bar", "Health bar" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Gradient", "Health bar gradient" )
 end
 
-hvhobkak.spfuncs[666] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,48)
+exechack_cc_hvh_obkak.spfuncs[666] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,48)
     
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Armor bar", "Armor bar" )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Gradient", "Armor bar gradient" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Armor bar", "Armor bar" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Gradient", "Armor bar gradient" )
 end
 
-hvhobkak.spfuncs[14] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[254] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,200)
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Backshoot", "Backshoot" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Fakelag comp new", "Fakelag comp new" )
+
+end
+
+exechack_cc_hvh_obkak.spfuncs[14] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
     
-    hvhobkak.ui.ComboBox( hvhobkak.ui.SettingsPan, "Visible material", "Visible mat", hvhobkak.chamsMaterials)
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Weapon chams", "Visible chams w" )
+    exechack_cc_hvh_obkak.ui.ComboBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Visible material", "Visible mat", exechack_cc_hvh_obkak.chamsMaterials)
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Weapon chams", "Visible chams w" )
 
-    hvhobkak.ui.ComboBox( hvhobkak.ui.SettingsPan, "Invisible material", "inVisible mat", hvhobkak.chamsMaterials)
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "inVisible chams", "inVisible chams" )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Weapon chams", "inVisible chams w" )
+    exechack_cc_hvh_obkak.ui.ComboBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Invisible material", "inVisible mat", exechack_cc_hvh_obkak.chamsMaterials)
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "inVisible chams", "inVisible chams" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Weapon chams", "inVisible chams w" )
 
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Fullbright", "Supress lighting" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Fullbright", "Supress lighting" )
 end
 
-hvhobkak.spfuncs[229] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,360)
+exechack_cc_hvh_obkak.spfuncs[229] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,360)
     
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Brightness","Color Modify Brightness", 0, 3, 4 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Contrast","Color Modify Contrast", 0, 5, 4 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Saturation","Color Modify Saturation", 0, 5, 4 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Add red","Color Modify Add Red", 0, 10, 4 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Add green","Color Modify Add Green", 0, 10, 4 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Add blue","Color Modify Add Blue", 0, 10, 4 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Mul red","Color Modify Mul Red", 0, 255, 4 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Mul green","Color Modify Mul Green", 0, 255, 4 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Mul blue","Color Modify Mul Blue", 0, 255, 4 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Brightness","Color Modify Brightness", 0, 3, 4 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Contrast","Color Modify Contrast", 0, 5, 4 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Saturation","Color Modify Saturation", 0, 5, 4 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Add red","Color Modify Add Red", 0, 10, 4 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Add green","Color Modify Add Green", 0, 10, 4 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Add blue","Color Modify Add Blue", 0, 10, 4 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Mul red","Color Modify Mul Red", 0, 255, 4 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Mul green","Color Modify Mul Green", 0, 255, 4 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Mul blue","Color Modify Mul Blue", 0, 255, 4 )
 end
 
-hvhobkak.spfuncs[15] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[15] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
 
-    hvhobkak.ui.ComboBox( hvhobkak.ui.SettingsPan, "Material", "Self mat", hvhobkak.chamsMaterials)
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Weapon chams", "Self chams w" )
+    exechack_cc_hvh_obkak.ui.ComboBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Material", "Self mat", exechack_cc_hvh_obkak.chamsMaterials)
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Weapon chams", "Self chams w" )
 
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Fullbright", "Supress self lighting" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Fullbright", "Supress self lighting" )
 end
 
-hvhobkak.spfuncs[16] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[16] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
 
-    hvhobkak.ui.ComboBox( hvhobkak.ui.SettingsPan, "Material", "Backtrack material", hvhobkak.chamsMaterials)
+    exechack_cc_hvh_obkak.ui.ComboBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Material", "Backtrack material", exechack_cc_hvh_obkak.chamsMaterials)
 
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Fullbright", "Backtrack fullbright" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Fullbright", "Backtrack fullbright" )
 end
 
-hvhobkak.spfuncs[17] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[17] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
 
-    hvhobkak.ui.ComboBox( hvhobkak.ui.SettingsPan, "Material", "Entity material", hvhobkak.chamsMaterials)
+    exechack_cc_hvh_obkak.ui.ComboBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Material", "Entity material", exechack_cc_hvh_obkak.chamsMaterials)
 
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Fullbright", "Entity fullbright" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Fullbright", "Entity fullbright" )
 end
 
-hvhobkak.spfuncs[18] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[18] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
 
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Die time","Tracers die time",1,10,0 )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Bullet tracers muzzle", "Bullet tracers muzzle" )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Die time","Tracers die time",1,10,0 )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Bullet tracers muzzle", "Bullet tracers muzzle" )
     
 end
 
-hvhobkak.spfuncs[19] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[19] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
 
-    hvhobkak.ui.ComboBox( hvhobkak.ui.SettingsPan, "Material", "Viewmodel chams type", hvhobkak.chamsMaterials)
+    exechack_cc_hvh_obkak.ui.ComboBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Material", "Viewmodel chams type", exechack_cc_hvh_obkak.chamsMaterials)
     
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Fullbright", "Fullbright viewmodel" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Fullbright", "Fullbright viewmodel" )
 end
 
-hvhobkak.spfuncs[20] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[20] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
 
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Smoothing", "Third person smoothing" )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Collision", "Third person collision" )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Distance","Third person distance",50,220,0 )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Smoothing", "Third person smoothing" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Collision", "Third person collision" )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Distance","Third person distance",50,220,0 )
 end
 
-hvhobkak.spfuncs[21] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[21] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
 
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Freecam speed","Free camera speed",5,100,0 )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Ghetto mode", "Ghetto free cam" )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Freecam speed","Free camera speed",5,100,0 )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Ghetto mode", "Ghetto free cam" )
 end
 
-hvhobkak.spfuncs[31] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,48)
+exechack_cc_hvh_obkak.spfuncs[31] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,48)
 
-    hvhobkak.ui.ComboBox( hvhobkak.ui.SettingsPan, "Style", "Ent box style", { "Default", "Corner", "3D" })
+    exechack_cc_hvh_obkak.ui.ComboBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Style", "Ent box style", { "Default", "Corner", "3D" })
 end
 
 
-hvhobkak.spfuncs[35] = function( p )
+exechack_cc_hvh_obkak.spfuncs[35] = function( p )
     local mdl = vgui.Create( "DModelPanel", p )
     mdl:SetPos(85,125)
     mdl:SetSize(85,125)
@@ -3506,20 +3437,20 @@ hvhobkak.spfuncs[35] = function( p )
     function mdl:LayoutEntity( Entity ) return end 
     
     for i = 1,4 do
-        local poses = hvhobkak.esppansposes
+        local poses = exechack_cc_hvh_obkak.esppansposes
 
-        hvhobkak.esppans[i].panel = vgui_Create( "UPaintedPanel", p )
-        hvhobkak.esppans[i].panel:SetPos(poses[i].x,poses[i].y)
-        hvhobkak.esppans[i].panel:SetSize(85,125)
-        hvhobkak.esppans[i].panel:Receiver( "SwagCock$", hvhobkak.DoDrop )
-        hvhobkak.esppans[i].panel.pos = i
+        exechack_cc_hvh_obkak.esppans[i].panel = vgui.Create( "UPaintedPanel", p )
+        exechack_cc_hvh_obkak.esppans[i].panel:SetPos(poses[i].x,poses[i].y)
+        exechack_cc_hvh_obkak.esppans[i].panel:SetSize(85,125)
+        exechack_cc_hvh_obkak.esppans[i].panel:Receiver( "SwagCock$", exechack_cc_hvh_obkak.DoDrop )
+        exechack_cc_hvh_obkak.esppans[i].panel.pos = i
     end
 
-    for i = 1, #hvhobkak.espelements do
-        local cfgstr = hvhobkak.espelements[i]
-        local panel = hvhobkak.esppans[hvhobkak.cfg.vars[cfgstr]].panel
+    for i = 1, #exechack_cc_hvh_obkak.espelements do
+        local cfgstr = exechack_cc_hvh_obkak.espelements[i]
+        local panel = exechack_cc_hvh_obkak.esppans[exechack_cc_hvh_obkak.cfg.vars[cfgstr]].panel
 
-        local b = vgui_Create("UESPPButton")
+        local b = vgui.Create("UESPPButton")
         b:SetText( cfgstr )
 		b:SetSize( 36, 24 )
 		b:Dock( TOP )
@@ -3529,148 +3460,153 @@ hvhobkak.spfuncs[35] = function( p )
     end
 end
 
-hvhobkak.spfuncs[33] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[33] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
 
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Show ammo", "Show ammo" )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Print name", "Weapon printname" )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Show reloading", "Show reloading" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Show ammo", "Show ammo" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Print name", "Weapon printname" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Show reloading", "Show reloading" )
     
 end
 
-hvhobkak.spfuncs[34] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[34] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
 
 
 end
 
-function hvhobkak.tabs.Visuals()
+function exechack_cc_hvh_obkak.tabs.Visuals()
 
-    local p = hvhobkak.itemPanel("Player",1,380):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("Player",1,440):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Box", "Box esp", false, false, true, hvhobkak.spfuncs[11] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Box", "Box esp", false, false, true, exechack_cc_hvh_obkak.spfuncs[11] )
 
-    hvhobkak.ui.CheckBox( p, "Name", "Name", false, false, false, false, false, function(p) local lbl, drop = hvhobkak.ui.ComboBox( p, "", "Name pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
-    hvhobkak.ui.CheckBox( p, "Usergroup", "Usergroup", false, false, false, false, false, function(p) local lbl, drop = hvhobkak.ui.ComboBox( p, "", "Usergroup pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
-    hvhobkak.ui.CheckBox( p, "Health", "Health", false, false, true, hvhobkak.spfuncs[12], false, function(p) local lbl, drop = hvhobkak.ui.ComboBox( p, "", "Health pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(3,0,0,0) hvhobkak.ui.ColorPicker( "Health bar gradient", p ) end )
-    hvhobkak.ui.CheckBox( p, "Armor", "Armor", false, false, true, hvhobkak.spfuncs[666], false, function(p) local lbl, drop = hvhobkak.ui.ComboBox( p, "", "Armor pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(3,0,0,0) hvhobkak.ui.ColorPicker( "Armor bar gradient", p ) end )
-    hvhobkak.ui.CheckBox( p, "Weapon", "Weapon", false, false, false, hvhobkak.spfuncs[33], false, function(p) local lbl, drop = hvhobkak.ui.ComboBox( p, "", "Weapon pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(3,0,0,0) end )
-    hvhobkak.ui.CheckBox( p, "Team", "Team", false, false, false, false, false, function(p) local lbl, drop = hvhobkak.ui.ComboBox( p, "", "Team pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
-    hvhobkak.ui.CheckBox( p, "Money", "DarkRP Money", false, false, false, false, false, function(p) local lbl, drop = hvhobkak.ui.ComboBox( p, "", "Money pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
-    hvhobkak.ui.CheckBox( p, "Lag compensation", "Break LC", false, false, false, false, false, function(p) local lbl, drop = hvhobkak.ui.ComboBox( p, "", "Break LC pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
-    hvhobkak.ui.CheckBox( p, "Packets ( Fake lag )", "Simtime updated", false, false, false, false, false, function(p) local lbl, drop = hvhobkak.ui.ComboBox( p, "", "Simtime pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
-    hvhobkak.ui.CheckBox( p, "Show records", "Show records" )
-    hvhobkak.ui.CheckBox( p, "Skeleton", "Skeleton" )
-    hvhobkak.ui.CheckBox( p, "Sight lines", "Sight lines" )
-    hvhobkak.ui.CheckBox( p, "OOF Arrows", "OOF Arrows", false, false, false, false, false, function(p)
-        local lbl, drop = hvhobkak.ui.ComboBox( p, "", "OOF Style", {"Arrow","UkroSwastika"} ) 
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Name", "Name", false, false, false, false, false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "Name pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Mark", "Mark", false, false, false, false, false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "Mark pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Usergroup", "Usergroup", false, false, false, false, false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "Usergroup pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Health", "Health", false, false, true, exechack_cc_hvh_obkak.spfuncs[12], false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "Health pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(3,0,0,0) exechack_cc_hvh_obkak.ui.ColorPicker( "Health bar gradient", p ) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Armor", "Armor", false, false, true, exechack_cc_hvh_obkak.spfuncs[666], false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "Armor pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(3,0,0,0) exechack_cc_hvh_obkak.ui.ColorPicker( "Armor bar gradient", p ) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Weapon", "Weapon", false, false, false, exechack_cc_hvh_obkak.spfuncs[33], false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "Weapon pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(3,0,0,0) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Team", "Team", false, false, false, false, false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "Team pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Money", "DarkRP Money", false, false, false, false, false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "Money pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Lag compensation", "Break LC", false, false, false, false, false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "Break LC pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Packets ( Fake lag )", "Simtime updated", false, false, false, false, false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "Simtime pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "FakeLag Show", "FakeLag Show", false, false, true, false, false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "FakeLag Show pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Show records", "Show records" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Skeleton", "Skeleton" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Sight lines", "Sight lines" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Player Hat", "Player Hat","Detect Screengrab" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "OOF Arrows", "OOF Arrows", false, false, false, false, false, function(p)
+        local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "OOF Style", {"Arrow","UkroSwastika"} ) 
         lbl:Remove() 
         drop:Dock(RIGHT) 
         drop:DockMargin(0,0,0,0) 
     end )
-    // hvhobkak.ui.CheckBox( p, "OOF Arrows", "OOF Arrows", false, false, false, hvhobkak.spfuncs[34], false, function(p) local lbl, drop = hvhobkak.ui.ComboBox( p, "", "OOF Style", {"Arrow","UkroSwastika"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
+    // exechack_cc_hvh_obkak.ui.CheckBox( p, "OOF Arrows", "OOF Arrows", false, false, false, exechack_cc_hvh_obkak.spfuncs[34], false, function(p) local lbl, drop = exechack_cc_hvh_obkak.ui.ComboBox( p, "", "OOF Style", {"Arrow","UkroSwastika"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
 
-    hvhobkak.ui.Slider( p, "Max distance","ESP Distance",0,100000,0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Max distance","ESP Distance", 0, 20000,0 )
 
-    local p = hvhobkak.itemPanel("Entity",1,135):GetItemPanel()
+    exechack_cc_hvh_obkak.ui.Label( p, "Add player key", function( p ) exechack_cc_hvh_obkak.ui.Binder( "Player add", p ) end )
 
-    hvhobkak.ui.CheckBox( p, "Box", "Ent box", false, false, false, hvhobkak.spfuncs[31] )
-    hvhobkak.ui.CheckBox( p, "Class", "Ent class" )
-    hvhobkak.ui.Slider( p, "Max distance","Ent ESP Distance",0,100000,0 )
-    hvhobkak.ui.Label( p, "Add entity key", function( p ) hvhobkak.ui.Binder( "Ent add", p ) end )
+    local p = exechack_cc_hvh_obkak.itemPanel("Entity",1,135):GetItemPanel()
 
-    local p = hvhobkak.itemPanel( "Misc", 1, 220 ):GetItemPanel()
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Box", "Ent box", false, false, false, exechack_cc_hvh_obkak.spfuncs[31] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Class", "Ent class" )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Max distance","Ent ESP Distance",0, 20000,0 )
+    exechack_cc_hvh_obkak.ui.Label( p, "Add entity key", function( p ) exechack_cc_hvh_obkak.ui.Binder( "Ent add", p ) end )
 
-    hvhobkak.ui.CheckBox( p, "Hide name", "Hide name" )
-    hvhobkak.ui.TextEntry( "Custom name", "Custom name", p, 999 )
-    hvhobkak.ui.CheckBox( p, "Disable sensivity adjustment", "Disable SADJ" )
-    hvhobkak.ui.CheckBox( p, "Screengrab image", "Screengrab image" )
-    hvhobkak.ui.ComboBox( p, "ESP Font", "ESP Font", { "Outlined", "Shadow" } )
+    local p = exechack_cc_hvh_obkak.itemPanel( "Misc", 1, 190 ):GetItemPanel()
+
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Hide name", "Hide name" )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Custom name", "Custom name", p, 999 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Disable sensivity adjustment", "Disable sensivity adjustment" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Screengrab image", "Screengrab image" )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "ESP Font", "ESP Font", { "Outlined", "Shadow" } )
     
-    local p = hvhobkak.itemPanel("Colored models",2,150):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("Colored models",2,150):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Player chams", "Visible chams", false, false, true, hvhobkak.spfuncs[14], false, function(p) hvhobkak.ui.ColorPicker( "inVisible chams", p ) end )
-    hvhobkak.ui.CheckBox( p, "Self chams", "Self chams", false, false, true, hvhobkak.spfuncs[15] )
-    hvhobkak.ui.CheckBox( p, "Backtrack chams", "Backtrack chams", false, false, true, hvhobkak.spfuncs[16] )
-    hvhobkak.ui.CheckBox( p, "Entity chams", "Entity chams", false, false, true, hvhobkak.spfuncs[17], false )
-    hvhobkak.ui.CheckBox( p, "Viewmodel chams", "Viewmodel chams", false, false, true, hvhobkak.spfuncs[19], false )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Player chams", "Visible chams", false, false, true, exechack_cc_hvh_obkak.spfuncs[14], false, function(p) exechack_cc_hvh_obkak.ui.ColorPicker( "inVisible chams", p ) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Self chams", "Self chams", false, false, true, exechack_cc_hvh_obkak.spfuncs[15] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Backtrack chams", "Backtrack chams", false, false, true, exechack_cc_hvh_obkak.spfuncs[16] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Entity chams", "Entity chams", false, false, true, exechack_cc_hvh_obkak.spfuncs[17], false )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Viewmodel chams", "Viewmodel chams", false, false, true, exechack_cc_hvh_obkak.spfuncs[19], false )
 
-    local p = hvhobkak.itemPanel("Material customisation",2,150):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("Material customisation",2,150):GetItemPanel()
 
-    hvhobkak.ui.Slider( p, "Min illumination", "Fresnel minimum illum", 0, 1, 1, function( v )
-        local v1, v2, v3, v4 = hvhobkak.chamMats.vis[3], hvhobkak.chamMats.vis[4], hvhobkak.chamMats.invis[3], hvhobkak.chamMats.invis[3]
+    exechack_cc_hvh_obkak.ui.Slider( p, "Min illumination", "Fresnel minimum illum", 0, 1, 1, function( v )
+        local v1, v2, v3, v4 = exechack_cc_hvh_obkak.chamMats.vis[3], exechack_cc_hvh_obkak.chamMats.vis[4], exechack_cc_hvh_obkak.chamMats.invis[3], exechack_cc_hvh_obkak.chamMats.invis[3]
 
-        v1:SetVector( "$selfIllumFresnelMinMaxExp", Vector( v, hvhobkak.cfg.vars["Fresnel maximum illum"], hvhobkak.cfg.vars["Fresnel exponent"] ) )
-        v2:SetVector( "$selfIllumFresnelMinMaxExp", Vector( v, hvhobkak.cfg.vars["Fresnel maximum illum"], hvhobkak.cfg.vars["Fresnel exponent"] ) )
-        v3:SetVector( "$selfIllumFresnelMinMaxExp", Vector( v, hvhobkak.cfg.vars["Fresnel maximum illum"], hvhobkak.cfg.vars["Fresnel exponent"] ) )
-        v4:SetVector( "$selfIllumFresnelMinMaxExp", Vector( v, hvhobkak.cfg.vars["Fresnel maximum illum"], hvhobkak.cfg.vars["Fresnel exponent"] ) )
+        v1:SetVector( "$selfIllumFresnelMinMaxExp", Vector( v, exechack_cc_hvh_obkak.cfg.vars["Fresnel maximum illum"], exechack_cc_hvh_obkak.cfg.vars["Fresnel exponent"] ) )
+        v2:SetVector( "$selfIllumFresnelMinMaxExp", Vector( v, exechack_cc_hvh_obkak.cfg.vars["Fresnel maximum illum"], exechack_cc_hvh_obkak.cfg.vars["Fresnel exponent"] ) )
+        v3:SetVector( "$selfIllumFresnelMinMaxExp", Vector( v, exechack_cc_hvh_obkak.cfg.vars["Fresnel maximum illum"], exechack_cc_hvh_obkak.cfg.vars["Fresnel exponent"] ) )
+        v4:SetVector( "$selfIllumFresnelMinMaxExp", Vector( v, exechack_cc_hvh_obkak.cfg.vars["Fresnel maximum illum"], exechack_cc_hvh_obkak.cfg.vars["Fresnel exponent"] ) )
     end )
     
-    hvhobkak.ui.Slider( p, "Max illumination", "Fresnel maximum illum", 0, 1, 1, function( v )
-        local v1, v2, v3, v4 = hvhobkak.chamMats.vis[3], hvhobkak.chamMats.vis[4], hvhobkak.chamMats.invis[3], hvhobkak.chamMats.invis[3]
+    exechack_cc_hvh_obkak.ui.Slider( p, "Max illumination", "Fresnel maximum illum", 0, 1, 1, function( v )
+        local v1, v2, v3, v4 = exechack_cc_hvh_obkak.chamMats.vis[3], exechack_cc_hvh_obkak.chamMats.vis[4], exechack_cc_hvh_obkak.chamMats.invis[3], exechack_cc_hvh_obkak.chamMats.invis[3]
 
-        v1:SetVector( "$selfIllumFresnelMinMaxExp", Vector( hvhobkak.cfg.vars["Fresnel minimum illum"], v, hvhobkak.cfg.vars["Fresnel exponent"] ) )
-        v2:SetVector( "$selfIllumFresnelMinMaxExp", Vector( hvhobkak.cfg.vars["Fresnel minimum illum"], v, hvhobkak.cfg.vars["Fresnel exponent"] ) )
-        v3:SetVector( "$selfIllumFresnelMinMaxExp", Vector( hvhobkak.cfg.vars["Fresnel minimum illum"], v, hvhobkak.cfg.vars["Fresnel exponent"] ) )
-        v4:SetVector( "$selfIllumFresnelMinMaxExp", Vector( hvhobkak.cfg.vars["Fresnel minimum illum"], v, hvhobkak.cfg.vars["Fresnel exponent"] ) )
+        v1:SetVector( "$selfIllumFresnelMinMaxExp", Vector( exechack_cc_hvh_obkak.cfg.vars["Fresnel minimum illum"], v, exechack_cc_hvh_obkak.cfg.vars["Fresnel exponent"] ) )
+        v2:SetVector( "$selfIllumFresnelMinMaxExp", Vector( exechack_cc_hvh_obkak.cfg.vars["Fresnel minimum illum"], v, exechack_cc_hvh_obkak.cfg.vars["Fresnel exponent"] ) )
+        v3:SetVector( "$selfIllumFresnelMinMaxExp", Vector( exechack_cc_hvh_obkak.cfg.vars["Fresnel minimum illum"], v, exechack_cc_hvh_obkak.cfg.vars["Fresnel exponent"] ) )
+        v4:SetVector( "$selfIllumFresnelMinMaxExp", Vector( exechack_cc_hvh_obkak.cfg.vars["Fresnel minimum illum"], v, exechack_cc_hvh_obkak.cfg.vars["Fresnel exponent"] ) )
     end )
  
-    hvhobkak.ui.Slider( p, "Fresnel exponent", "Fresnel exponent", 0, 1, 1, function( v )
-        local v1, v2, v3, v4 = hvhobkak.chamMats.vis[3], hvhobkak.chamMats.vis[4], hvhobkak.chamMats.invis[3], hvhobkak.chamMats.invis[3]
+    exechack_cc_hvh_obkak.ui.Slider( p, "Fresnel exponent", "Fresnel exponent", 0, 1, 1, function( v )
+        local v1, v2, v3, v4 = exechack_cc_hvh_obkak.chamMats.vis[3], exechack_cc_hvh_obkak.chamMats.vis[4], exechack_cc_hvh_obkak.chamMats.invis[3], exechack_cc_hvh_obkak.chamMats.invis[3]
 
-        v1:SetVector( "$selfIllumFresnelMinMaxExp", Vector( hvhobkak.cfg.vars["Fresnel minimum illum"], hvhobkak.cfg.vars["Fresnel maximum illum"], v ) )
-        v2:SetVector( "$selfIllumFresnelMinMaxExp", Vector( hvhobkak.cfg.vars["Fresnel minimum illum"], hvhobkak.cfg.vars["Fresnel maximum illum"], v ) )
-        v3:SetVector( "$selfIllumFresnelMinMaxExp", Vector( hvhobkak.cfg.vars["Fresnel minimum illum"], hvhobkak.cfg.vars["Fresnel maximum illum"], v ) )
-        v4:SetVector( "$selfIllumFresnelMinMaxExp", Vector( hvhobkak.cfg.vars["Fresnel minimum illum"], hvhobkak.cfg.vars["Fresnel maximum illum"], v ) )
+        v1:SetVector( "$selfIllumFresnelMinMaxExp", Vector( exechack_cc_hvh_obkak.cfg.vars["Fresnel minimum illum"], exechack_cc_hvh_obkak.cfg.vars["Fresnel maximum illum"], v ) )
+        v2:SetVector( "$selfIllumFresnelMinMaxExp", Vector( exechack_cc_hvh_obkak.cfg.vars["Fresnel minimum illum"], exechack_cc_hvh_obkak.cfg.vars["Fresnel maximum illum"], v ) )
+        v3:SetVector( "$selfIllumFresnelMinMaxExp", Vector( exechack_cc_hvh_obkak.cfg.vars["Fresnel minimum illum"], exechack_cc_hvh_obkak.cfg.vars["Fresnel maximum illum"], v ) )
+        v4:SetVector( "$selfIllumFresnelMinMaxExp", Vector( exechack_cc_hvh_obkak.cfg.vars["Fresnel minimum illum"], exechack_cc_hvh_obkak.cfg.vars["Fresnel maximum illum"], v ) )
     end )
 
-    local p = hvhobkak.itemPanel("Outlines",2,115):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("Outlines",2,115):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Player outline", "Player outline", false, false, true )
-    hvhobkak.ui.CheckBox( p, "Entity outline", "Entity outline", false, false, true )
-    hvhobkak.ui.ComboBox( p, "Style", "Outline style", { "Default", "Subtractive", "Additive" } )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Player outline", "Player outline", false, false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Entity outline", "Entity outline", false, false, true )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Style", "Outline style", { "Default", "Subtractive", "Additive" } )
 
-    local p = hvhobkak.itemPanel( "Indicators", 2, 145 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Indicators", 2, 160 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Hitmarker", "Hitmarker", false, false, true )
-    hvhobkak.ui.CheckBox( p, "Hitnumbers", "Hitnumbers", false, false, true, false, false, function(p) hvhobkak.ui.ColorPicker( "Hitnumbers krit", p ) end )
-    //hvhobkak.ui.CheckBox( p, "Hit particles", "Hit particles", false, false, true, hvhobkak.spfuncs[31] )
-    hvhobkak.ui.CheckBox( p, "On screen logs", "On screen logs", false, false, true, false, false, function(p) hvhobkak.ui.ColorPicker( "Miss lagcomp", p ) hvhobkak.ui.ColorPicker( "Miss spread", p ) hvhobkak.ui.ColorPicker( "Miss fail", p ) end )
-    hvhobkak.ui.CheckBox( p, "Spectator list", "Spectator list" )
-    hvhobkak.ui.CheckBox( p, "Tickbase", "Tickbase indicator" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Hitmarker", "Hitmarker", false, false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Hitnumbers", "Hitnumbers", false, false, true, false, false, function(p) exechack_cc_hvh_obkak.ui.ColorPicker( "Hitnumbers krit", p ) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Headshot indicator", "Headshot indicator", false, false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "On screen logs", "On screen logs", false, false, true, false, false, function(p) exechack_cc_hvh_obkak.ui.ColorPicker( "Miss lagcomp", p ) exechack_cc_hvh_obkak.ui.ColorPicker( "Miss spread", p ) exechack_cc_hvh_obkak.ui.ColorPicker( "Miss fail", p ) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "WaterMark", "WaterMark")
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Spectator list", "Spectator list" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Tickbase", "Tickbase indicator" )
 
-    local p = hvhobkak.itemPanel("World",3,420):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("World",3,400):GetItemPanel()
 
-    hvhobkak.ui.TextEntry( "Skybox texture", "Custom sky", p, 420 )
-    hvhobkak.ui.CheckBox( p, "Sky color", "Sky color", false, false, true )
-    hvhobkak.ui.CheckBox( p, "Wall color", "Wall color", false, false, true )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Skybox texture", "Custom sky", p, 420 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Sky color", "Sky color", false, false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Wall color", "Wall color", false, false, true )
 
-    hvhobkak.ui.CheckBox( p, "Fullbright", "Fullbright", false, true )
-    hvhobkak.ui.ComboBox( p, "Mode", "Fullbright mode", { "Default", "Corvus extreme" } )
-    hvhobkak.ui.CheckBox( p, "Disable shadows", "Disable shadows" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Fullbright", "Fullbright", false, true )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Mode", "Fullbright mode", { "Default", "Corvus extreme" } )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Disable shadows", "Disable shadows" )
 
-    hvhobkak.ui.CheckBox( p, "Fog changer", "FogChanger", false, false, true )
-    hvhobkak.ui.Slider( p, "Fog start","FogStart", 1, 4200, 0 )
-    hvhobkak.ui.Slider( p, "Fog end","FogEnd", 1, 9000, 0 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Fog changer", "FogChanger", false, false, true )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Fog start","FogStart", 1, 4200, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Fog end","FogEnd", 1, 9000, 0 )
 
-    hvhobkak.ui.CheckBox( p, "Color modify", "Color Modify", false, false, false, hvhobkak.spfuncs[229] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Color modify", "Color Modify", false, false, false, exechack_cc_hvh_obkak.spfuncs[229] )
 
-    hvhobkak.ui.CheckBox( p, "Bullet tracers", "Bullet tracers", false, false, true, hvhobkak.spfuncs[18] )
-    hvhobkak.ui.TextEntry( "Material", "Bullet tracers material", p, 420 )
-
-
-    local p = hvhobkak.itemPanel("View",3,192):GetItemPanel()
-
-    hvhobkak.ui.CheckBox( p, "Third person", "Third person", false, true, false, hvhobkak.spfuncs[20] )
-    hvhobkak.ui.CheckBox( p, "Free camera", "Free camera", false, true, false, hvhobkak.spfuncs[21] )
-
-    hvhobkak.ui.Slider( p, "Fov override","Fov override",75,160,0 )
-    hvhobkak.ui.Slider( p, "Viewmodel fov","Viewmodel fov",50,180,0 )
-    hvhobkak.ui.Slider( p, "Aspect ratio","Aspect ratio",0,2,3,function(val) gRunCmd("r_aspectratio",val) end )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Bullet tracers", "Bullet tracers", false, false, true, exechack_cc_hvh_obkak.spfuncs[18] )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Material", "Bullet tracers material", p, 420 )
 
 
-    
-    
+    local p = exechack_cc_hvh_obkak.itemPanel("View",3,215):GetItemPanel()
+
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Override view", "Override view" )
+
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Third person", "Third person", false, true, false, exechack_cc_hvh_obkak.spfuncs[20] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Free camera", "Free camera", false, true, false, exechack_cc_hvh_obkak.spfuncs[21] )
+
+    exechack_cc_hvh_obkak.ui.Slider( p, "Fov override","Fov override",75,160,0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Viewmodel fov","Viewmodel fov",50,180,0 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Aspect ratio","Aspect ratio",0,2,3,function(val) RunConsoleCommand("r_aspectratio",val) end )
+
 
    
 
@@ -3697,84 +3633,84 @@ function hvhobkak.tabs.Visuals()
 
 
 
-    hvhobkak.checkbox("Kill sound","Killsound",p:GetItemPanel())
+    exechack_cc_hvh_obkak.checkbox("Kill sound","Killsound",p:GetItemPanel())
     
 
-    local p = hvhobkak.itemPanel("World",2,123)
+    local p = exechack_cc_hvh_obkak.itemPanel("World",2,123)
 
     
 
-    local p = hvhobkak.itemPanel("Effects",2,142)
+    local p = exechack_cc_hvh_obkak.itemPanel("Effects",2,142)
 
 
     
     
 
-    local p = hvhobkak.itemPanel("View",3,275)
+    local p = exechack_cc_hvh_obkak.itemPanel("View",3,275)
 
 
 
 
-    // hvhobkak.ESPPP:Show()
+    // exechack_cc_hvh_obkak.ESPPP:Show()
 */
 end
 
-hvhobkak.spfuncs[25] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[25] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
 
-    hvhobkak.ui.ComboBox( hvhobkak.ui.SettingsPan, "Strafe mode", "Strafe mode", {"Legit","Rage","Multidir"})
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Ground strafer", "Ground strafer" )
-    hvhobkak.ui.CheckBox( hvhobkak.ui.SettingsPan, "Sin ( snake ) strafe", "Z Hop", false, true )
+    exechack_cc_hvh_obkak.ui.ComboBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Strafe mode", "Strafe mode", {"Legit","Rage","Multidir"})
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Ground strafer", "Ground strafer" )
+    exechack_cc_hvh_obkak.ui.CheckBox( exechack_cc_hvh_obkak.ui.SettingsPan, "Sin ( snake ) strafe", "Z Hop", false, true )
 end
 
-hvhobkak.spfuncs[26] = function()
-    hvhobkak.ui.SettingsPan:SetSize(250,256)
+exechack_cc_hvh_obkak.spfuncs[26] = function()
+    exechack_cc_hvh_obkak.ui.SettingsPan:SetSize(250,256)
 
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Predict ticks", "CStrafe ticks", 16, 128, 0 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Angle step", "CStrafe angle step", 1, 10, 0 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Angle max step", "CStrafe angle max step", 5, 50, 0 )
-    hvhobkak.ui.Slider( hvhobkak.ui.SettingsPan, "Ground diff", "CStrafe ground diff", 1, 65, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Predict ticks", "CStrafe ticks", 16, 128, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Angle step", "CStrafe angle step", 1, 10, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Angle max step", "CStrafe angle max step", 5, 50, 0 )
+    exechack_cc_hvh_obkak.ui.Slider( exechack_cc_hvh_obkak.ui.SettingsPan, "Ground diff", "CStrafe ground diff", 1, 65, 0 )
 end
 
-hvhobkak.spfuncs[27] = function( p )
-    hvhobkak.ui.TextEntry( "Name", "Name Convar", p, 250 )
-    hvhobkak.ui.Button( "Change name", function() ded.NetSetConVar("name",hvhobkak.cfg.vars["Name Convar"]) end, p )
-    hvhobkak.ui.CheckBox( p, "Name stealer", "Name stealer" )
+exechack_cc_hvh_obkak.spfuncs[27] = function( p )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Name", "Name Convar", p, 250 )
+    exechack_cc_hvh_obkak.ui.Button( "Change name", function() ded.NetSetConVar("name",exechack_cc_hvh_obkak.cfg.vars["Name Convar"]) end, p )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Name stealer", "Name stealer" )
 
-    hvhobkak.ui.TextEntry( "Disconnect reason", "Disconnect reason", p, 250 )
-    hvhobkak.ui.Button( "Disconnect", function() ded.NetDisconnect(hvhobkak.cfg.vars["Disconnect reason"]) end, p )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Disconnect reason", "Disconnect reason", p, 250 )
+    exechack_cc_hvh_obkak.ui.Button( "Disconnect", function() ded.NetDisconnect(exechack_cc_hvh_obkak.cfg.vars["Disconnect reason"]) end, p )
 end 
 
-function hvhobkak.CustomCvarVal( net )
+function exechack_cc_hvh_obkak.CustomCvarVal( net )
     local m = net == 1 and "Net Convar mode" or "Cvar mode"
     local n = net == 1 and "Net Convar int" or "Cvar int"
     local s = net == 1 and "Net Convar str" or "Cvar str"
 
-    local mode = hvhobkak.cfg.vars[m] 
-    local num = hvhobkak.cfg.vars[n]
-    local set = mode == 2 and math_Round( num ) or num
+    local mode = exechack_cc_hvh_obkak.cfg.vars[m] 
+    local num = exechack_cc_hvh_obkak.cfg.vars[n]
+    local set = mode == 2 and math.Round( num ) or num
 
-    if mode == 1 then set = hvhobkak.cfg.vars[s] end
+    if mode == 1 then set = exechack_cc_hvh_obkak.cfg.vars[s] end
 
     return set
 end
 
-hvhobkak.spfuncs[28] = function( p )
-    hvhobkak.ui.TextEntry( "Cvar name", "Net Convar", p, 250 )
-    hvhobkak.ui.Slider( p, "Cvar int", "Net Convar int", 1, 100, 2 )
-    hvhobkak.ui.TextEntry( "Cvar str", "Net Convar str", p, 250 )
+exechack_cc_hvh_obkak.spfuncs[28] = function( p )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Cvar name", "Net Convar", p, 250 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Cvar int", "Net Convar int", 1, 100, 2 )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Cvar str", "Net Convar str", p, 250 )
 
-    hvhobkak.ui.ComboBox( p, "Set mode", "Net Convar mode", {"String","Int","Float"})
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Set mode", "Net Convar mode", {"String","Int","Float"})
 
-    hvhobkak.ui.Button( "Send new val", function() ded.NetSetConVar( hvhobkak.cfg.vars["Net Convar"] ,hvhobkak.CustomCvarVal( 1 ) ) end, p )
+    exechack_cc_hvh_obkak.ui.Button( "Send new val", function() ded.NetSetConVar( exechack_cc_hvh_obkak.cfg.vars["Net Convar"] ,exechack_cc_hvh_obkak.CustomCvarVal( 1 ) ) end, p )
 end 
 
-hvhobkak.FCVAR = {
+exechack_cc_hvh_obkak.FCVAR = {
     str = {
         "Archive", "Archive XBOX", "Cheat", "Client can execute", "Client DLL", "Demo", "Dont record",
         "Game DLL", "Lua client", "Lua server", "Never as string", "None", "Notify", "Not connected",
         "Printable only", "Protected", "Replicated", "Server cannot query", "Server can execute",
-        "Sponly", "Unlogged", "Unregistered", "35"
+        "Sponly", "Unlogged", "Unregistered", "Userinfo"
     },
     int = {
         128, 16777216, 16384, 1073741824, 8, 65536, 131072, 4, 262144, 524288, 4096, 0, 256, 4194304,
@@ -3782,169 +3718,476 @@ hvhobkak.FCVAR = {
     }
 }
 
-hvhobkak.spfuncs[29] = function( p )
-    hvhobkak.ui.TextEntry( "Enter cvar name", "Cvar name", p, 500 )
-    hvhobkak.ui.Slider( p, "Custom number", "Cvar int", 1, 1000, 2 )
-    hvhobkak.ui.TextEntry( "Custom string", "Cvar str", p, 500 )
+exechack_cc_hvh_obkak.spfuncs[29] = function( p )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Enter cvar name", "Cvar name", p, 500 )
+    exechack_cc_hvh_obkak.ui.Slider( p, "Custom number", "Cvar int", 1, 1000, 2 )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Custom string", "Cvar str", p, 500 )
 
-    hvhobkak.ui.ComboBox( p, "Cvar mode", "Cvar mode", {"String","Int","Float"})
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Cvar mode", "Cvar mode", {"String","Int","Float"})
     
-    hvhobkak.ui.Button( "Change cvar", function()
-        local s = hvhobkak.CustomCvarVal( 0 )
-        local n = hvhobkak.cfg.vars["Cvar name"]
+    exechack_cc_hvh_obkak.ui.Button( "Change cvar", function()
+        local s = exechack_cc_hvh_obkak.CustomCvarVal( 0 )
+        local n = exechack_cc_hvh_obkak.cfg.vars["Cvar name"]
         
         local flag = GetConVar(n):GetFlags()
 
         ded.ConVarSetFlags( n, 0 )
 
-        gRunCmd( n, s )
+        RunConsoleCommand( n, s )
 
         ded.ConVarSetFlags( n, flag )
     end, p )
 
-    hvhobkak.ui.ComboBox( p, "Cvar flag", "Cvar flag", hvhobkak.FCVAR.str)
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Cvar flag", "Cvar flag", exechack_cc_hvh_obkak.FCVAR.str)
 
-    hvhobkak.ui.Button( "Change flag", function()
-        ded.ConVarSetFlags( hvhobkak.cfg.vars["Cvar name"], hvhobkak.FCVAR.int[ hvhobkak.cfg.vars["Cvar flag"] ] )
-        print( hvhobkak.cfg.vars["Cvar name"], hvhobkak.FCVAR.int[ hvhobkak.cfg.vars["Cvar flag"] ] )
+    exechack_cc_hvh_obkak.ui.Button( "Change flag", function()
+        ded.ConVarSetFlags( exechack_cc_hvh_obkak.cfg.vars["Cvar name"], exechack_cc_hvh_obkak.FCVAR.int[ exechack_cc_hvh_obkak.cfg.vars["Cvar flag"] ] )
+        print( exechack_cc_hvh_obkak.cfg.vars["Cvar name"], exechack_cc_hvh_obkak.FCVAR.int[ exechack_cc_hvh_obkak.cfg.vars["Cvar flag"] ] )
     end, p )
 
 end 
 
-function hvhobkak.tabs.Misc()
+function exechack_cc_hvh_obkak.tabs.Misc()
 
     local function func( p )
-        hvhobkak.ui.MTButton( p, "Cvar", hvhobkak.spfuncs[29] )
-        hvhobkak.ui.MTButton( p, "Net cvar", hvhobkak.spfuncs[28] )
-        hvhobkak.ui.MTButton( p, "Net", hvhobkak.spfuncs[27] )
+        exechack_cc_hvh_obkak.ui.MTButton( p, "Cvar", exechack_cc_hvh_obkak.spfuncs[29] )
+        exechack_cc_hvh_obkak.ui.MTButton( p, "Net cvar", exechack_cc_hvh_obkak.spfuncs[28] )
+        exechack_cc_hvh_obkak.ui.MTButton( p, "Net", exechack_cc_hvh_obkak.spfuncs[27] )
     end
 
-    local p = hvhobkak.itemPanel("Movement",1,205):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("Movement",1,205):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Bunny hop", "Bhop" )
-    hvhobkak.ui.CheckBox( p, "Air strafer", "Air strafer", false, false, false, hvhobkak.spfuncs[25] )
-    hvhobkak.ui.CheckBox( p, "Circle strafe", "Circle strafe", false, true, false, hvhobkak.spfuncs[26] )
-    hvhobkak.ui.CheckBox( p, "Keep sprint", "Sprint" )
-    hvhobkak.ui.CheckBox( p, "Fast stop", "Fast stop" )
-    hvhobkak.ui.CheckBox( p, "Auto peak", "Auto peak", false, true )
-    hvhobkak.ui.CheckBox( p, "Auto teleport back", "Auto peak tp" )
-    hvhobkak.ui.CheckBox( p, "Water walk", "Water jump" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Bunny hop", "Bhop" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Air strafer", "Air strafer", false, false, false, exechack_cc_hvh_obkak.spfuncs[25] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Circle strafe", "Circle strafe", false, true, false, exechack_cc_hvh_obkak.spfuncs[26] )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Keep sprint", "Sprint" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Fast stop", "Fast stop" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Auto peak", "Auto peak", false, true )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Auto teleport back", "Auto peak tp" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Water walk", "Water jump" )
 
-    local p = hvhobkak.itemPanel("Key spam",1,185):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("Key spam",1,165):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Use spam", "Use spam" )
-    hvhobkak.ui.CheckBox( p, "Flashlight spam", "Flashlight spam" )
-    hvhobkak.ui.CheckBox( p, "Auto GTA", "Auto GTA" )
-    hvhobkak.ui.CheckBox( p, "Camera spam", "Camera spam" )
-    hvhobkak.ui.CheckBox( p, "Vape spam", "Vape spam" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Use spam", "Use spam" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Flashlight spam", "Flashlight spam" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Auto GTA", "Auto GTA" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Camera spam", "Camera spam" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Vape spam", "Vape spam" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Retry on handcuff", "Retry on handcuff" )
 
-    local p = hvhobkak.itemPanel( "Sounds", 2, 173 ):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel( "Sounds", 2, 200 ):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Hitsound", "Hitsound" )
-    hvhobkak.ui.TextEntry( "Sound path", "Hitsound str", p, 420 )
-    hvhobkak.ui.CheckBox( p, "Killsound", "Killsound" )
-    hvhobkak.ui.TextEntry( "Sound path", "Killsound str", p, 420 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Hitsound", "Hitsound" )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Sound path", "Hitsound str", p, 420 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Killsound", "Killsound" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Killstreak", "Killstreak" )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Sound path", "Killsound str", p, 420 )
 
-    local p = hvhobkak.itemPanel("Chat",2,282):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("Chat",2,282):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Spammer", "Chat spammer" )
-    hvhobkak.ui.ComboBox( p, "Mode", "Chat mode", { "Sacred quotes", "Domestic terrorist", "Butthole licker", "White nationalist" })
-    hvhobkak.ui.ComboBox( p, "Group", "Chat group", { "Default", "OOC", "Advert", "PM", "ULX" })
-    hvhobkak.ui.Slider( p, "Delay", "Chat delay", 0,20,0 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Spammer", "Chat spammer" )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Mode", "Chat mode", { "хвх деды", "кадилак", "cute femboy", "хвх", "pm", "ad cheat", "pm cheat", "hvh ad", "pm hvh" })
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Group", "Chat group", { "Default", "OOC", "Advert", "PM", "ULX" })
+    exechack_cc_hvh_obkak.ui.Slider( p, "Delay", "Chat delay", 0,20,0 )
     
-    hvhobkak.ui.CheckBox( p, "Killsay", "Killsay" )
-    hvhobkak.ui.ComboBox( p, "Mode", "Killsay mode", { "Sacred quotes", "Domestic terrorist", "Butthole licker", "White nationalist" })
-    hvhobkak.ui.ComboBox( p, "Group", "Killsay group", { "Default", "OOC", "Advert", "PM", "ULX" })
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Killsay", "Killsay" )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Mode", "Killsay mode", { "хвх деды", "кадилак", "cute femboy", "хвх", "pm", "ad cheat", "pm cheat", "hvh ad", "pm hvh" })
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Group", "Killsay group", { "Default", "OOC", "Advert", "PM", "ULX" })
 
-    hvhobkak.itemPanelB( "Net / Cvar", 3, 310, func )
+    exechack_cc_hvh_obkak.itemPanelB( "Net / Cvar", 3, 310, func )
 
-    local p = hvhobkak.itemPanel("Memes",3,250):GetItemPanel()
+    local p = exechack_cc_hvh_obkak.itemPanel("Memes",3,150):GetItemPanel()
 
-    hvhobkak.ui.CheckBox( p, "Follow Player", "Ghost follower" )
-    hvhobkak.ui.TextEntry( "Steam ID", "GFID", p, 500 )
-    hvhobkak.ui.CheckBox( p, "Auto Затяг ( Vape )", "Auto Vape" )
-    hvhobkak.ui.CheckBox( p, "Fast lockpick", "Fast lockpick" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Follow Player", "Ghost follower" )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Steam ID", "GFID", p, 500 )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Auto Затяг ( Vape )", "Auto Vape" )
+    exechack_cc_hvh_obkak.ui.CheckBox( p, "Fast lockpick", "Fast lockpick" )
 
    /*
-        hvhobkak.checkbox("Safe hop","Safe hop",p:GetItemPanel())
-        hvhobkak.checkbox("Edge jump","Edge jump",p:GetItemPanel())
-        hvhobkak.checkbox("Air duck","Air duck",p:GetItemPanel())
+        exechack_cc_hvh_obkak.checkbox("Safe hop","Safe hop",p:GetItemPanel())
+        exechack_cc_hvh_obkak.checkbox("Edge jump","Edge jump",p:GetItemPanel())
+        exechack_cc_hvh_obkak.checkbox("Air duck","Air duck",p:GetItemPanel())
     */
 end
 
 /*
-function hvhobkak.updateMenuColor( col )
+function exechack_cc_hvh_obkak.updateMenuColor( col )
     local r, g, b = col.r, col.g, col.b 
 
     for i = 1,255 do 
-        hvhobkak.Colors[i] = Color( i + r, i + g, i + b, 255 )
+        exechack_cc_hvh_obkak.Colors[i] = Color( i + r, i + g, i + b, 255 )
     end
 end
 */
 
 
-function hvhobkak.tabs.Config()
-    local p = hvhobkak.itemPanel("Settings",1,230):GetItemPanel()
 
-    hvhobkak.ui.ComboBox( p, "Choice", "Selected config", hvhobkak.cfgTable)
+function exechack_cc_hvh_obkak.tabs.Config()
+    local p = exechack_cc_hvh_obkak.itemPanel("Settings",1,270):GetItemPanel()
 
-    hvhobkak.ui.Button( "Load", function() hvhobkak.LoadConfig() end, p )
-    hvhobkak.ui.Button( "Save", function() hvhobkak.SaveConfig() end, p )
-    hvhobkak.ui.Button( "Delete", function() hvhobkak.DeleteConfig() end, p )
+    exechack_cc_hvh_obkak.ui.ComboBox( p, "Choice", "Selected config", exechack_cc_hvh_obkak.cfgTable)
 
-    hvhobkak.ui.TextEntry( "Name", "Config name", p, 64 )
-    hvhobkak.ui.Button( "Create", function() hvhobkak.CreateConfig() end, p )
+    exechack_cc_hvh_obkak.ui.Button( "Load", function() exechack_cc_hvh_obkak.LoadConfig() end, p )
+    exechack_cc_hvh_obkak.ui.Button( "Save", function() exechack_cc_hvh_obkak.SaveConfig() end, p )
+    exechack_cc_hvh_obkak.ui.Button( "Delete", function() exechack_cc_hvh_obkak.DeleteConfig() end, p )
 
-    //hvhobkak.ui.Label( p, "Menu color", function( p ) hvhobkak.ui.ColorPicker( "Menu color", p, hvhobkak.updateMenuColor ) end )
+    exechack_cc_hvh_obkak.ui.TextEntry( "Name", "Config name", p, 64 )
+    exechack_cc_hvh_obkak.ui.Button( "Create", function() exechack_cc_hvh_obkak.CreateConfig() end, p )
+
 end
 
-function hvhobkak.tabs.Players()
-    local playerlist = vgui.Create( "UListView", hvhobkak.scrollpanel )
+function exechack_cc_hvh_obkak.tabs.Players()
+    local playerlist = player.GetAll()
 
-    playerlist:SetPos( 5, 5 )
-    playerlist:SetSize( 500, 775 )
-    playerlist:SetMultiSelect( false )
-    playerlist:AddColumn( "Name" )
-    playerlist:AddColumn( "SID" )
-    playerlist:AddColumn( "SID64" )
-    playerlist:AddColumn( "Team" )
-    playerlist:AddColumn( "Group" )
 
-    local plys = player_GetAll()
+    for i = 1, #playerlist do
+        local pEntity = playerlist[i]
+        local pButton = vgui.Create("Panel", exechack_cc_hvh_obkak.scrollpanel)
+        pButton:SetTall(25)
+        pButton:Dock(TOP)
 
-    for i = 1, #plys do
-        local ply = plys[i]
+        function pButton:Paint(w, h)
+            if not IsValid(pEntity) then self:Remove() return end
+            local steamId = pEntity:SteamID()
+            
+            local isPriority = exechack_cc_hvh_obkak.cfg.priorityList and exechack_cc_hvh_obkak.cfg.priorityList[steamId]
+            local isFriend = exechack_cc_hvh_obkak.cfg.friends and exechack_cc_hvh_obkak.cfg.friends[steamId]
+            
+            if isPriority then
+                surface.SetDrawColor(50, 0, 0, 100) 
+                surface.DrawRect(0, 0, w, h)
+            end
+            
+            surface.SetFont("DermaSmall")
+            
+            local nameColor = Color(255, 255, 255) 
+            if isPriority then
+                nameColor = Color(255, 50, 50) 
+            elseif isFriend then
+                nameColor = Color(0, 255, 0) 
+            end
 
-        local TeamIndex, TeamName, TeamColor = hvhobkak.GetTeam( ply )
-    
-        playerlist:AddLine(ply:Name(), ply:SteamID(), ply:SteamID64(), TeamName, hvhobkak.GetUserGroup(ply))
+            local nameStartX = 10
+
+            surface.SetTextColor(nameColor.r, nameColor.g, nameColor.b)
+            surface.SetTextPos(nameStartX, 5)
+            surface.DrawText(pEntity:Name())
+            
+            local nameWidth = surface.GetTextSize(pEntity:Name())
+            local indicatorX = nameStartX + nameWidth + 5
+
+            if isPriority then
+                surface.SetTextColor(255, 100, 0)
+                surface.SetTextPos(indicatorX, 5)
+                surface.DrawText("[Piority]")
+                indicatorX = indicatorX + surface.GetTextSize("[Piority]") + 3
+            end
+
+            if isFriend then
+                surface.SetTextColor(0, 255, 0)
+                surface.SetTextPos(indicatorX, 5)
+                surface.DrawText("[Friend]")
+            end
+            
+            local teamIndex, teamName, teamColor = exechack_cc_hvh_obkak.GetTeam(pEntity)
+            local textWidth, textHeight = surface.GetTextSize(teamName)
+            surface.SetTextColor(teamColor)
+            surface.SetTextPos(w / 2 - textWidth / 2, 5)
+            surface.DrawText(teamName)
+            
+            local userGroup = exechack_cc_hvh_obkak.GetUserGroup(pEntity)
+            local textWidth, textHeight = surface.GetTextSize(userGroup)
+            surface.SetTextColor(255, 255, 255)
+            surface.SetTextPos(w - textWidth - 5, 5)
+            surface.DrawText(userGroup)
+            
+            surface.SetDrawColor(45, 45, 45)
+            surface.DrawRect(0, h - 1, w, 1)
+        end
+
+        function pButton:OnMousePressed(mouseCode)
+            if not IsValid(pEntity) then self:Remove() return end
+
+            local steamId = pEntity:SteamID()
+
+            if mouseCode == MOUSE_LEFT then
+                exechack_cc_hvh_obkak.cfg.friends[steamId] = not exechack_cc_hvh_obkak.cfg.friends[steamId]
+            elseif mouseCode == MOUSE_RIGHT then
+                exechack_cc_hvh_obkak.cfg.priorityList[steamId] = not exechack_cc_hvh_obkak.cfg.priorityList[steamId]
+            end
+        end
     end
+end
+
+
+function exechack_cc_hvh_obkak.tabs.Entities()
+    local entitylist = ents.GetAll()
+    local classes = {}
+
+    for i = 1, #entitylist do
+        local pEntity = entitylist[ i ]
+
+        local class = pEntity:GetClass()
+        
+        if class == "player" then continue end
+
+        if not classes[class] then
+            classes[class] = true
+        else
+            continue
+        end
+
+        local pButton = vgui.Create( "Panel", exechack_cc_hvh_obkak.scrollpanel )
+        pButton:SetTall( 25 )
+        pButton:Dock( TOP )
+
+        function pButton:Paint( w, h )
+            if not IsValid(pEntity) then self:Remove() return end
+
+            local class = pEntity:GetClass()
+
+            surface.SetFont( "DermaSmall" )
+
+            if ( exechack_cc_hvh_obkak.cfg.ents[ class ] ) then
+                surface.SetTextColor( 0, 255, 0 )
+            else
+                surface.SetTextColor( 255, 255, 255 )
+            end
+
+            surface.SetTextPos( 10, 5 )
+            surface.DrawText( class )
+
+            surface.SetDrawColor( 45, 45, 45 )
+            surface.DrawRect( 0, h - 1, w, 1 )
+        end
+
+        function pButton:OnMousePressed( mouseCode )
+            if not IsValid(pEntity) then self:Remove() return end
+
+            if ( mouseCode == MOUSE_LEFT ) then
+                local class = pEntity:GetClass()
+
+                if not exechack_cc_hvh_obkak.cfg.ents[ class ] then
+                    exechack_cc_hvh_obkak.cfg.ents[ class ] = true
+                else
+                    exechack_cc_hvh_obkak.cfg.ents[ class ] = nil
+                end
+            end
+        end
+    end
+end
+
+function exechack_cc_hvh_obkak.tabs.resolver()
+
+local p = exechack_cc_hvh_obkak.itemPanel("resolver",1,185):GetItemPanel()
 
 
 end
 
-hvhobkak.ttable = {}
-
-hvhobkak.ttable["Aimbot"]   = hvhobkak.tabs.Aimbot
-hvhobkak.ttable["Rage"]     = hvhobkak.tabs.Rage
-hvhobkak.ttable["Visuals"]  = hvhobkak.tabs.Visuals
-hvhobkak.ttable["Misc"]     = hvhobkak.tabs.Misc
-hvhobkak.ttable["Config"] = hvhobkak.tabs.Config
-hvhobkak.ttable["Players"]  = hvhobkak.tabs.Players
-
-function hvhobkak.initTab(tab)
-    if hvhobkak.scrollpanel != nil then hvhobkak.scrollpanel:Remove() end
-
-    hvhobkak.scrollpanel = vgui_Create("UScroll",hvhobkak.frame)
-
-    hvhobkak.pty = { 5, 5, 5 }
-    // hvhobkak.ESPPP:Hide()
-    hvhobkak.ttable[tostring(tab)]()
+function exechack_cc_hvh_obkak.SetUltimateMode(mode)
+    exechack_cc_hvh_obkak.cfg.vars["Russian Ultimate"] = false
+    exechack_cc_hvh_obkak.cfg.vars["Ukrainian Ultimate"] = false
+    exechack_cc_hvh_obkak.cfg.vars["Navalny Ultimate"] = false
+    exechack_cc_hvh_obkak.cfg.vars["Tesak Ultimate"] = false
+    
+    if exechack_cc_hvh_obkak.musicChannel then
+        exechack_cc_hvh_obkak.musicChannel:Stop()
+        exechack_cc_hvh_obkak.musicChannel = nil
+    end
+    
+    exechack_cc_hvh_obkak.backgroundImage = nil
+    exechack_cc_hvh_obkak.backgroundMaterial = nil
+    exechack_cc_hvh_obkak.backgroundType = nil
+    exechack_cc_hvh_obkak.currentTitle = exechack_cc_hvh_obkak.originalTitle
+    
+    if mode == "Russian" then
+        exechack_cc_hvh_obkak.cfg.vars["Russian Ultimate"] = true
+        exechack_cc_hvh_obkak.currentTitle = "Russian.Hack | Putin Edition"
+        
+        exechack_cc_hvh_obkak.backgroundType = "russian_flag"
+        
+        sound.PlayURL("https://millionskazok.ru/audiofile/a/vpered-rossiya.mp3", "noplay", function(station, errCode, errStr)
+            if IsValid(station) then
+                exechack_cc_hvh_obkak.musicChannel = station
+                station:SetVolume(0.3)
+                station:Play()
+            end
+        end)
+    elseif mode == "Ukrainian" then
+        exechack_cc_hvh_obkak.cfg.vars["Ukrainian Ultimate"] = true
+        exechack_cc_hvh_obkak.currentTitle = "Bandera Hack | Zelensky Edition"
+        
+        exechack_cc_hvh_obkak.backgroundType = "ukrainian_flag"
+        
+        sound.PlayURL("https://rus.hitmotop.com/get/music/20250820/Masha_Kondratenko_-_Vanka-Vstanka_79508324.mp3", "noplay", function(station, errCode, errStr)
+            if IsValid(station) then
+                exechack_cc_hvh_obkak.musicChannel = station
+                station:SetVolume(0.3)
+                station:Play()
+            end
+        end)
+    elseif mode == "Navalny" then
+        exechack_cc_hvh_obkak.cfg.vars["Navalny Ultimate"] = true
+        exechack_cc_hvh_obkak.currentTitle = "Navalny Hack | Z Edition"
+        
+        http.Fetch("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ2SP8RAgnSAm3RBJVyPHcp9P2X9XY70kt5Q&s", function(body, len, headers, code)
+            if code == 200 then
+                file.Write("exechack_cc_hvh_obkak_navalny.jpg", body)
+                exechack_cc_hvh_obkak.backgroundMaterial = Material("../data/exechack_cc_hvh_obkak_navalny.jpg", "noclamp smooth")
+            end
+        end)
+    elseif mode == "Tesak" then
+        exechack_cc_hvh_obkak.cfg.vars["Tesak Ultimate"] = true
+        exechack_cc_hvh_obkak.currentTitle = "1488 ULTIMATE | Ультраправая Edition"
+        
+        http.Fetch("https://i.ytimg.com/vi/l9pgC2oqZQM/sddefault.jpg?sqp=-oaymwEmCIAFEOAD8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGH8gNCguMA8=&rs=AOn4CLAQJwDbnCRHbC0eWfEZFLflIoF82g", function(body, len, headers, code)
+            if code == 200 then
+                file.Write("exechack_cc_hvh_obkak_tesak.jpg", body)
+                exechack_cc_hvh_obkak.backgroundMaterial = Material("../data/exechack_cc_hvh_obkak_tesak.jpg", "noclamp smooth")
+            end
+        end)
+        exechack_cc_hvh_obkak.InitTesakParticles()
+    end
 end
 
-function hvhobkak.tabButton(tab,par) 
-    surface_SetFont("tbfont")
-    local w, h = surface_GetTextSize(tab)
+function exechack_cc_hvh_obkak.InitTesakParticles()
+    exechack_cc_hvh_obkak.tesakParticles = {}
+    for i = 1, exechack_cc_hvh_obkak.particleCount do
+        table.insert(exechack_cc_hvh_obkak.tesakParticles, {
+            x = math.random(0, 800),
+            y = math.random(0, 500),
+            vx = math.random(-50, 50),
+            vy = math.random(-50, 50),
+            life = math.random(3, 6),
+            maxLife = math.random(3, 6),
+            size = math.random(12, 18)
+        })
+    end
+end
+
+function exechack_cc_hvh_obkak.UpdateTesakParticles()
+    if not exechack_cc_hvh_obkak.cfg.vars["Tesak Ultimate"] then return end
+    
+    for i = #exechack_cc_hvh_obkak.tesakParticles, 1, -1 do
+        local particle = exechack_cc_hvh_obkak.tesakParticles[i]
+        
+        particle.x = particle.x + particle.vx * FrameTime()
+        particle.y = particle.y + particle.vy * FrameTime()
+        particle.life = particle.life - FrameTime()
+        
+        if particle.life <= 0 or particle.x < -50 or particle.x > 850 or particle.y < -50 or particle.y > 550 then
+            table.remove(exechack_cc_hvh_obkak.tesakParticles, i)
+        end
+    end
+    
+    while #exechack_cc_hvh_obkak.tesakParticles < exechack_cc_hvh_obkak.particleCount do
+        table.insert(exechack_cc_hvh_obkak.tesakParticles, {
+            x = math.random(-50, 850),
+            y = math.random(-50, 550),
+            vx = math.random(-30, 30),
+            vy = math.random(-30, 30),
+            life = math.random(4, 7),
+            maxLife = math.random(4, 7),
+            size = math.random(12, 18)
+        })
+    end
+end
+
+function exechack_cc_hvh_obkak.tabs.Fun()
+    local p = exechack_cc_hvh_obkak.itemPanel("Info", 1, 300):GetItemPanel()
+    
+    local infoText = "HvH OBKAK: Coded by Exec,Top1HvHMedia.\n\nChange.Log: New WaterMark,Fixed resolver,pitch resolver,New Screen On Logs (Fixed),Angle Arrows (fixed),Fixed PM Killsays,Fake Lag Show,HeadShoot indicator,Fixed bug with lag compensation."
+    
+    local infoLabel = vgui.Create("DLabel", p)
+    infoLabel:SetText(infoText)
+    infoLabel:SetFont("DermaDefault")
+    infoLabel:SetTextColor(Color(255, 255, 255))
+    infoLabel:SetWrap(true)
+    infoLabel:SetAutoStretchVertical(true)
+    infoLabel:Dock(TOP)
+    infoLabel:DockMargin(5, 5, 5, 10)
+    
+    exechack_cc_hvh_obkak.russianCB = exechack_cc_hvh_obkak.ui.CheckBox(p, "Russian Ultimate", "Russian Ultimate", false, false, false, false, function(val)
+        if val then
+            exechack_cc_hvh_obkak.SetUltimateMode("Russian")
+        else
+            exechack_cc_hvh_obkak.SetUltimateMode(nil)
+        end
+    end)
+    
+    exechack_cc_hvh_obkak.ukrainianCB = exechack_cc_hvh_obkak.ui.CheckBox(p, "Ukrainian Ultimate", "Ukrainian Ultimate", false, false, false, false, function(val)
+        if val then
+            exechack_cc_hvh_obkak.SetUltimateMode("Ukrainian")
+        else
+            exechack_cc_hvh_obkak.SetUltimateMode(nil)
+        end
+    end)
+    
+    exechack_cc_hvh_obkak.navalnyCB = exechack_cc_hvh_obkak.ui.CheckBox(p, "Navalny Ultimate", "Navalny Ultimate", false, false, false, false, function(val)
+        if val then
+            exechack_cc_hvh_obkak.SetUltimateMode("Navalny")
+        else
+            exechack_cc_hvh_obkak.SetUltimateMode(nil)
+        end
+    end)
+    
+    exechack_cc_hvh_obkak.tesakCB = exechack_cc_hvh_obkak.ui.CheckBox(p, "Tesak Ultimate", "Tesak Ultimate", false, false, false, false, function(val)
+        if val then
+            exechack_cc_hvh_obkak.SetUltimateMode("Tesak")
+        else
+            exechack_cc_hvh_obkak.SetUltimateMode(nil)
+        end
+    end)
+    
+    if IsValid(exechack_cc_hvh_obkak.tesakCB) then
+        for k, v in pairs(exechack_cc_hvh_obkak.tesakCB:GetChildren()) do
+            if v:GetName() == "UCheckboxLabel" then
+                v.Label:SetTextColor(Color(255, 0, 0))
+                function v.Button:Paint(w,h)
+                    local checked = self:GetChecked()
+                    surface.SetDrawColor(255, 0, 0)
+                    surface.DrawOutlinedRect(0,0,w,h,1)
+                    
+                    if checked or self:IsHovered() then
+                        if checked then
+                            surface.SetDrawColor(255, 0, 0)
+                        else
+                            surface.SetDrawColor(139, 0, 0)
+                        end
+                        surface.DrawRect(3,3,w-6,h-6)
+                    end
+                end
+                break
+            end
+        end
+    end
+end
+
+exechack_cc_hvh_obkak.ttable = {}
+
+exechack_cc_hvh_obkak.ttable["Aimbot"]   = exechack_cc_hvh_obkak.tabs.Aimbot
+exechack_cc_hvh_obkak.ttable["Rage"]     = exechack_cc_hvh_obkak.tabs.Rage
+exechack_cc_hvh_obkak.ttable["Visuals"]  = exechack_cc_hvh_obkak.tabs.Visuals
+exechack_cc_hvh_obkak.ttable["Misc"]     = exechack_cc_hvh_obkak.tabs.Misc
+exechack_cc_hvh_obkak.ttable["Fun"]      = exechack_cc_hvh_obkak.tabs.Fun
+exechack_cc_hvh_obkak.ttable["Config"] = exechack_cc_hvh_obkak.tabs.Config
+exechack_cc_hvh_obkak.ttable["Players"]  = exechack_cc_hvh_obkak.tabs.Players
+exechack_cc_hvh_obkak.ttable["Entities"]  = exechack_cc_hvh_obkak.tabs.Entities
+--exechack_cc_hvh_obkak.ttable["resolver"]  = exechack_cc_hvh_obkak.tabs.resolver
+
+function exechack_cc_hvh_obkak.initTab(tab)
+    if exechack_cc_hvh_obkak.scrollpanel != nil then exechack_cc_hvh_obkak.scrollpanel:Remove() end
+
+    exechack_cc_hvh_obkak.scrollpanel = vgui.Create("UScroll",exechack_cc_hvh_obkak.frame)
+
+    exechack_cc_hvh_obkak.pty = { 5, 5, 5 }
+    // exechack_cc_hvh_obkak.ESPPP:Hide()
+    exechack_cc_hvh_obkak.ttable[tostring(tab)]()
+end
+
+function exechack_cc_hvh_obkak.tabButton(tab,par) 
+    surface.SetFont("DermaSmall")
+    local w, h = surface.GetTextSize(tab)
 
     local fw = w + 35
 
@@ -3957,47 +4200,51 @@ function hvhobkak.tabButton(tab,par)
     b:SetText("")
     
     function b:DoClick()
-        hvhobkak.activetab = tab
-        hvhobkak.initTab(tab)
+        exechack_cc_hvh_obkak.activetab = tab
+        exechack_cc_hvh_obkak.initTab(tab)
     end
 
     function b:Paint(width,height)
-        if hvhobkak.activetab == tab or self:OnDepressed() then
-            surface_SetDrawColor(hvhobkak.Colors[54])
-            surface_SetTextColor(245,245,245,255)
+        if exechack_cc_hvh_obkak.activetab == tab or self:OnDepressed() then
+            surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
+            surface.SetTextColor(245,245,245,255)
         elseif self:IsHovered() then
-            surface_SetDrawColor(hvhobkak.Colors[40])
-            surface_SetTextColor(225,225,225,255)
+            surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[40])
+            surface.SetTextColor(225,225,225,255)
         else
-            surface_SetDrawColor(hvhobkak.Colors[30])
-            surface_SetTextColor(200,200,200,255)
+            surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[30])
+            surface.SetTextColor(200,200,200,255)
         end
         
-        surface_DrawRect(0,0,width,height)
+        surface.DrawRect(0,0,width,height)
 
-        surface_SetFont("tbfont")
-        surface_SetTextPos(tx,ty)
-        surface_DrawText(tab)
+        surface.SetFont("DermaSmall")
+        surface.SetTextPos(tx,ty)
+        surface.DrawText(tab)
     end
 end
 
-hvhobkak.tabButton( "Aimbot",        hvhobkak.frame:GetTopPanel() ) 
-hvhobkak.tabButton( "Rage",          hvhobkak.frame:GetTopPanel() ) 
-hvhobkak.tabButton( "Visuals",       hvhobkak.frame:GetTopPanel() ) 
-hvhobkak.tabButton( "Misc",          hvhobkak.frame:GetTopPanel() ) 
-hvhobkak.tabButton( "Config",        hvhobkak.frame:GetTopPanel() ) 
-hvhobkak.tabButton( "Players",       hvhobkak.frame:GetTopPanel() ) 
-
-hvhobkak.ttable["Aimbot"]()
+exechack_cc_hvh_obkak.tabButton( "Aimbot",        exechack_cc_hvh_obkak.frame:GetTopPanel() ) 
+exechack_cc_hvh_obkak.tabButton( "Rage",          exechack_cc_hvh_obkak.frame:GetTopPanel() ) 
+exechack_cc_hvh_obkak.tabButton( "Visuals",       exechack_cc_hvh_obkak.frame:GetTopPanel() ) 
+exechack_cc_hvh_obkak.tabButton( "Misc",          exechack_cc_hvh_obkak.frame:GetTopPanel() ) 
+exechack_cc_hvh_obkak.tabButton( "Fun",           exechack_cc_hvh_obkak.frame:GetTopPanel() ) 
+exechack_cc_hvh_obkak.tabButton( "Config",        exechack_cc_hvh_obkak.frame:GetTopPanel() ) 
+exechack_cc_hvh_obkak.tabButton( "Players",       exechack_cc_hvh_obkak.frame:GetTopPanel() ) 
+exechack_cc_hvh_obkak.tabButton( "Entities",       exechack_cc_hvh_obkak.frame:GetTopPanel() ) 
+--exechack_cc_hvh_obkak.tabButton( "resolver",       exechack_cc_hvh_obkak.frame:GetTopPanel() ) 
+                    
+exechack_cc_hvh_obkak.ttable["Aimbot"]()
 
 // Input 
 
-function hvhobkak.IsKeyDown( key )
-    if key >= 107 then
-        return input_IsMouseDown( key )
-    end
+function exechack_cc_hvh_obkak.IsKeyDown( key )
+	if not key then return false end
+	if key >= 107 then
+		return input.IsMouseDown( key )
+	end
 
-    return input_IsKeyDown( key )
+	return input.IsKeyDown( key )
 end
 
 /*
@@ -4006,95 +4253,84 @@ end
 
 // cm stuff
 
-hvhobkak.target             = false  
-hvhobkak.aimingrn           = false 
+exechack_cc_hvh_obkak.target             = false  
+exechack_cc_hvh_obkak.aimingrn           = false 
 
-hvhobkak.targetVector       = Vector()
-hvhobkak.predictedVector    = Vector()
-hvhobkak.backtrackVector    = Vector()
-hvhobkak.nullVec            = Vector() * -1
+exechack_cc_hvh_obkak.targetVector       = Vector()
+exechack_cc_hvh_obkak.predictedVector    = Vector()
+exechack_cc_hvh_obkak.backtrackVector    = Vector()
+exechack_cc_hvh_obkak.nullVec            = Vector() * -1
 
-hvhobkak.SilentAngle        = me:EyeAngles()
+exechack_cc_hvh_obkak.SilentAngle        = pLocalPlayer:EyeAngles()
 
-hvhobkak.SkipCommand        = false
-hvhobkak.SendPacket         = true
+exechack_cc_hvh_obkak.SkipCommand        = false
+exechack_cc_hvh_obkak.SendPacket         = true
 
-hvhobkak.traceStruct        = { mask = MASK_SHOT, filter = me }
-hvhobkak.badSweps           = { ["gmod_camera"] = true, ["manhack_welder"] = true, ["weapon_medkit"] = true, ["gmod_tool"] = true, ["weapon_physgun"] = true, ["weapon_physcannon"] = true, ["weapon_bugbait"] = true, }
-hvhobkak.badSeqs            = { [ACT_VM_RELOAD] = true, [ACT_VM_RELOAD_SILENCED] = true, [ACT_VM_RELOAD_DEPLOYED] = true, [ACT_VM_RELOAD_IDLE] = true, [ACT_VM_RELOAD_EMPTY] = true, [ACT_VM_RELOADEMPTY] = true, [ACT_VM_RELOAD_M203] = true, [ACT_VM_RELOAD_INSERT] = true, [ACT_VM_RELOAD_INSERT_PULL] = true, [ACT_VM_RELOAD_END] = true, [ACT_VM_RELOAD_END_EMPTY] = true, [ACT_VM_RELOAD_INSERT_EMPTY] = true, [ACT_VM_RELOAD2] = true }
-hvhobkak.cones              = {}
-hvhobkak.parsedbones        = {}
+exechack_cc_hvh_obkak.traceStruct        = { mask = MASK_SHOT, filter = pLocalPlayer }
+exechack_cc_hvh_obkak.badSweps           = { ["gmod_camera"] = true, ["manhack_welder"] = true, ["weapon_medkit"] = true, ["gmod_tool"] = true, ["weapon_physgun"] = true, ["weapon_physcannon"] = true, ["weapon_bugbait"] = true, }
+exechack_cc_hvh_obkak.badSeqs            = { [ACT_VM_RELOAD] = true, [ACT_VM_RELOAD_SILENCED] = true, [ACT_VM_RELOAD_DEPLOYED] = true, [ACT_VM_RELOAD_IDLE] = true, [ACT_VM_RELOAD_EMPTY] = true, [ACT_VM_RELOADEMPTY] = true, [ACT_VM_RELOAD_M203] = true, [ACT_VM_RELOAD_INSERT] = true, [ACT_VM_RELOAD_INSERT_PULL] = true, [ACT_VM_RELOAD_END] = true, [ACT_VM_RELOAD_END_EMPTY] = true, [ACT_VM_RELOAD_INSERT_EMPTY] = true, [ACT_VM_RELOAD2] = true }
+exechack_cc_hvh_obkak.cones              = {}
+exechack_cc_hvh_obkak.parsedbones        = {}
 
-hvhobkak.swbNormal          = bor(CONTENTS_SOLID, CONTENTS_OPAQUE, CONTENTS_MOVEABLE, CONTENTS_DEBRIS, CONTENTS_MONSTER, CONTENTS_HITBOX, 402653442, CONTENTS_WATER)
-hvhobkak.swbWall            = bor(CONTENTS_TESTFOGVOLUME, CONTENTS_EMPTY, CONTENTS_MONSTER, CONTENTS_HITBOX)
-hvhobkak.swbPen             = {[MAT_SAND] = 0.5, [MAT_DIRT] = 0.8, [MAT_METAL] = 1.1, [MAT_TILE] = 0.9, [MAT_WOOD] = 1.2}
-hvhobkak.swbShit            = { ["swb_knife"] = true, ["swb_knife_m"] = true }
+exechack_cc_hvh_obkak.swbNormal          = bit.bor(CONTENTS_SOLID, CONTENTS_OPAQUE, CONTENTS_MOVEABLE, CONTENTS_DEBRIS, CONTENTS_MONSTER, CONTENTS_HITBOX, 402653442, CONTENTS_WATER)
+exechack_cc_hvh_obkak.swbWall            = bit.bor(CONTENTS_TESTFOGVOLUME, CONTENTS_EMPTY, CONTENTS_MONSTER, CONTENTS_HITBOX)
+exechack_cc_hvh_obkak.swbPen             = {[MAT_SAND] = 0.5, [MAT_DIRT] = 0.8, [MAT_METAL] = 1.1, [MAT_TILE] = 0.9, [MAT_WOOD] = 1.2}
+exechack_cc_hvh_obkak.swbShit            = { ["swb_knife"] = true, ["swb_knife_m"] = true }
 
-hvhobkak.m9kPenetration     = { ["SniperPenetratedRound"] = 20, ["pistol"] = 9, ["357"] = 12, ["smg1"] = 14, ["ar2"] = 16, ["buckshot"] = 5, ["slam"] = 5, ["AirboatGun"] = 17, }
-hvhobkak.m9kMaxRicochet     = { ["SniperPenetratedRound"] = 10, ["pistol"] = 2, ["357"] = 5, ["smg1"] = 4, ["ar2"] = 5, ["buckshot"] = 0, ["slam"] = 0, ["AirboatGun"] = 9, }
-hvhobkak.m9kCanRicochet     = { ["SniperPenetratedRound"] = true, ["pistol"] = true, ["buckshot"] = true, ["slam"] = true }
-hvhobkak.m9kPenMaterial     = { [MAT_GLASS] = true, [MAT_PLASTIC] = true, [MAT_WOOD] = true, [MAT_FLESH] = true, [MAT_ALIENFLESH] = true }
+exechack_cc_hvh_obkak.m9kPenetration     = { ["SniperPenetratedRound"] = 20, ["pistol"] = 9, ["357"] = 12, ["smg1"] = 14, ["ar2"] = 16, ["buckshot"] = 5, ["slam"] = 5, ["AirboatGun"] = 17, }
+exechack_cc_hvh_obkak.m9kMaxRicochet     = { ["SniperPenetratedRound"] = 10, ["pistol"] = 2, ["357"] = 5, ["smg1"] = 4, ["ar2"] = 5, ["buckshot"] = 0, ["slam"] = 0, ["AirboatGun"] = 9, }
+exechack_cc_hvh_obkak.m9kCanRicochet     = { ["SniperPenetratedRound"] = true, ["pistol"] = true, ["buckshot"] = true, ["slam"] = true }
+exechack_cc_hvh_obkak.m9kPenMaterial     = { [MAT_GLASS] = true, [MAT_PLASTIC] = true, [MAT_WOOD] = true, [MAT_FLESH] = true, [MAT_ALIENFLESH] = true }
 
-hvhobkak.activeWeapon       = false 
-hvhobkak.activeWeaponClass  = false 
-hvhobkak.moveType           = me:GetMoveType() 
+exechack_cc_hvh_obkak.activeWeapon       = false 
+exechack_cc_hvh_obkak.activeWeaponClass  = false 
+exechack_cc_hvh_obkak.moveType           = pLocalPlayer:GetMoveType() 
 
-hvhobkak.myaw               = GetConVar("m_yaw"):GetFloat()
+exechack_cc_hvh_obkak.backtracktick      = 0
 
-hvhobkak.backtracktick      = 0
+function exechack_cc_hvh_obkak.AutoWall( dir, plyTarget )
+	if not exechack_cc_hvh_obkak.activeWeapon or exechack_cc_hvh_obkak.swbShit[ exechack_cc_hvh_obkak.activeWeaponClass ] then return false end 
 
-
-
-
-
-
-
-
-
-
-function hvhobkak.AutoWall( dir, plyTarget )
-	if not hvhobkak.activeWeapon or hvhobkak.swbShit[ hvhobkak.activeWeaponClass ] then return false end 
-
-	local eyePos = me:EyePos()
+	local eyePos = pLocalPlayer:EyePos()
 	
 	local function SWBAutowall()
 
-        hvhobkak.traceStruct.start = eyePos
-        hvhobkak.traceStruct.endpos = eyePos + dir * hvhobkak.activeWeapon.PenetrativeRange
-        hvhobkak.traceStruct.filter = me
-        hvhobkak.traceStruct.mask = hvhobkak.swbNormal
+        exechack_cc_hvh_obkak.traceStruct.start = eyePos
+        exechack_cc_hvh_obkak.traceStruct.endpos = eyePos + dir * exechack_cc_hvh_obkak.activeWeapon.PenetrativeRange
+        exechack_cc_hvh_obkak.traceStruct.filter = pLocalPlayer
+        exechack_cc_hvh_obkak.traceStruct.mask = exechack_cc_hvh_obkak.swbNormal
 
-		local tr = TraceLine( hvhobkak.traceStruct )
+		local tr = TraceLine( exechack_cc_hvh_obkak.traceStruct )
 		
 		if tr.Hit and !tr.HitSky then
 			local dot = -dir:Dot(tr.HitNormal)
 			
-			if hvhobkak.activeWeapon.CanPenetrate and dot > 0.26 then
+			if exechack_cc_hvh_obkak.activeWeapon.CanPenetrate and dot > 0.26 then
 
-                hvhobkak.traceStruct.start = tr.HitPos
-                hvhobkak.traceStruct.endpos = tr.HitPos + dir * hvhobkak.activeWeapon.PenStr * ( hvhobkak.swbPen[tr.MatType] or 1 ) * hvhobkak.activeWeapon.PenMod
-                hvhobkak.traceStruct.filter = me
-                hvhobkak.traceStruct.mask = hvhobkak.swbWall
+                exechack_cc_hvh_obkak.traceStruct.start = tr.HitPos
+                exechack_cc_hvh_obkak.traceStruct.endpos = tr.HitPos + dir * exechack_cc_hvh_obkak.activeWeapon.PenStr * ( exechack_cc_hvh_obkak.swbPen[tr.MatType] or 1 ) * exechack_cc_hvh_obkak.activeWeapon.PenMod
+                exechack_cc_hvh_obkak.traceStruct.filter = pLocalPlayer
+                exechack_cc_hvh_obkak.traceStruct.mask = exechack_cc_hvh_obkak.swbWall
 
-				tr = TraceLine( hvhobkak.traceStruct )
+				tr = TraceLine( exechack_cc_hvh_obkak.traceStruct )
 
-                hvhobkak.traceStruct.start = tr.HitPos
-                hvhobkak.traceStruct.endpos = tr.HitPos + dir * 0.1
-                hvhobkak.traceStruct.filter = me
-                hvhobkak.traceStruct.mask = hvhobkak.swbNormal
+                exechack_cc_hvh_obkak.traceStruct.start = tr.HitPos
+                exechack_cc_hvh_obkak.traceStruct.endpos = tr.HitPos + dir * 0.1
+                exechack_cc_hvh_obkak.traceStruct.filter = pLocalPlayer
+                exechack_cc_hvh_obkak.traceStruct.mask = exechack_cc_hvh_obkak.swbNormal
 
-				tr = TraceLine( hvhobkak.traceStruct) 
+				tr = TraceLine( exechack_cc_hvh_obkak.traceStruct) 
 				
 				if tr.Hit then return false end
 
-                hvhobkak.traceStruct.start = tr.HitPos
-                hvhobkak.traceStruct.endpos = tr.HitPos + dir * 32768
-                hvhobkak.traceStruct.filter = me
-                hvhobkak.traceStruct.mask = MASK_SHOT
+                exechack_cc_hvh_obkak.traceStruct.start = tr.HitPos
+                exechack_cc_hvh_obkak.traceStruct.endpos = tr.HitPos + dir * 32768
+                exechack_cc_hvh_obkak.traceStruct.filter = pLocalPlayer
+                exechack_cc_hvh_obkak.traceStruct.mask = MASK_SHOT
 
-				tr = TraceLine( hvhobkak.traceStruct )
+				tr = TraceLine( exechack_cc_hvh_obkak.traceStruct )
 				
-                if hvhobkak.cfg.vars["Ignores-Head unhitable"] then
+                if exechack_cc_hvh_obkak.cfg.vars["Ignores-Head unhitable"] then
                     return tr.Entity == plyTarget and tr.HitGroup == 1
                 else
                     return tr.Entity == plyTarget
@@ -4106,7 +4342,14 @@ function hvhobkak.AutoWall( dir, plyTarget )
 	end
 	
 	local function M9KAutowall()
-		if !hvhobkak.activeWeapon.Penetration then
+        local penetrate_cvar = GetConVar( "M9KDisablePenetration" )
+        if IsValid(penetrate_cvar) then
+            if ( penetrate_cvar:GetBool() ) then
+                return false 
+            end
+        end
+
+		if !exechack_cc_hvh_obkak.activeWeapon.Penetration then
 			return false
 		end
 
@@ -4119,19 +4362,19 @@ function hvhobkak.AutoWall( dir, plyTarget )
             local maxRicochet       = 0
             local isRicochet        = false
 
-            if hvhobkak.m9kPenetration[ hvhobkak.activeWeapon.Primary.Ammo ] then
-                maxPenetration = hvhobkak.m9kPenetration[ hvhobkak.activeWeapon.Primary.Ammo ]
+            if exechack_cc_hvh_obkak.m9kPenetration[ exechack_cc_hvh_obkak.activeWeapon.Primary.Ammo ] then
+                maxPenetration = exechack_cc_hvh_obkak.m9kPenetration[ exechack_cc_hvh_obkak.activeWeapon.Primary.Ammo ]
             end
 			
-            if hvhobkak.m9kMaxRicochet[ hvhobkak.activeWeapon.Primary.Ammo ] then
-                maxRicochet = hvhobkak.m9kMaxRicochet[ hvhobkak.activeWeapon.Primary.Ammo ]
+            if exechack_cc_hvh_obkak.m9kMaxRicochet[ exechack_cc_hvh_obkak.activeWeapon.Primary.Ammo ] then
+                maxRicochet = exechack_cc_hvh_obkak.m9kMaxRicochet[ exechack_cc_hvh_obkak.activeWeapon.Primary.Ammo ]
             end
 
-            if hvhobkak.m9kCanRicochet[ hvhobkak.activeWeapon.Primary.Ammo ] then
-                isRicochet = hvhobkak.m9kMaxRicochet[ hvhobkak.activeWeapon.Primary.Ammo ]
+            if exechack_cc_hvh_obkak.m9kCanRicochet[ exechack_cc_hvh_obkak.activeWeapon.Primary.Ammo ] then
+                isRicochet = exechack_cc_hvh_obkak.m9kMaxRicochet[ exechack_cc_hvh_obkak.activeWeapon.Primary.Ammo ]
             end
 
-			if tr.MatType == MAT_METAL and isRicochet and hvhobkak.activeWeapon.Primary.Ammo != "SniperPenetratedRound" then
+			if tr.MatType == MAT_METAL and isRicochet and exechack_cc_hvh_obkak.activeWeapon.Primary.Ammo != "SniperPenetratedRound" then
 				return false
 			end
 
@@ -4141,7 +4384,7 @@ function hvhobkak.AutoWall( dir, plyTarget )
 
 			local penetrationDir = tr.Normal * maxPenetration
 
-			if hvhobkak.m9kPenMaterial[ tr.MatType ] then
+			if exechack_cc_hvh_obkak.m9kPenMaterial[ tr.MatType ] then
 				penetrationDir = tr.Normal * ( maxPenetration * 2 ) 
 			end
 
@@ -4149,32 +4392,32 @@ function hvhobkak.AutoWall( dir, plyTarget )
 				return false
 			end
 
-			hvhobkak.traceStruct.endpos    = tr.HitPos
-			hvhobkak.traceStruct.start     = tr.HitPos + penetrationDir
-			hvhobkak.traceStruct.mask      = MASK_SHOT
-			hvhobkak.traceStruct.filter    = me
+			exechack_cc_hvh_obkak.traceStruct.endpos    = tr.HitPos
+			exechack_cc_hvh_obkak.traceStruct.start     = tr.HitPos + penetrationDir
+			exechack_cc_hvh_obkak.traceStruct.mask      = MASK_SHOT
+			exechack_cc_hvh_obkak.traceStruct.filter    = pLocalPlayer
 
-			local trace = TraceLine( hvhobkak.traceStruct )
+			local trace = TraceLine( exechack_cc_hvh_obkak.traceStruct )
 
 			if trace.StartSolid or trace.Fraction >= 1 then
 				return false
 			end
 
-			hvhobkak.traceStruct.endpos = trace.HitPos + tr.Normal * 32768
-			hvhobkak.traceStruct.start  = trace.HitPos
-			hvhobkak.traceStruct.mask   = MASK_SHOT
-			hvhobkak.traceStruct.filter = me
+			exechack_cc_hvh_obkak.traceStruct.endpos = trace.HitPos + tr.Normal * 32768
+			exechack_cc_hvh_obkak.traceStruct.start  = trace.HitPos
+			exechack_cc_hvh_obkak.traceStruct.mask   = MASK_SHOT
+			exechack_cc_hvh_obkak.traceStruct.filter = pLocalPlayer
 
-			local penTrace = TraceLine( hvhobkak.traceStruct )
+			local penTrace = TraceLine( exechack_cc_hvh_obkak.traceStruct )
 
-            if hvhobkak.cfg.vars["Ignores-Head unhitable"] then
+            if exechack_cc_hvh_obkak.cfg.vars["Ignores-Head unhitable"] then
                 return penTrace.Entity == plyTarget and penTrace.HitGroup == 1
             else
                 return penTrace.Entity == plyTarget
             end
 
 			local damageMulti = 0.5
-			if hvhobkak.activeWeapon.Primary.Ammo == "SniperPenetratedRound" then
+			if exechack_cc_hvh_obkak.activeWeapon.Primary.Ammo == "SniperPenetratedRound" then
 				damageMulti = 1
 			elseif tr.MatType == MAT_CONCRETE or tr.MatType == MAT_METAL then
 				damageMulti = 0.3
@@ -4191,82 +4434,83 @@ function hvhobkak.AutoWall( dir, plyTarget )
 			return BulletPenetrate( penTrace, bounceNum + 1, damage * damageMulti )
 		end
 
-        hvhobkak.traceStruct.start = eyePos
-        hvhobkak.traceStruct.endpos = eyePos + dir * 32768
-        hvhobkak.traceStruct.filter = me
-        hvhobkak.traceStruct.mask = MASK_SHOT
+        exechack_cc_hvh_obkak.traceStruct.start = eyePos
+        exechack_cc_hvh_obkak.traceStruct.endpos = eyePos + dir * 32768
+        exechack_cc_hvh_obkak.traceStruct.filter = pLocalPlayer
+        exechack_cc_hvh_obkak.traceStruct.mask = MASK_SHOT
 
-		local trace = TraceLine( hvhobkak.traceStruct )
+		local trace = TraceLine( exechack_cc_hvh_obkak.traceStruct )
 
-		return BulletPenetrate( trace, 0, hvhobkak.activeWeapon.Primary.Damage )
+		return BulletPenetrate( trace, 0, exechack_cc_hvh_obkak.activeWeapon.Primary.Damage )
 	end
 	
-    if StartsWith( hvhobkak.activeWeaponClass, "m9k_" ) then
+    if string.StartsWith( exechack_cc_hvh_obkak.activeWeaponClass, "m9k_" ) or string.StartsWith( exechack_cc_hvh_obkak.activeWeaponClass, "bender_" ) then
 		return M9KAutowall()
-	elseif StartsWith( hvhobkak.activeWeaponClass, "swb_" ) then
+	elseif string.StartsWith( exechack_cc_hvh_obkak.activeWeaponClass, "swb_" ) then
 		return SWBAutowall()
 	end
 	
 	return false
 end
 
-function hvhobkak.VisibleCheck( who, where, predticks, awalldir )
-    local start = me:EyePos()
+function exechack_cc_hvh_obkak.VisibleCheck( who, where, predticks, awalldir )
+    local start = pLocalPlayer:EyePos()
 
-    if predticks then start = start + ( me:GetVelocity() * TickInterval ) * predticks end
+    if predticks then start = start + ( pLocalPlayer:GetVelocity() * flTickInterval ) * predticks end
 
-    hvhobkak.traceStruct.start = start
-	hvhobkak.traceStruct.endpos = where
-	hvhobkak.traceStruct.mask = MASK_SHOT
-    hvhobkak.traceStruct.filter = me
+    exechack_cc_hvh_obkak.traceStruct.start = start
+	exechack_cc_hvh_obkak.traceStruct.endpos = where
+	exechack_cc_hvh_obkak.traceStruct.mask = MASK_SHOT
+    exechack_cc_hvh_obkak.traceStruct.filter = pLocalPlayer
 
-    local tr = TraceLine( hvhobkak.traceStruct )
+    local tr = TraceLine( exechack_cc_hvh_obkak.traceStruct )
 
     local canhit = tr.Entity == who or tr.Fraction == 1
 
-    if !canhit and awalldir and hvhobkak.cfg.vars["Wallz"] then 
-        return hvhobkak.AutoWall( awalldir, who )
+    if !canhit and awalldir and exechack_cc_hvh_obkak.cfg.vars["Wallz"] then 
+        return exechack_cc_hvh_obkak.AutoWall( awalldir, who )
     end
 
-    if hvhobkak.cfg.vars["Ignores-Head unhitable"] and tr.HitGroup != 1 then return false end
+    if exechack_cc_hvh_obkak.cfg.vars["Ignores-Head unhitable"] and tr.HitGroup != 1 then return false end
 
     return canhit
 end
 
-function hvhobkak.CanShoot( cmd )
-	if not hvhobkak.activeWeapon then return false end
-	local seq = hvhobkak.activeWeapon:GetSequence()
+exechack_cc_hvh_obkak.flServerTime = 0
+function exechack_cc_hvh_obkak.CanShoot( cmd )
+	if not exechack_cc_hvh_obkak.activeWeapon then return false end
+	local seq = exechack_cc_hvh_obkak.activeWeapon:GetSequence()
 
-    if hvhobkak.cfg.binds["Aim on key"] != 0 and not hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Aim on key"] ) then
+    if exechack_cc_hvh_obkak.cfg.binds["Aim on key"] != 0 and not exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Aim on key"] ) then
         return false
     end
 
-	if hvhobkak.badSweps[ hvhobkak.activeWeaponClass ] then
+	if exechack_cc_hvh_obkak.badSweps[ exechack_cc_hvh_obkak.activeWeaponClass ] then
 		return false
 	end
 
-    if hvhobkak.moveType == MOVETYPE_NOCLIP then
+    if exechack_cc_hvh_obkak.moveType == MOVETYPE_NOCLIP then
         return false
     end
 
-    if hvhobkak.cfg.vars["Auto fire"] and cmd:KeyDown(IN_ATTACK) then
+    if exechack_cc_hvh_obkak.cfg.vars["Auto fire"] and cmd:KeyDown(IN_ATTACK) then
         return false
     end
 
-	if hvhobkak.cfg.vars["Bullet time"] and hvhobkak.activeWeapon:GetNextPrimaryFire() >= ded.GetServerTime(cmd) then
+	if exechack_cc_hvh_obkak.cfg.vars["Bullet time"] and exechack_cc_hvh_obkak.activeWeapon:GetNextPrimaryFire() >= exechack_cc_hvh_obkak.flServerTime then
 		return false
 	end
 
     // print(ded.GetRandomSeed( cmd ))
-    if hvhobkak.cfg.vars["Wait for seed"] and ded.GetRandomSeed( cmd ) != 134 then
+    if exechack_cc_hvh_obkak.cfg.vars["Wait for seed"] and ded.GetRandomSeed( cmd ) != 134 then
         return false 
     end
 
-	return hvhobkak.activeWeapon:Clip1() != 0 and !hvhobkak.badSeqs[ seq ] 
+	return exechack_cc_hvh_obkak.activeWeapon:Clip1() != 0 and !exechack_cc_hvh_obkak.badSeqs[ seq ] 
 end 
 
-function hvhobkak.Spread( cmd, ang, spread )
-	if not hvhobkak.activeWeapon or not hvhobkak.cones[ hvhobkak.activeWeaponClass ] then return ang end
+function exechack_cc_hvh_obkak.Spread( cmd, ang, spread )
+	if not exechack_cc_hvh_obkak.activeWeapon or not exechack_cc_hvh_obkak.cones[ exechack_cc_hvh_obkak.activeWeaponClass ] then return ang end
 
 	local dir = ded.PredictSpread( cmd, ang, spread )
 
@@ -4280,90 +4524,147 @@ end
     Nospread 
 */
 
-hvhobkak.CustomSpread = {}
+exechack_cc_hvh_obkak.CustomSpread = {}
 
-function hvhobkak.CustomSpread.swb( cmd, ang )
+function exechack_cc_hvh_obkak.CustomSpread.swb( cmd, ang )
     /*
-    local vel = me:GetVelocity():Length()
+    local vel = pLocalPlayer:GetVelocity():Length()
     local dir = ang:Forward()
     
-    if !me.LastView then
-        me.LastView = dir
-        me.ViewAff = 0
+    if !pLocalPlayer.LastView then
+        pLocalPlayer.LastView = dir
+        pLocalPlayer.ViewAff = 0
     else
-        me.ViewAff = Lerp( 0.25, me.ViewAff, ( dir - me.LastView ):Length() * 0.5 )
+        pLocalPlayer.ViewAff = Lerp( 0.25, pLocalPlayer.ViewAff, ( dir - pLocalPlayer.LastView ):Length() * 0.5 )
     end
     
-    if hvhobkak.activeWeapon.dt and hvhobkak.activeWeapon.meSpread and hvhobkak.activeWeapon.dt.State == SWB_AIMING then
-        hvhobkak.activeWeapon.BaseCone = hvhobkak.activeWeapon.meSpread
+    if exechack_cc_hvh_obkak.activeWeapon.dt and exechack_cc_hvh_obkak.activeWeapon.meSpread and exechack_cc_hvh_obkak.activeWeapon.dt.State == SWB_AIMING then
+        exechack_cc_hvh_obkak.activeWeapon.BaseCone = exechack_cc_hvh_obkak.activeWeapon.meSpread
         
-        if hvhobkak.activeWeapon.Owner.Expertise then
-            hvhobkak.activeWeapon.BaseCone = hvhobkak.activeWeapon.BaseCone * ( 1 - hvhobkak.activeWeapon.Owner.Expertise["steadyme"].val * 0.0015 )
+        if exechack_cc_hvh_obkak.activeWeapon.Owner.Expertise then
+            exechack_cc_hvh_obkak.activeWeapon.BaseCone = exechack_cc_hvh_obkak.activeWeapon.BaseCone * ( 1 - exechack_cc_hvh_obkak.activeWeapon.Owner.Expertise["steadyme"].val * 0.0015 )
         end
     else
-        hvhobkak.activeWeapon.BaseCone = hvhobkak.activeWeapon.HipSpread
+        exechack_cc_hvh_obkak.activeWeapon.BaseCone = exechack_cc_hvh_obkak.activeWeapon.HipSpread
         
-        if hvhobkak.activeWeapon.Owner.Expertise then
-            hvhobkak.activeWeapon.BaseCone = hvhobkak.activeWeapon.BaseCone * ( 1 - hvhobkak.activeWeapon.Owner.Expertise["wepprof"].val * 0.0015 )
+        if exechack_cc_hvh_obkak.activeWeapon.Owner.Expertise then
+            exechack_cc_hvh_obkak.activeWeapon.BaseCone = exechack_cc_hvh_obkak.activeWeapon.BaseCone * ( 1 - exechack_cc_hvh_obkak.activeWeapon.Owner.Expertise["wepprof"].val * 0.0015 )
         end
     end
     
-    if me:Crouching() then
-        hvhobkak.activeWeapon.BaseCone = hvhobkak.activeWeapon.BaseCone * ( hvhobkak.activeWeapon.dt.State == SWB_AIMING and 0.9 or 0.75 )
+    if pLocalPlayer:Crouching() then
+        exechack_cc_hvh_obkak.activeWeapon.BaseCone = exechack_cc_hvh_obkak.activeWeapon.BaseCone * ( exechack_cc_hvh_obkak.activeWeapon.dt.State == SWB_AIMING and 0.9 or 0.75 )
     end
     
-    hvhobkak.activeWeapon.CurCone = math_Clamp( hvhobkak.activeWeapon.BaseCone + hvhobkak.activeWeapon.AddSpread + ( vel / 10000 * hvhobkak.activeWeapon.VelocitySensitivity ) * ( hvhobkak.activeWeapon.dt.State == SWB_AIMING and hvhobkak.activeWeapon.meMobilitySpreadMod or 1 ) + me.ViewAff, 0, 0.09 + hvhobkak.activeWeapon.MaxSpreadInc )
+    exechack_cc_hvh_obkak.activeWeapon.CurCone = math.Clamp( exechack_cc_hvh_obkak.activeWeapon.BaseCone + exechack_cc_hvh_obkak.activeWeapon.AddSpread + ( vel / 10000 * exechack_cc_hvh_obkak.activeWeapon.VelocitySensitivity ) * ( exechack_cc_hvh_obkak.activeWeapon.dt.State == SWB_AIMING and exechack_cc_hvh_obkak.activeWeapon.meMobilitySpreadMod or 1 ) + pLocalPlayer.ViewAff, 0, 0.09 + exechack_cc_hvh_obkak.activeWeapon.MaxSpreadInc )
     
-    if CurTime() > hvhobkak.activeWeapon.SpreadWait then
-        hvhobkak.activeWeapon.AddSpread = math_Clamp( hvhobkak.activeWeapon.AddSpread - 0.005 * hvhobkak.activeWeapon.AddSpreadSpeed, 0, hvhobkak.activeWeapon.MaxSpreadInc )
-        hvhobkak.activeWeapon.AddSpreadSpeed = math_Clamp( hvhobkak.activeWeapon.AddSpreadSpeed + 0.05, 0, 1 )
+    if CurTime() > exechack_cc_hvh_obkak.activeWeapon.SpreadWait then
+        exechack_cc_hvh_obkak.activeWeapon.AddSpread = math.Clamp( exechack_cc_hvh_obkak.activeWeapon.AddSpread - 0.005 * exechack_cc_hvh_obkak.activeWeapon.AddSpreadSpeed, 0, exechack_cc_hvh_obkak.activeWeapon.MaxSpreadInc )
+        exechack_cc_hvh_obkak.activeWeapon.AddSpreadSpeed = math.Clamp( exechack_cc_hvh_obkak.activeWeapon.AddSpreadSpeed + 0.05, 0, 1 )
     end
     */
 
-    local cone = hvhobkak.activeWeapon.CurCone
+    local cone = exechack_cc_hvh_obkak.activeWeapon.CurCone
     if !cone then return ang end
 
-    if me:Crouching() then
+    if pLocalPlayer:Crouching() then
         cone = cone * 0.85
     end
 
-    math_randomseed( cmd:CommandNumber() )
-    return ang - Angle( math_Rand(-cone, cone), math_Rand(-cone, cone), 0 ) * 25
+    math.randomseed( cmd:CommandNumber() )
+    return ang - Angle( math.Rand(-cone, cone), math.Rand(-cone, cone), 0 ) * 25
 end
 
-function hvhobkak.CustomSpread.cw( cmd, ang )
-    local cone = hvhobkak.activeWeapon.CurCone
+function exechack_cc_hvh_obkak.CustomSpread.cw( cmd, ang )
+    local cone = exechack_cc_hvh_obkak.activeWeapon.CurCone
     if !cone then return ang end
 
-    math_randomseed( cmd:CommandNumber() )
-    return ang - Angle( math_Rand(-cone, cone), math_Rand(-cone, cone), 0 ) * 25
+    math.randomseed( cmd:CommandNumber() )
+    return ang - Angle( math.Rand(-cone, cone), math.Rand(-cone, cone), 0 ) * 25
 end
 
-function hvhobkak.CustomSpread.fas2( cmd, ang )
-    math_randomseed( CurTime() )
+function exechack_cc_hvh_obkak.CustomSpread.fas2( cmd, ang )
+    math.randomseed( CurTime() )
 
-    local dir = Angle( math_Rand( -hvhobkak.activeWeapon.CurCone, hvhobkak.activeWeapon.CurCone ), math_Rand( -hvhobkak.activeWeapon.CurCone, hvhobkak.activeWeapon.CurCone ), 0 ) * 25
+    local dir = Angle( math.Rand( -exechack_cc_hvh_obkak.activeWeapon.CurCone, exechack_cc_hvh_obkak.activeWeapon.CurCone ), math.Rand( -exechack_cc_hvh_obkak.activeWeapon.CurCone, exechack_cc_hvh_obkak.activeWeapon.CurCone ), 0 ) * 25
     local dir2 = dir 
             
-    if hvhobkak.activeWeapon.ClumpSpread and hvhobkak.activeWeapon.ClumpSpread > 0 then
-        dir2 = dir + Vector( math_Rand(-1, 1), math_Rand(-1, 1), math_Rand(-1, 1)) * hvhobkak.activeWeapon.ClumpSpread
+    if exechack_cc_hvh_obkak.activeWeapon.ClumpSpread and exechack_cc_hvh_obkak.activeWeapon.ClumpSpread > 0 then
+        dir2 = dir + Vector( math.Rand(-1, 1), math.Rand(-1, 1), math.Rand(-1, 1)) * exechack_cc_hvh_obkak.activeWeapon.ClumpSpread
     end
 
     return ang - dir2
 end
 
-function hvhobkak.CustomSpread.tfa( cmd, ang )
+function exechack_cc_hvh_obkak.CustomSpread.tfa( cmd, ang )
 
     
     return ang
 end
 
-hvhobkak.SpreadComps = {}
+function exechack_cc_hvh_obkak.CustomSpread.mg( cmd, ang )
+    /*
+    local pWeapon = exechack_cc_hvh_obkak.activeWeapon
 
-hvhobkak.SpreadComps["swb"]     = hvhobkak.CustomSpread.swb
-hvhobkak.SpreadComps["cw"]      = hvhobkak.CustomSpread.cw
-hvhobkak.SpreadComps["fas2"]    = hvhobkak.CustomSpread.fas2
-hvhobkak.SpreadComps["tfa"]     = hvhobkak.CustomSpread.tfa
+    local flCone = pWeapon:GetCone()
+
+    math.randomseed( pWeapon.Cone.Seed + pWeapon:Clip1() + pWeapon:Ammo1() )
+
+    local flSpread = math.Rand( -flCone, flCone ) * 1000
+
+    if ( flSpread < -flCone ) then
+        flSpread = -flCone
+    elseif ( flSpread > flCone ) then
+        flSpread = flCone
+    end
+
+    flSpread = flSpread * 0.1
+
+    local vSpread = Vector( 1, -flSpread, flSpread )
+    local newAngle = ang + vSpread:Angle()
+    newAngle:Normalize()
+
+    return newAngle
+    */
+end
+
+/*
+local function Zc(self, bd)
+    local cd = self:GetCone()
+    Xc(self.Cone.Seed + self:Clip1() + self:Ammo1())
+    local dd = Wc(-cd, cd) * 1000
+    if (dd < -cd) then
+        dd = -cd
+    elseif (dd > cd) then
+        dd = cd
+    end
+    dd = dd * 0.1
+    Yc.x = dd
+    Yc.y = -dd
+    local ed = self.Bullet
+    self:FireBullets(
+        {
+            Attacker = bd,
+            Src = bd:EyePos(),
+            Dir = (bd:EyeAngles() + bd:GetViewPunchAngles()):Forward(),
+            Spread = Yc,
+            Num = ed.NumBullets,
+            Distance = (ed.Range * 100) / 2.54,
+            Tracer = ed.Tracer and 1 or 0,
+            Callback = function(fd, gd, hd)
+            end
+        }
+    )
+end
+*/
+
+exechack_cc_hvh_obkak.SpreadComps = {}
+
+exechack_cc_hvh_obkak.SpreadComps["swb"]     = exechack_cc_hvh_obkak.CustomSpread.swb
+exechack_cc_hvh_obkak.SpreadComps["cw"]      = exechack_cc_hvh_obkak.CustomSpread.cw
+exechack_cc_hvh_obkak.SpreadComps["fas2"]    = exechack_cc_hvh_obkak.CustomSpread.fas2
+exechack_cc_hvh_obkak.SpreadComps["tfa"]     = exechack_cc_hvh_obkak.CustomSpread.tfa
+exechack_cc_hvh_obkak.SpreadComps["mg"]     = exechack_cc_hvh_obkak.CustomSpread.mg
 
 
 
@@ -4372,46 +4673,44 @@ hvhobkak.SpreadComps["tfa"]     = hvhobkak.CustomSpread.tfa
 
 
 
+function exechack_cc_hvh_obkak.NoSpread(cmd, ang)
+    if not exechack_cc_hvh_obkak.activeWeapon or exechack_cc_hvh_obkak.swbShit[ exechack_cc_hvh_obkak.activeWeaponClass ] then return ang end
+    local base = string.Split( exechack_cc_hvh_obkak.activeWeaponClass, "_" )[ 1 ]
 
-
-function hvhobkak.NoSpread(cmd, ang)
-    if not hvhobkak.activeWeapon or hvhobkak.swbShit[ hvhobkak.activeWeaponClass ] then return ang end
-    local base = string.Split( hvhobkak.activeWeaponClass, "_" )[ 1 ]
-
-    if hvhobkak.SpreadComps[ base ] then
-        ang = hvhobkak.SpreadComps[ base ]( cmd, ang )
-    elseif hvhobkak.cones[ hvhobkak.activeWeaponClass ] then
-        local spread = hvhobkak.cones[ hvhobkak.activeWeaponClass ]
-        return hvhobkak.Spread( cmd, ang, spread ) 
+    if exechack_cc_hvh_obkak.SpreadComps[ base ] then
+        ang = exechack_cc_hvh_obkak.SpreadComps[ base ]( cmd, ang )
+    elseif exechack_cc_hvh_obkak.cones[ exechack_cc_hvh_obkak.activeWeaponClass ] then
+        local spread = exechack_cc_hvh_obkak.cones[ exechack_cc_hvh_obkak.activeWeaponClass ]
+        return exechack_cc_hvh_obkak.Spread( cmd, ang, spread ) 
     end
 
     return ang
 end
 
-function hvhobkak.NoRecoil( ang )  
-	if hvhobkak.activeWeaponClass == "weapon_pistol" or StartsWith( hvhobkak.activeWeaponClass,"m9k_" ) or StartsWith( hvhobkak.activeWeaponClass,"bb_" ) or StartsWith( hvhobkak.activeWeaponClass,"unclen8_" ) then
+function exechack_cc_hvh_obkak.NoRecoil( ang )  
+	if exechack_cc_hvh_obkak.activeWeaponClass == "weapon_pistol" or string.StartsWith( exechack_cc_hvh_obkak.activeWeaponClass,"m9k_" ) or string.StartsWith( exechack_cc_hvh_obkak.activeWeaponClass,"bb_" ) or string.StartsWith( exechack_cc_hvh_obkak.activeWeaponClass,"unclen8_" ) then
 		return ang
 	else
-	    ang = ang - me:GetViewPunchAngles()
+	    ang = ang - pLocalPlayer:GetViewPunchAngles()
     end
 
 	return ang
 end
 
 /*
-hvhobkak.ui.ComboBox( p, "Hitscan mode", { "Damage", "Safety", "Scale" }, "Hitscan mode" )
+exechack_cc_hvh_obkak.ui.ComboBox( p, "Hitscan mode", { "Damage", "Safety", "Scale" }, "Hitscan mode" )
 
 */
 
-function hvhobkak.ParseBones( ply, bone )
+function exechack_cc_hvh_obkak.ParseBones( ply, bone )
     local mdl = ply:GetModel()
 
-    if hvhobkak.parsedbones[ mdl ] and hvhobkak.parsedbones[ mdl ][ bone ] then 
-        return hvhobkak.parsedbones[ mdl ][ bone ]
+    if exechack_cc_hvh_obkak.parsedbones[ mdl ] and exechack_cc_hvh_obkak.parsedbones[ mdl ][ bone ] then 
+        return exechack_cc_hvh_obkak.parsedbones[ mdl ][ bone ]
     end
 
-    if not hvhobkak.parsedbones[ mdl ] then
-        hvhobkak.parsedbones[ mdl ] = {}
+    if not exechack_cc_hvh_obkak.parsedbones[ mdl ] then
+        exechack_cc_hvh_obkak.parsedbones[ mdl ] = {}
     end
         
     local set = ply:GetHitboxSet()
@@ -4423,7 +4722,7 @@ function hvhobkak.ParseBones( ply, bone )
         if group == nil then continue end
 
 		if bone == group then
-			hvhobkak.parsedbones[ mdl ][ bone ] = i
+			exechack_cc_hvh_obkak.parsedbones[ mdl ][ bone ] = i
 
             return i
         end
@@ -4435,7 +4734,7 @@ function hvhobkak.ParseBones( ply, bone )
         if group == nil then continue end
 
         if bone > 1 and group == 0 then
-            hvhobkak.parsedbones[ mdl ][ bone ] = i
+            exechack_cc_hvh_obkak.parsedbones[ mdl ][ bone ] = i
 
             return i
         end
@@ -4444,23 +4743,23 @@ function hvhobkak.ParseBones( ply, bone )
     return 0
 end
 
-function hvhobkak.MultipointGroupCheck( group )
-    if group == 1 and not hvhobkak.cfg.vars["Multipoint groups-Head"] then return false end
-    if group == 2 and not hvhobkak.cfg.vars["Multipoint groups-Chest"] then return false end
-    if group == 3 and not hvhobkak.cfg.vars["Multipoint groups-Stomach"] then return false end
-    if group == 4 or group == 5 and not hvhobkak.cfg.vars["Multipoint groups-Arms"] then return false end
-    if group == 6 or group == 7 and not hvhobkak.cfg.vars["Multipoint groups-Legs"] then return false end
-    if group == 0 and not hvhobkak.cfg.vars["Multipoint groups-Generic"] then return false end
+function exechack_cc_hvh_obkak.MultipointGroupCheck( group )
+    if group == 1 and not exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Head"] then return false end
+    if group == 2 and not exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Chest"] then return false end
+    if group == 3 and not exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Stomach"] then return false end
+    if group == 4 or group == 5 and not exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Arms"] then return false end
+    if group == 6 or group == 7 and not exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Legs"] then return false end
+    if group == 0 and not exechack_cc_hvh_obkak.cfg.vars["Multipoint groups-Generic"] then return false end
 
     return true 
 end
 
-function hvhobkak.GetBones( ply )
-    local scale = hvhobkak.cfg.vars["Multipoint scale"]
+function exechack_cc_hvh_obkak.GetBones( ply )
+    local scale = exechack_cc_hvh_obkak.cfg.vars["Multipoint scale"]
     local pos = ply:LocalToWorld( ply:OBBCenter() )
     local set = ply:GetHitboxSet()
 
-    if hvhobkak.cfg.vars["Hitscan"] then
+    if exechack_cc_hvh_obkak.cfg.vars["Hitscan"] then
         local set = ply:GetHitboxSet()
         local bonecount = ply:GetBoneCount()
 
@@ -4471,12 +4770,12 @@ function hvhobkak.GetBones( ply )
 
             if group == nil then continue end
 
-            if group == 1 and not hvhobkak.cfg.vars["Hitscan groups-Head"] then continue end
-            if group == 2 and not hvhobkak.cfg.vars["Hitscan groups-Chest"] then continue end
-            if group == 3 and not hvhobkak.cfg.vars["Hitscan groups-Stomach"] then continue end
-            if group == 4 or group == 5 and not hvhobkak.cfg.vars["Hitscan groups-Arms"] then continue end
-            if group == 6 or group == 7 and not hvhobkak.cfg.vars["Hitscan groups-Legs"] then continue end
-            if group == 0 and not hvhobkak.cfg.vars["Hitscan groups-Generic"] then continue end
+            if group == 1 and not exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Head"] then continue end
+            if group == 2 and not exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Chest"] then continue end
+            if group == 3 and not exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Stomach"] then continue end
+            if group == 4 or group == 5 and not exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Arms"] then continue end
+            if group == 6 or group == 7 and not exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Legs"] then continue end
+            if group == 0 and not exechack_cc_hvh_obkak.cfg.vars["Hitscan groups-Generic"] then continue end
 
             pos[ #pos + 1 ] = { bone = i, hitgroup = group }
         end
@@ -4501,7 +4800,7 @@ function hvhobkak.GetBones( ply )
 
             local bonepos, ang = ply:GetBonePosition( hitboxbone )
             
-            if hvhobkak.cfg.vars["Multipoint"] and hvhobkak.MultipointGroupCheck( pos[ i ].hitgroup ) then
+            if exechack_cc_hvh_obkak.cfg.vars["Multipoint"] and exechack_cc_hvh_obkak.MultipointGroupCheck( pos[ i ].hitgroup ) then
                 local points = {
                     ( ( mins + maxs ) * 0.5 ),
                     Vector( mins.x, mins.y, mins.z ),
@@ -4533,7 +4832,7 @@ function hvhobkak.GetBones( ply )
 
         return valid
     else
-        local bone = hvhobkak.ParseBones( ply, hvhobkak.cfg.vars["Hitbox selection"] ) 
+        local bone = exechack_cc_hvh_obkak.ParseBones( ply, exechack_cc_hvh_obkak.cfg.vars["Hitbox selection"] ) 
 
         local hitboxbone = ply:GetHitBoxBone( bone, set )
 
@@ -4549,7 +4848,7 @@ function hvhobkak.GetBones( ply )
 
         local bonepos, ang = ply:GetBonePosition( hitboxbone )  
 
-        if hvhobkak.cfg.vars["Multipoint"] then
+        if exechack_cc_hvh_obkak.cfg.vars["Multipoint"] then
             local points = {
                 ( ( mins + maxs ) * 0.5 ),
                 Vector( mins.x, mins.y, mins.z ),
@@ -4583,72 +4882,85 @@ function hvhobkak.GetBones( ply )
     return { pos }
 end
 
-function hvhobkak.GetSortedPlayers( mode, selfpred, plypred, vischeck )
-    local players   = player_GetAll()   
-    local eyepos    = me:EyePos()       
-    local valid     = {}                // sorted lady and gentleman goes here ( niggers and faggots goes to hell )
+function exechack_cc_hvh_obkak.GetSortedPlayers( mode, selfpred, plypred, vischeck )
+    local players   = player.GetAll()   
+    local eyepos    = pLocalPlayer:EyePos()       
+    local valid     = {}   
 
 	if selfpred then
-		eyepos = eyepos + (me:GetVelocity() * TickInterval) * selfpred
+		eyepos = eyepos + (pLocalPlayer:GetVelocity() * flTickInterval) * selfpred
 	end
 
-    local iTeamLocal = hvhobkak.GetTeam( me )
+    local iTeamLocal = exechack_cc_hvh_obkak.GetTeam( pLocalPlayer )
 
-        for i = 1, #players do
-            local v = players[i]
+    for i = 1, #players do
+        local v = players[i]
 
-            if v == me then continue end 
-            if not v:Alive() or v:IsDormant() then continue end 
-            if hvhobkak.cfg.vars["Ignores-Bots"] and v:IsBot() then continue end 
-            if hvhobkak.cfg.vars["Ignores-Friends"] and hvhobkak.cfg.friends[v:SteamID64()] then continue end 
-            if hvhobkak.cfg.vars["Ignores-Steam friends"] and v:GetFriendStatus() == "friend" then continue end 
-            if hvhobkak.cfg.vars["Ignores-Admins"] and v:IsAdmin() then continue end 
-            if hvhobkak.cfg.vars["Ignores-Frozen"] and v:IsFlagSet( FL_FROZEN ) then continue end 
-            if hvhobkak.cfg.vars["Ignores-Nodraw"] and v:IsEffectActive( EF_NODRAW ) then continue end 
-            if hvhobkak.cfg.vars["Ignores-God time"] and v:GetColor().a < 255 then continue end 
-            if hvhobkak.cfg.vars["Ignores-Driver"] and v:InVehicle() then continue end 
+        if v == pLocalPlayer then 
+            continue 
+        end 
 
-            local iTeamEnemy = hvhobkak.GetTeam( v )
-            if st == TEAM_SPECTATOR or hvhobkak.cfg.vars["Ignores-Teammates"] and iTeamLocal == iTeamEnemy then continue end 
-            if hvhobkak.cfg.vars["Ignores-Nocliping"] and v:GetMoveType() == MOVETYPE_NOCLIP then continue end 
+        if not v:Alive() or v:IsDormant() then 
+            continue 
+        end
 
-            if vischeck then
-                local bone = hvhobkak.GetBones( v )[1]
-                local dir = me:GetShootPos() - bone
-                dir:Normalize()
+        if exechack_cc_hvh_obkak.cfg.vars["Ignores-Bots"] and v:IsBot() then continue end 
+        if exechack_cc_hvh_obkak.cfg.vars["Ignores-Friends"] and exechack_cc_hvh_obkak.cfg.friends[v:SteamID()] then continue end 
+        if exechack_cc_hvh_obkak.cfg.vars["Ignores-Steam friends"] and v:GetFriendStatus() == "friend" then continue end 
+        if exechack_cc_hvh_obkak.cfg.vars["Ignores-Admins"] and v:IsAdmin() then continue end 
+        if exechack_cc_hvh_obkak.cfg.vars["Ignores-Frozen"] and v:IsFlagSet( FL_FROZEN ) then continue end 
+        if exechack_cc_hvh_obkak.cfg.vars["Ignores-Nodraw"] and v:IsEffectActive( EF_NODRAW ) then continue end 
+        if exechack_cc_hvh_obkak.cfg.vars["Ignores-God time"] and v:GetColor().a < 255 then continue end 
+        if exechack_cc_hvh_obkak.cfg.vars["Ignores-Driver"] and v:InVehicle() then continue end 
+        if exechack_cc_hvh_obkak.cfg.vars["Target-Priority-Only"] and not exechack_cc_hvh_obkak.cfg.priorityList[v:SteamID()] then continue end
 
-                if !hvhobkak.VisibleCheck( v, bone, selfpred, dir ) then
-                    continue
-                end
-            end
+        local iTeamEnemy = exechack_cc_hvh_obkak.GetTeam( v )
+
+        if st == TEAM_SPECTATOR or exechack_cc_hvh_obkak.cfg.vars["Ignores-Teammates"] and iTeamLocal == iTeamEnemy then 
+            continue 
+        end 
+
+        if exechack_cc_hvh_obkak.cfg.vars["Ignores-Nocliping"] and v:GetMoveType() == MOVETYPE_NOCLIP then 
+            continue 
+        end 
+
+        if vischeck then
+			local bone = exechack_cc_hvh_obkak.GetBones( v )[1]
+			local dir = pLocalPlayer:GetShootPos() - bone
+			dir:Normalize()
+
+			if !exechack_cc_hvh_obkak.VisibleCheck( v, bone, selfpred, dir ) then
+				continue
+			end
+		end
 
         local pos = v:GetPos()
         if plypred then 
-            pos = pos + (v:GetVelocity() * TickInterval) * plypred
+            pos = pos + (v:GetVelocity() * flTickInterval) * plypred
         end
 
         valid[#valid+1] = { v, pos }
     end
 
     if mode == 1 then
-        table_sort(valid, function( a, b )
+        table.sort(valid, function( a, b )
             return ( a[2] - eyepos ):LengthSqr() < ( b[2] - eyepos ):LengthSqr()       
         end)
     elseif mode == 2 then
-        table_sort(valid, function( a, b )
+        table.sort(valid, function( a, b )
             local aScr, bScr = a[2]:ToScreen(), b[2]:ToScreen()
 
             local aDist
             do
-                local dx = scrwc - aScr.x
-                local dy = scrhc - aScr.y
+                local dx = ( screenWidth * 0.5 ) - aScr.x
+                local dy = ( screenHeight * 0.5 ) - aScr.y
                 aDist = dx * dx + dy * dy
             end
     
             local bDist
             do
-                local dx = scrwc - bScr.x
-                local dy = scrhc - bScr.y
+                local dx = ( screenWidth * 0.5 ) - bScr.x
+                local dy = ( screenHeight * 0.5 ) - bScr.y
                 bDist = dx * dx + dy * dy
             end
     
@@ -4661,23 +4973,23 @@ function hvhobkak.GetSortedPlayers( mode, selfpred, plypred, vischeck )
     return valid
 end
 
-function hvhobkak.IsTickHittable( ply, cmd, tick )
+function exechack_cc_hvh_obkak.IsTickHittable( ply, cmd, tick )
     if ded.GetLatency(0) > 1 then return false end
 
-    local serverArriveTick = ded.GetServerTime(cmd) + ded.GetLatency(0) + ded.GetLatency(1)
-    local diff = serverArriveTick - hvhobkak.btrecords[ ply ][ tick ].simulationtime
+    local serverArriveTick = exechack_cc_hvh_obkak.flServerTime + ded.GetLatency(0) + ded.GetLatency(1)
+    local diff = serverArriveTick - exechack_cc_hvh_obkak.btrecords[ ply ][ tick ].simulationtime
 
-    if diff > hvhobkak.cfg.vars["Backtrack time"] / 1000 then return false end
+    if diff > exechack_cc_hvh_obkak.cfg.vars["Backtrack time"] / 1000 then return false end
 
     return true
 end
 
-function hvhobkak.FindBacktrack( cmd, ply )
-    local ticks = #hvhobkak.btrecords[ ply ]
+function exechack_cc_hvh_obkak.FindBacktrack( cmd, ply )
+    local ticks = #exechack_cc_hvh_obkak.btrecords[ ply ]
     local canhit = {}
 
     for i = 1, ticks do
-        if hvhobkak.IsTickHittable( ply, cmd, i ) then
+        if exechack_cc_hvh_obkak.IsTickHittable( ply, cmd, i ) then
             canhit[ #canhit + 1 ] = i
         end
     end
@@ -4685,13 +4997,13 @@ function hvhobkak.FindBacktrack( cmd, ply )
     return canhit
 end
 
-function hvhobkak.FindFirstHittableTicks( ply, cmd )
-    local tickcount = #hvhobkak.btrecords[ ply ]
+function exechack_cc_hvh_obkak.FindFirstHittableTicks( ply, cmd )
+    local tickcount = #exechack_cc_hvh_obkak.btrecords[ ply ]
 
     if !tickcount then return 1 end
 
     for i = 1, tickcount do
-        if hvhobkak.IsTickHittable( ply, cmd, i ) then
+        if exechack_cc_hvh_obkak.IsTickHittable( ply, cmd, i ) then
             return i
         end
     end
@@ -4700,15 +5012,15 @@ end
 do
     local lastdist, lasttick = 1337, 1
 
-    function hvhobkak.FindClosestHittableTicks( ply, cmd )
-        local mypos = me:EyePos()
-        local records = hvhobkak.btrecords[ ply ]
-        local firstticks = hvhobkak.FindFirstHittableTicks( ply, cmd )
+    function exechack_cc_hvh_obkak.FindClosestHittableTicks( ply, cmd )
+        local mypos = pLocalPlayer:EyePos()
+        local records = exechack_cc_hvh_obkak.btrecords[ ply ]
+        local firstticks = exechack_cc_hvh_obkak.FindFirstHittableTicks( ply, cmd )
         local tickcount = #records
 
         if !tickcount or !firstticks then return 1 end
 
-        lastdist = math_huge
+        lastdist = math.huge
     
         for i = 1, tickcount - firstticks do
             local mt = i + firstticks
@@ -4723,113 +5035,130 @@ do
     end
 end
 
-function hvhobkak.SelectTarget( cmd )
-    local plys = hvhobkak.GetSortedPlayers( hvhobkak.cfg.vars["Target selection"] )
-    hvhobkak.target     = false
+function exechack_cc_hvh_obkak.SelectTarget( cmd )
+    local plys = exechack_cc_hvh_obkak.GetSortedPlayers( exechack_cc_hvh_obkak.cfg.vars["Target selection"] )
+    exechack_cc_hvh_obkak.target     = false
 
 
     if !plys then return end 
 
-    local maxplys       = hvhobkak.cfg.vars["Max targets"]
+    local maxplys       = exechack_cc_hvh_obkak.cfg.vars["Max targets"]
     local curplys       = #plys
 
     if maxplys != 0 and curplys > maxplys then
         curplys = maxplys
     end
 
+    local vEyePos = pLocalPlayer:EyePos()
+
     local aimAng
     for i = 1, curplys do
 		local ply = plys[i][1]
 
-        if not hvhobkak.cfg.vars["Always backtrack"] then
-            local bones = hvhobkak.GetBones( ply )
+        -- distance check 
+        local iMaxDistance = exechack_cc_hvh_obkak.cfg.vars[ "Max distance" ]
+        local iDistance = vEyePos:DistToSqr( ply:EyePos() )
+
+        if ( iMaxDistance ~= 0 and iDistance > ( iMaxDistance * iMaxDistance ) ) then
+            continue 
+        end
+        
+
+
+
+
+
+
+        if not exechack_cc_hvh_obkak.cfg.vars["Always backtrack"] then
+            local bones = exechack_cc_hvh_obkak.GetBones( ply )
 
             for o = 1, #bones do
                 local bone = bones[o]
-                aimAng = ( bone - me:EyePos() ):Angle()
+                aimAng = ( bone - pLocalPlayer:EyePos() ):Angle()
 
-                if hvhobkak.VisibleCheck( ply, bone, nil, aimAng:Forward() ) then 
-                    hvhobkak.target = ply
+                if exechack_cc_hvh_obkak.VisibleCheck( ply, bone, nil, aimAng:Forward() ) then 
+                    exechack_cc_hvh_obkak.target = ply
                     return ply, bone, aimAng, false, 0
                 end
             end
-        /*elseif hvhobkak.cfg.vars["Extrapolation"] and hvhobkak.predicted[ ply ] then
-            if not hvhobkak.predicted[ ply ].pos then return end
 
-            aimAng = ( hvhobkak.predicted[ ply ].pos - me:EyePos() ):Angle()
+        elseif exechack_cc_hvh_obkak.cfg.vars["Extrapolation"] and exechack_cc_hvh_obkak.predicted[ ply ] then
+            if not exechack_cc_hvh_obkak.predicted[ ply ].pos then return end
 
-            hvhobkak.traceStruct.start = me:EyePos()
-            hvhobkak.traceStruct.endpos = hvhobkak.predicted[ ply ].pos
-            hvhobkak.traceStruct.filter = me
-            hvhobkak.traceStruct.mask = MASK_SHOT
+            aimAng = ( exechack_cc_hvh_obkak.predicted[ ply ].pos - pLocalPlayer:EyePos() ):Angle()
 
-            local tr = TraceLine( hvhobkak.traceStruct )
+            exechack_cc_hvh_obkak.traceStruct.start = pLocalPlayer:EyePos()
+            exechack_cc_hvh_obkak.traceStruct.endpos = exechack_cc_hvh_obkak.predicted[ ply ].pos
+            exechack_cc_hvh_obkak.traceStruct.filter = pLocalPlayer
+            exechack_cc_hvh_obkak.traceStruct.mask = MASK_SHOT
+
+            local tr = TraceLine( exechack_cc_hvh_obkak.traceStruct )
 
             if !tr.Hit or tr.Entity == ply then
-                hvhobkak.target = ply
-                return ply, hvhobkak.predicted[ ply ].pos, aimAng, false, 0
-            end*/
+                exechack_cc_hvh_obkak.target = ply
+                return ply, exechack_cc_hvh_obkak.predicted[ ply ].pos, aimAng, false, 0
+            end
         end
 
-        if hvhobkak.cfg.vars["Backtrack"] then
-            local ticks = hvhobkak.FindBacktrack( cmd, ply )
+        if exechack_cc_hvh_obkak.cfg.vars["Backtrack"] then
+            local ticks = exechack_cc_hvh_obkak.FindBacktrack( cmd, ply )
 
-            if hvhobkak.btrecords[ ply ] and not ply.break_lc then 
+            if exechack_cc_hvh_obkak.btrecords[ ply ] and not ply.break_lc then 
                 local ts = 0 
                 
-                if hvhobkak.cfg.vars["Backtrack mode"] == 3 then
+                if exechack_cc_hvh_obkak.cfg.vars["Backtrack mode"] == 3 then
                     for p = 1, #ticks do
-                        if not hvhobkak.btrecords[ ply ][ p ] then continue end
+                        if not exechack_cc_hvh_obkak.btrecords[ ply ][ p ] then continue end
 
-                        aimAng = ( hvhobkak.btrecords[ ply ][ p ].aimpos - me:EyePos() ):Angle()
+                        aimAng = ( exechack_cc_hvh_obkak.btrecords[ ply ][ p ].aimpos - pLocalPlayer:EyePos() ):Angle()
 
-                        hvhobkak.traceStruct.start = me:EyePos()
-                        hvhobkak.traceStruct.endpos = hvhobkak.btrecords[ ply ][ p ].aimpos
-                        hvhobkak.traceStruct.filter = me
-                        hvhobkak.traceStruct.mask = MASK_SHOT
+                        exechack_cc_hvh_obkak.traceStruct.start = pLocalPlayer:EyePos()
+                        exechack_cc_hvh_obkak.traceStruct.endpos = exechack_cc_hvh_obkak.btrecords[ ply ][ p ].aimpos
+                        exechack_cc_hvh_obkak.traceStruct.filter = pLocalPlayer
+                        exechack_cc_hvh_obkak.traceStruct.mask = MASK_SHOT
 
-                        local tr = TraceLine( hvhobkak.traceStruct )
+                        local tr = TraceLine( exechack_cc_hvh_obkak.traceStruct )
 
                         if !tr.Hit or tr.Entity == ply then
-                            hvhobkak.target = ply
-                            hvhobkak.backtracktick = p
+                            exechack_cc_hvh_obkak.target = ply
+                            exechack_cc_hvh_obkak.backtracktick = p
 
-                            return ply, hvhobkak.btrecords[ ply ][ p ].aimpos, aimAng, true, p
+                            return ply, exechack_cc_hvh_obkak.btrecords[ ply ][ p ].aimpos, aimAng, true, p
                         end
                     end
                 end
 
-                if hvhobkak.cfg.vars["Backtrack mode"] == 3 then return end
+                if exechack_cc_hvh_obkak.cfg.vars["Backtrack mode"] == 3 then return end
 
-                if hvhobkak.cfg.vars["Backtrack mode"] == 1 then
-                    ts = hvhobkak.FindFirstHittableTicks( ply, cmd )
-                elseif hvhobkak.cfg.vars["Backtrack mode"] == 2 then
-                    ts = hvhobkak.FindClosestHittableTicks( ply, cmd )
+                if exechack_cc_hvh_obkak.cfg.vars["Backtrack mode"] == 1 then
+                    ts = exechack_cc_hvh_obkak.FindFirstHittableTicks( ply, cmd )
+                elseif exechack_cc_hvh_obkak.cfg.vars["Backtrack mode"] == 2 then
+                    ts = exechack_cc_hvh_obkak.FindClosestHittableTicks( ply, cmd )
                 end
 
-                if not hvhobkak.btrecords[ ply ][ ts ] then return end
+                if not exechack_cc_hvh_obkak.btrecords[ ply ][ ts ] then return end
 
-                aimAng = ( hvhobkak.btrecords[ ply ][ ts ].aimpos - me:EyePos() ):Angle()
+                aimAng = ( exechack_cc_hvh_obkak.btrecords[ ply ][ ts ].aimpos - pLocalPlayer:EyePos() ):Angle()
 
-                hvhobkak.traceStruct.start = me:EyePos()
-                hvhobkak.traceStruct.endpos = hvhobkak.btrecords[ ply ][ ts ].aimpos
-                hvhobkak.traceStruct.filter = me
-                hvhobkak.traceStruct.mask = MASK_SHOT
+                exechack_cc_hvh_obkak.traceStruct.start = pLocalPlayer:EyePos()
+                exechack_cc_hvh_obkak.traceStruct.endpos = exechack_cc_hvh_obkak.btrecords[ ply ][ ts ].aimpos
+                exechack_cc_hvh_obkak.traceStruct.filter = pLocalPlayer
+                exechack_cc_hvh_obkak.traceStruct.mask = MASK_SHOT
 
-                local tr = TraceLine( hvhobkak.traceStruct )
+                local tr = TraceLine( exechack_cc_hvh_obkak.traceStruct )
 
                 if !tr.Hit or tr.Entity == ply then
-                    hvhobkak.target = ply
-                    hvhobkak.backtracktick = ts
+                    exechack_cc_hvh_obkak.target = ply
+                    exechack_cc_hvh_obkak.backtracktick = ts
 
-                    return ply, hvhobkak.btrecords[ ply ][ ts ].aimpos, aimAng, true, ts
+                    return ply, exechack_cc_hvh_obkak.btrecords[ ply ][ ts ].aimpos, aimAng, true, ts
                 end
             end
         end
 	end
 end
 
-function hvhobkak.IsMovementKeysDown( cmd )
+function exechack_cc_hvh_obkak.IsMovementKeysDown( cmd )
 
     if cmd:KeyDown( IN_MOVERIGHT ) then
         return true 
@@ -4850,35 +5179,54 @@ function hvhobkak.IsMovementKeysDown( cmd )
     return false
 end
 
-function hvhobkak.MovementFix( cmd, wish_yaw )
+function exechack_cc_hvh_obkak.MovementFix( cmd, wish_yaw )
 
-	local pitch = math_NormalizeAngle( cmd:GetViewAngles().x )
+	local pitch = math.NormalizeAngle( cmd:GetViewAngles().x )
 	local inverted = -1
 	
 	if ( pitch > 89 || pitch < -89 ) then
 		inverted = 1
 	end
 
-	local ang_diff = math_rad( math_NormalizeAngle( ( cmd:GetViewAngles().y - wish_yaw ) * inverted ) )
+	local ang_diff = math.rad( math.NormalizeAngle( ( cmd:GetViewAngles().y - wish_yaw ) * inverted ) )
 
 	local forwardmove = cmd:GetForwardMove()
 	local sidemove = cmd:GetSideMove()
 
-	local new_forwardmove = forwardmove * -math_cos( ang_diff ) * inverted + sidemove * math_sin( ang_diff )
-	local new_sidemove = forwardmove * math_sin( ang_diff ) * inverted + sidemove * math_cos( ang_diff )
+	local new_forwardmove = forwardmove * -math.cos( ang_diff ) * inverted + sidemove * math.sin( ang_diff )
+	local new_sidemove = forwardmove * math.sin( ang_diff ) * inverted + sidemove * math.cos( ang_diff )
 
 	cmd:SetForwardMove( new_forwardmove )
 	cmd:SetSideMove( new_sidemove )
 end
 
-function hvhobkak.SilentAngles(cmd)
-	if !hvhobkak.SilentAngle then hvhobkak.SilentAngle = cmd:GetViewAngles() end
+function exechack_cc_hvh_obkak.DoSilentAngleUpdate( UserCmd )
+    local pWeapon = pLocalPlayer:GetActiveWeapon()
 
-	hvhobkak.SilentAngle = hvhobkak.SilentAngle + Angle( cmd:GetMouseY() * hvhobkak.myaw, cmd:GetMouseX() * -hvhobkak.myaw, 0)
-	hvhobkak.SilentAngle.p = math_Clamp( hvhobkak.SilentAngle.p, -89, 89 )
-    hvhobkak.SilentAngle.r = 0
+    if ( IsValid( pWeapon ) ) then
+        if ( pWeapon.FreezeMovement and pWeapon:FreezeMovement() ) then 
+            return 
+        end
+
+        local bIsInUse = UserCmd:KeyDown( IN_USE ) or pLocalPlayer:KeyDown(IN_USE)
+
+        if ( pWeapon:GetClass() == "weapon_physgun" and IsValid( pWeapon:GetInternalVariable( "m_hGrabbedEntity" ) ) and bIsInUse ) then 
+            return 
+        end
+    end
+
+    local mYaw = GetConVar( "m_yaw" ):GetFloat()
+    local mPitch = GetConVar( "m_pitch" ):GetFloat()
+
+    local silentAngle = exechack_cc_hvh_obkak.SilentAngle
+
+    silentAngle.x = math.Clamp( silentAngle.x + UserCmd:GetMouseY() * mPitch, -89, 89 )
+    silentAngle.y = silentAngle.y + UserCmd:GetMouseX() * -mYaw
+    silentAngle.r = 0
     
-    hvhobkak.SilentAngle:Normalize()
+    silentAngle:Normalize()
+
+    return silentAngle
 end
 
 
@@ -4903,9 +5251,9 @@ end
 
 // Knife bot ( Etot zaichik knifer )
 
-hvhobkak.knifes = {}
+exechack_cc_hvh_obkak.knifes = {}
 
-hvhobkak.knifes[1] = {
+exechack_cc_hvh_obkak.knifes[1] = {
     str = "csgo_",
 
     canbackstab = true,
@@ -4919,7 +5267,7 @@ hvhobkak.knifes[1] = {
     rightdist = 48*48,
 }
 
-hvhobkak.knifes[2] = {
+exechack_cc_hvh_obkak.knifes[2] = {
     str = "swb_",
 
     canbackstab = false,
@@ -4933,7 +5281,7 @@ hvhobkak.knifes[2] = {
     rightdist = 50*50,
 }
 
-hvhobkak.knifes[3] = {
+exechack_cc_hvh_obkak.knifes[3] = {
     str = "weapon_crowba",
 
     canbackstab = false,
@@ -4947,7 +5295,7 @@ hvhobkak.knifes[3] = {
     rightdist = 75*75,
 }
 
-hvhobkak.knifes[4] = {
+exechack_cc_hvh_obkak.knifes[4] = {
     str = "knife_",
 
     canbackstab = true,
@@ -4961,7 +5309,7 @@ hvhobkak.knifes[4] = {
     rightdist = 48*48,
 }
 
-hvhobkak.knifes[5] = {
+exechack_cc_hvh_obkak.knifes[5] = {
     str = "umb_",
 
     canbackstab = false,
@@ -4975,8 +5323,21 @@ hvhobkak.knifes[5] = {
     rightdist = 300*300,
 }
 
-function hvhobkak:EntityFaceBack( ent )
-    local angle = me:GetAngles().y - ent:GetAngles().y
+exechack_cc_hvh_obkak.knifes[6] = {
+    str = "weapon_fists",
+
+    canbackstab = false,
+
+    leftdmg = 8,
+    leftdmgb = 12,
+    leftdist = 50*50,
+
+    rightdmg = 8,
+    rightdmgb = 12,
+    rightdist = 50*50,
+}
+function exechack_cc_hvh_obkak:EntityFaceBack( ent )
+    local angle = pLocalPlayer:GetAngles().y - ent:GetAngles().y
 
     if angle < -180 then angle = 360 + angle end
 
@@ -4985,29 +5346,29 @@ function hvhobkak:EntityFaceBack( ent )
     return false
 end
 
-function hvhobkak.CanStab( ent, pos, health )
-    local mypos = me:GetShootPos()
-    local tbl = hvhobkak.knifes[1]
-    local wc = me:GetActiveWeapon():GetClass()
+function exechack_cc_hvh_obkak.CanStab( ent, pos, health )
+    local mypos = pLocalPlayer:GetShootPos()
+    local tbl = exechack_cc_hvh_obkak.knifes[1]
+    local wc = pLocalPlayer:GetActiveWeapon():GetClass()
     local canuse = false 
 
-    for i = 1, #hvhobkak.knifes do
-        if StartsWith(wc,hvhobkak.knifes[i].str) then
+    for i = 1, #exechack_cc_hvh_obkak.knifes do
+        if string.StartsWith(wc,exechack_cc_hvh_obkak.knifes[i].str) then
             canuse = true 
-            tbl = hvhobkak.knifes[i]
+            tbl = exechack_cc_hvh_obkak.knifes[i]
             break
         end
     end 
 
     if not canuse then return false, false end
 
-    if hvhobkak.canBacktrack( ent ) and hvhobkak.btrecords[ent][hvhobkak.backtracktick] then
-        pos = hvhobkak.btrecords[ ent ][ hvhobkak.backtracktick ].aimpos
+    if exechack_cc_hvh_obkak.canBacktrack( ent ) and exechack_cc_hvh_obkak.btrecords[ent][exechack_cc_hvh_obkak.backtracktick] then
+        pos = exechack_cc_hvh_obkak.btrecords[ ent ][ exechack_cc_hvh_obkak.backtracktick ].aimpos
     end
 
-    local backstab = tbl.canbackstab and hvhobkak:EntityFaceBack( ent ) or false
+    local backstab = tbl.canbackstab and exechack_cc_hvh_obkak:EntityFaceBack( ent ) or false
     local dist = mypos:DistToSqr( pos )
-    local mode = hvhobkak.cfg.vars["Knifebot mode"]
+    local mode = exechack_cc_hvh_obkak.cfg.vars["Knifebot mode"]
     
     if mode == 1 then // Damage mode - tries to inflict biggest possible damage
         if backstab and dist < tbl.rightdist then
@@ -5034,25 +5395,51 @@ function hvhobkak.CanStab( ent, pos, health )
     return false, false
 end
 
-function hvhobkak.simtimeCheck( v )
-    if not hvhobkak.cfg.vars["Wait for simtime update"] then return true end
-
-    return v.simtime_updated
+function GetServerTime(cmd)
+    if cmd == "get" then
+        return os.date("%c", os.time())
+    else
+        return "Invalid command"
+    end
 end
+
+function GetServerTime()
+    return CurTime()   
+end
+
+exechack_cc_hvh_obkak.grabbingEnt = false 
+
+function exechack_cc_hvh_obkak.DrawPhysgunBeamFunc( ply, wep, e, tar, bone, hitpos )
+    if ply != me then return end 
+
+    exechack_cc_hvh_obkak.grabbingEnt = IsValid( tar ) and tar or false
+end
+
+function exechack_cc_hvh_obkak.LagCompensation(cmd)
+    local ply = exechack_cc_hvh_obkak.SelectTarget(cmd)
+    local ping = ply:Ping()
+
+    local compensationAmount = ping * 0.001 
+
+
+    local serverTime = GetServerTime()
+    local compensatedTime = serverTime - compensationAmount
+end
+
 
 // Crossbow prediction 
 
-function hvhobkak.CrossbowPred( cmd )
-    if not hvhobkak.CanShoot( cmd ) then return end
+function exechack_cc_hvh_obkak.CrossbowPred( cmd )
+    if not exechack_cc_hvh_obkak.CanShoot( cmd ) then return end
 
-    local plys = hvhobkak.GetSortedPlayers( hvhobkak.cfg.vars["Target selection"] )
+    local plys = exechack_cc_hvh_obkak.GetSortedPlayers( exechack_cc_hvh_obkak.cfg.vars["Target selection"] )
 
     if !plys then return end
 
     for i = 1, #plys do
         local ply = plys[i][1]
 
-        local eyePos        = me:EyePos()
+        local eyePos        = pLocalPlayer:EyePos()
 
         local plyPos        = ply:GetPos()
         local plyCenter     = ply:OBBCenter()
@@ -5069,11 +5456,11 @@ function hvhobkak.CrossbowPred( cmd )
         // Movement simulation 
         local predTime      = ( ded.GetLatency( 0 ) + ded.GetLatency( 1 ) ) + travelTime
 
-        if predTime > hvhobkak.cfg.vars["Simulation limit"] then continue end
+        if predTime > exechack_cc_hvh_obkak.cfg.vars["Simulation limit"] then continue end
 
         ded.StartSimulation( ply:EntIndex() )
 
-        for i = 1, hvhobkak.TIME_TO_TICKS( predTime ) do
+        for i = 1, math.floor(0.5 + predTime / flTickInterval) do
             ded.SimulateTick()
         end
 
@@ -5087,7 +5474,7 @@ function hvhobkak.CrossbowPred( cmd )
 
         // Gravity simulation
         local gravity       = GetConVar("sv_gravity"):GetFloat() * 0.05
-        gravity             = ( gravity * TickInterval ) * hvhobkak.TIME_TO_TICKS( travelTime )
+        gravity             = ( gravity * flTickInterval ) * math.floor(0.5 + travelTime / flTickInterval)
 
         aimPos.z            = aimPos.z + gravity
 
@@ -5105,37 +5492,32 @@ end
 
 // Propkill aimbot
 
-hvhobkak.grabbingEnt = false 
+exechack_cc_hvh_obkak.grabbingEnt = false 
 
-function hvhobkak.DrawPhysgunBeam( ply, wep, e, tar, bone, hitpos )
-    if ply != me then return end 
 
-    hvhobkak.grabbingEnt = IsValid( tar ) and tar or false
-end
+exechack_cc_hvh_obkak.predictedPoint = {}
+function exechack_cc_hvh_obkak.PropAim( cmd )
+    if not exechack_cc_hvh_obkak.grabbingEnt or not IsValid( exechack_cc_hvh_obkak.grabbingEnt ) or not cmd:KeyDown( IN_ATTACK ) then return end
 
-hvhobkak.predictedPoint = {}
-function hvhobkak.PropAim( cmd )
-    if not hvhobkak.grabbingEnt or not IsValid( hvhobkak.grabbingEnt ) or not cmd:KeyDown( IN_ATTACK ) then return end
-
-    local plys = hvhobkak.GetSortedPlayers( hvhobkak.cfg.vars["Target selection"] )
-    hvhobkak.target = false
-    hvhobkak.targetVector = false
+    local plys = exechack_cc_hvh_obkak.GetSortedPlayers( exechack_cc_hvh_obkak.cfg.vars["Target selection"] )
+    exechack_cc_hvh_obkak.target = false
+    exechack_cc_hvh_obkak.targetVector = false
 
     if !plys then return end
 
     for i = 1, #plys do
         local ply           = plys[i][1]
 
-        local eyePos        = me:EyePos() 
+        local eyePos        = pLocalPlayer:EyePos() 
 
         local plyPos        = ply:GetPos()
         local plyVel        = ply:GetVelocity()
         local plyCenter     = ply:OBBCenter()
         local plySpeed      = plyVel:Length()
-        //local plyPred       = plyPos + plyVel * TickInterval
+        //local plyPred       = plyPos + plyVel * flTickInterval
 
-        local propPos       = hvhobkak.grabbingEnt:GetPos()
-        local propVel       = hvhobkak.grabbingEnt:GetVelocity()
+        local propPos       = exechack_cc_hvh_obkak.grabbingEnt:GetPos()
+        local propVel       = exechack_cc_hvh_obkak.grabbingEnt:GetVelocity()
         local propSpeed     = propVel:Length()
 
         local distance      = plyPos:Distance( propPos )
@@ -5146,13 +5528,13 @@ function hvhobkak.PropAim( cmd )
         local travelTime    = distance / propSpeed
         //local predTime      = ( ded.GetLatency( 0 ) + ded.GetLatency( 1 ) ) + travelTime
 
-        if travelTime > hvhobkak.cfg.vars["Simulation limit"] then continue end // predTime
+        if travelTime > exechack_cc_hvh_obkak.cfg.vars["Simulation limit"] then continue end // predTime
 
         // Prediction
 
         ded.StartSimulation( ply:EntIndex() )
 
-        for i = 1, hvhobkak.TIME_TO_TICKS( travelTime ) do // predTime
+        for i = 1, math.floor(0.5 + travelTime / flTickInterval) do // predTime
             ded.SimulateTick()
         end
 
@@ -5171,7 +5553,7 @@ function hvhobkak.PropAim( cmd )
 
         // Aim
 
-        local aimAng        = ( aimPos - me:EyePos() ):Angle()
+        local aimAng        = ( aimPos - pLocalPlayer:EyePos() ):Angle()
         aimAng:Normalize()
 
         cmd:SetMouseWheel( scrollDelta ) 
@@ -5195,7 +5577,7 @@ function hvhobkak.PropAim( cmd )
 
 
         
-        local predticks = hvhobkak.TIME_TO_TICKS( ded.GetLatency(0) + ded.GetLatency(1) ) + 1
+        local predticks = math.floor(0.5 + (ded.GetLatency(0) + ded.GetLatency(1)) / flTickInterval) + 1
 
         ded.StartSimulation( ply:EntIndex() )
 
@@ -5209,28 +5591,28 @@ function hvhobkak.PropAim( cmd )
 
         ded.FinishSimulation()
 
-        local dist = pos:DistToSqr( me:EyePos() )
+        local dist = pos:DistToSqr( pLocalPlayer:EyePos() )
 
         local clr = dist < 16777216 and Color( 0, 255, 0 ) or Color( 255, 0, 0 )
 
-        debugoverlay.Line( pos, hvhobkak.grabbingEnt:GetPos(), 0.1, clr, true )
+        debugoverlay.Line( pos, exechack_cc_hvh_obkak.grabbingEnt:GetPos(), 0.1, clr, true )
         debugoverlay.Box( pos - ply:OBBCenter(), ply:OBBMins(), ply:OBBMaxs(), 0.1, Color( 255, 15, 15, 32 ) )
 
         if dist >= 16777216 then continue end
 
-        local aimAng = ( pos - me:EyePos() ):Angle()
-        local ppd = hvhobkak.grabbingEnt:GetPos():DistToSqr( pos )
+        local aimAng = ( pos - pLocalPlayer:EyePos() ):Angle()
+        local ppd = exechack_cc_hvh_obkak.grabbingEnt:GetPos():DistToSqr( pos )
 
-        local cd = hvhobkak.cfg.vars["PA thrower dist"]
-        if ppd < ( cd * cd ) and hvhobkak.cfg.vars["PA thrower"] then
+        local cd = exechack_cc_hvh_obkak.cfg.vars["PA thrower dist"]
+        if ppd < ( cd * cd ) and exechack_cc_hvh_obkak.cfg.vars["PA thrower"] then
             cmd:RemoveKey( IN_ATTACK )
         end
 
-        local bmd = math_sqrt( dist - ppd )
+        local bmd = math.sqrt( dist - ppd )
 
         if ( dist - ppd ) < 0 then bmd = 0 end 
 
-        local scrollDelta = math_ceil( bmd > 0 and -ppd or ppd )
+        local scrollDelta = math.ceil( bmd > 0 and -ppd or ppd )
 
         if scrollDelta > 5000 then
             scrollDelta = 5000
@@ -5246,107 +5628,114 @@ function hvhobkak.PropAim( cmd )
     end
 end
 
-function hvhobkak.Aim(cmd)
-    hvhobkak.AntiAim(cmd)
+function exechack_cc_hvh_obkak.Aim(cmd)
+    exechack_cc_hvh_obkak.AntiAim(cmd)
 
-    if hvhobkak.SendPacket then
-        hvhobkak.fakeAngles.angle = cmd:GetViewAngles()
-        hvhobkak.fakeAngles.movex = me:GetPoseParameter("move_x")
-        hvhobkak.fakeAngles.movey = me:GetPoseParameter("move_y")
+    if exechack_cc_hvh_obkak.SendPacket then
+        exechack_cc_hvh_obkak.fakeAngles.angle = cmd:GetViewAngles()
+        exechack_cc_hvh_obkak.fakeAngles.movex = pLocalPlayer:GetPoseParameter("move_x")
+        exechack_cc_hvh_obkak.fakeAngles.movey = pLocalPlayer:GetPoseParameter("move_y")
 
         local layers = {}
 
         for i = 0, 13 do
-            if me:IsValidLayer(i) then
+            if pLocalPlayer:IsValidLayer(i) then
                 layers[i] = {
-                    cycle = me:GetLayerCycle(i),
-                    sequence = me:GetLayerSequence(i),
-                    weight = me:GetLayerWeight(i)
+                    cycle = pLocalPlayer:GetLayerCycle(i),
+                    sequence = pLocalPlayer:GetLayerSequence(i),
+                    weight = pLocalPlayer:GetLayerWeight(i)
                 }
             end
         end
 
-        hvhobkak.fakeAngles.origin = me:GetNetworkOrigin()
-        hvhobkak.fakeAngles.seq = me:GetSequence()
-        hvhobkak.fakeAngles.cycle = me:GetCycle()
+        exechack_cc_hvh_obkak.fakeAngles.origin = pLocalPlayer:GetNetworkOrigin()
+        exechack_cc_hvh_obkak.fakeAngles.seq = pLocalPlayer:GetSequence()
+        exechack_cc_hvh_obkak.fakeAngles.cycle = pLocalPlayer:GetCycle()
     else
-        hvhobkak.realAngle = cmd:GetViewAngles()
+        exechack_cc_hvh_obkak.realAngle = cmd:GetViewAngles()
     end
 
-    local ply, bone, aimang, backtracking, bttick = hvhobkak.SelectTarget(cmd)
+    local ply, bone, aimang, backtracking, bttick = exechack_cc_hvh_obkak.SelectTarget(cmd)
 
-    hvhobkak.targetVector = bone 
+    exechack_cc_hvh_obkak.targetVector = bone 
 
     if not aimang then return end
 
     aimang:Normalize()  
 
-    if not hvhobkak.cfg.vars["Enable aimbot"] or not ply then return end
+    if not exechack_cc_hvh_obkak.cfg.vars["Enable aimbot"] or not ply then return end
 
-    /*local targetTime = ded.GetSimulationTime( ply:EntIndex() )
+    local targetTime = ded.GetSimulationTime( ply:EntIndex() )
     local timeOffset = ded.GetServerTime(cmd) - targetTime
 
     local serverArriveTick = ded.GetServerTime(cmd) + ded.GetLatency(0) + ded.GetLatency(1)
     local diff = serverArriveTick - targetTime
 
-    if diff > 1 and hvhobkak.cfg.vars["Adjust tickcount"] then return end*/
+
+    if diff > 1 and exechack_cc_hvh_obkak.cfg.vars["Adjust tickcount"] then return end
 
     local oldangs = Angle(aimang)
 
-    if hvhobkak.cfg.vars["Always backtrack"] and not backtracking then return end
+    if exechack_cc_hvh_obkak.cfg.vars["Always backtrack"] and not backtracking then return end
 
-    if hvhobkak.cfg.vars["Fov limit"] then
-        local fov = hvhobkak.cfg.vars["Aimbot FOV"]
+    if exechack_cc_hvh_obkak.cfg.vars["Fov limit"] then
+        local fov = exechack_cc_hvh_obkak.cfg.vars["Aimbot FOV"]
 
-		local view = hvhobkak.cfg.vars["Silent aim"] and hvhobkak.SilentAngle or cmd:GetViewAngles()
+		local view = exechack_cc_hvh_obkak.cfg.vars["Silent aim"] and exechack_cc_hvh_obkak.SilentAngle or cmd:GetViewAngles()
 		local ang = aimang - view
 
 		ang:Normalize()
 
-		ang = math_sqrt(ang.x * ang.x + ang.y * ang.y)
+		ang = math.sqrt(ang.x * ang.x + ang.y * ang.y)
 
         if ang > fov then
-            hvhobkak.targetVector = false
+            exechack_cc_hvh_obkak.targetVector = false
 		    return 
         end
     end
 
-    if not hvhobkak.CanShoot(cmd) or not hvhobkak.simtimeCheck( ply ) then return end
-    if not hvhobkak.cfg.vars["Aimbot smoothing"] and hvhobkak.SkipCommand then return end
+    if not exechack_cc_hvh_obkak.CanShoot(cmd) then return end
 
-    hvhobkak.aimingrn = true
+    if ( exechack_cc_hvh_obkak.cfg.vars["Wait for simulation"] and ( ply:GetVelocity():Length() ~= 0 and not ply.simtime_updated ) ) then
+        return 
+    end
+
+    if not exechack_cc_hvh_obkak.cfg.vars["Aimbot smoothing"] and exechack_cc_hvh_obkak.SkipCommand then return end
+
+    exechack_cc_hvh_obkak.aimingrn = true
+
 
     // Knife bot 
     local altfire = false
-    local canstab, rightstab = hvhobkak.CanStab( ply, bone, ply:Health() )
+    local canstab, rightstab = exechack_cc_hvh_obkak.CanStab( ply, bone, ply:Health() )
 
-    if hvhobkak.cfg.vars["Knifebot"] and canstab then
+    if exechack_cc_hvh_obkak.cfg.vars["Knifebot"] and canstab then
         altfire = rightstab
-    elseif hvhobkak.cfg.vars["Knifebot"] and not canstab then
+    elseif exechack_cc_hvh_obkak.cfg.vars["Knifebot"] and not canstab then
         return 
     end
 
     local oldAimAng = aimang
     local finalAngle = aimang
 
-    if hvhobkak.cfg.vars["Norecoil"] then
-        finalAngle = hvhobkak.NoRecoil(finalAngle)
+    if exechack_cc_hvh_obkak.cfg.vars["Norecoil"] then
+        finalAngle = exechack_cc_hvh_obkak.NoRecoil(finalAngle)
     end
 
-    if hvhobkak.cfg.vars["Force seed"] then
+    if exechack_cc_hvh_obkak.cfg.vars["Force seed"] then
         //ded.ForceSeed( cmd )
     end
 
-    if hvhobkak.cfg.vars["Nospread"] then
-        finalAngle = hvhobkak.NoSpread(cmd,finalAngle)
+    if exechack_cc_hvh_obkak.cfg.vars["Nospread"] then
+        finalAngle = exechack_cc_hvh_obkak.NoSpread(cmd,finalAngle)
     end
 
-    if hvhobkak.cfg.vars["On shot aa"] then
+    if exechack_cc_hvh_obkak.cfg.vars["On shot aa"] then
         finalAngle.p = -finalAngle.p - 180
         finalAngle.y = finalAngle.y + 180
     end
     
-    if hvhobkak.cfg.vars["Facestab"] then
+    if exechack_cc_hvh_obkak.cfg.vars["Facestab"] then
         local angles = ply:EyeAngles()
 
         finalAngle.y = angles.y
@@ -5355,18 +5744,18 @@ function hvhobkak.Aim(cmd)
         altfire = true
     end
 
-    if hvhobkak.cfg.vars["Aimbot smoothing"] then
+    if exechack_cc_hvh_obkak.cfg.vars["Aimbot smoothing"] then
         local va = cmd:GetViewAngles()
         va.r = 0
 
-        local rat = hvhobkak.cfg.vars["Smoothing"] * 100
+        local rat = exechack_cc_hvh_obkak.cfg.vars["Smoothing"] * 100
         local ret = LerpAngle( FrameTime()*rat, va, finalAngle )
         
         finalAngle = ret
     end
 
-    if hvhobkak.cfg.vars["Projectile aimbot"] then
-        local predTime = math.ceil( ( me:EyePos() ):DistToSqr( ply:GetPos() ) / 3600 )
+    if exechack_cc_hvh_obkak.cfg.vars["Projectile aimbot"] then
+        local predTime = math.ceil( ( pLocalPlayer:EyePos() ):DistToSqr( ply:GetPos() ) / 3600 )
 
         //print( predTime )
 
@@ -5389,97 +5778,93 @@ function hvhobkak.Aim(cmd)
 
         vec.z = vec.z + g 
 
-        finalAngle = ( vec - me:EyePos() ):Angle()
+        finalAngle = ( vec - pLocalPlayer:EyePos() ):Angle()
         finalAngle:Normalize()  
     end
 
-    //ded.SetContextMenu( cmd, hvhobkak.cfg.vars["pSilent"] or hvhobkak.cfg.vars["Facestab"] )
-    if hvhobkak.cfg.vars["Facestab"] then
+    if exechack_cc_hvh_obkak.cfg.vars["Facestab"] then
         cmd:SetViewAngles( finalAngle )
         ded.SetContextVector( cmd, oldAimAng:Forward(), true )
-    elseif hvhobkak.cfg.vars["pSilent"] then
+    elseif exechack_cc_hvh_obkak.cfg.vars["pSilent"] then
         ded.SetContextVector( cmd, finalAngle:Forward(), true )
-        //ded.SetContextVector( cmd, oldAimAng:Forward(), true )
     else
         cmd:SetViewAngles( finalAngle )
     end
 
     if backtracking then
-        targetTime = hvhobkak.btrecords[ply][bttick].simulationtime
-        timeOffset = ded.GetServerTime(cmd) - targetTime
+        targetTime = exechack_cc_hvh_obkak.btrecords[ply][bttick].simulationtime
+        timeOffset = exechack_cc_hvh_obkak.flServerTime - targetTime
 
-        serverArriveTick = ded.GetServerTime(cmd) + ded.GetLatency(0) + ded.GetLatency(1)
-        diff = serverArriveTick - hvhobkak.btrecords[ply][bttick].simulationtime
+        serverArriveTick = exechack_cc_hvh_obkak.flServerTime + ded.GetLatency(0) + ded.GetLatency(1)
+        diff = serverArriveTick - exechack_cc_hvh_obkak.btrecords[ply][bttick].simulationtime
 
         if diff < 0.2 then
             ded.NetSetConVar("cl_interpolate","0")
             ded.NetSetConVar("cl_interp","0")
-            local tick = hvhobkak.TIME_TO_TICKS(targetTime)
+            local tick = math.floor(0.5 + targetTime / flTickInterval)
             ded.SetCommandTick(cmd, tick)
         else
             ded.NetSetConVar("cl_interpolate","1")
-            ded.NetSetConVar("cl_interp",tostring(ded.GetServerTime(cmd) - targetTime))
-            local tick = hvhobkak.TIME_TO_TICKS(ded.GetServerTime(cmd))
+            ded.NetSetConVar("cl_interp",tostring(exechack_cc_hvh_obkak.flServerTime - targetTime))
+            local tick = math.floor(0.5 + exechack_cc_hvh_obkak.flServerTime / flTickInterval)
             ded.SetCommandTick(cmd, tick - 1)
         end
-    elseif hvhobkak.cfg.vars["Adjust tickcount"] then
-        //if diff < 0.2 then
-            ded.NetSetConVar("cl_interpolate","0")
-            ded.NetSetConVar("cl_interp","0")
+    elseif ( exechack_cc_hvh_obkak.cfg.vars["Adjust tickcount"] and ply.simtime_updated ) then
+        local flSimulationTime = ded.GetSimulationTime( ply:EntIndex() )
+        local iTickCount = math.floor(0.5 + flSimulationTime / flTickInterval)
 
-            ded.SetCommandTick(cmd, hvhobkak.TIME_TO_TICKS( ded.GetSimulationTime( ply:EntIndex() ) ) )
-        //else
-        //    ded.NetSetConVar("cl_interpolate","1")
-        //    ded.NetSetConVar("cl_interp",tostring(ded.GetServerTime(cmd) - targetTime))
+        ded.NetSetConVar( "cl_interpolate", "0" )
+        ded.NetSetConVar( "cl_interp", "0" )
 
-        //    local tick = hvhobkak.TIME_TO_TICKS(ded.GetServerTime(cmd))
-        //    ded.SetCommandTick(cmd, tick - 1)
-        //end
+        ded.SetCommandTick( cmd, iTickCount )
     end
-
-    if hvhobkak.cfg.vars["Auto fire"] then
-        if StartsWith( hvhobkak.activeWeaponClass, "m9k_" ) then
+    
+    if exechack_cc_hvh_obkak.cfg.vars["Auto fire"] then
+        if string.StartsWith( exechack_cc_hvh_obkak.activeWeaponClass, "m9k_" ) then
             cmd:RemoveKey( IN_SPEED )
         end
 
-        hvhobkak.SendPacket = true
-        me.simtime_updated = true
-        ded.UpdateClientAnimation( me:EntIndex() )
+        exechack_cc_hvh_obkak.SendPacket = true
+        pLocalPlayer.simtime_updated = true
+        --ded.UpdateClientAnimation( pLocalPlayer:EntIndex() )
 
-        if hvhobkak.cfg.vars["Resolver"] then 
+        if exechack_cc_hvh_obkak.cfg.vars["Resolver"] then 
             ply.aimshots = (ply.aimshots or 0) + 1
         end
 
         local isAutomatic = true
 
-        if hvhobkak.activeWeapon.Primary then
-            isAutomatic = hvhobkak.activeWeapon.Primary.Automatic
+        if exechack_cc_hvh_obkak.activeWeapon.Primary then
+            isAutomatic = exechack_cc_hvh_obkak.activeWeapon.Primary.Automatic
         else
             if class == "weapon_pistol" then
                 isAutomatic = false
             end
         end
 
-        if altfire or ( hvhobkak.cfg.vars["Alt Rapid fire"] and cmd:CommandNumber() % 2 == 0 ) then
+
+        if altfire or ( exechack_cc_hvh_obkak.cfg.vars["Alt Rapid fire"] and cmd:CommandNumber() % 2 == 0 ) then
             cmd:AddKey(IN_ATTACK2)
         else
-            if isAutomatic or ( hvhobkak.cfg.vars["Rapid fire"] and cmd:CommandNumber() % 2 == 0 ) then
+            if isAutomatic or ( exechack_cc_hvh_obkak.cfg.vars["Rapid fire"] and cmd:CommandNumber() % 2 == 0 ) then
                 cmd:AddKey(IN_ATTACK)
             end
         end
 
-        hvhobkak.SkipCommand = true 
+        exechack_cc_hvh_obkak.SkipCommand = true 
     end
+    return true
 end
 
-function hvhobkak.autoReload(cmd)
-    if !hvhobkak.cfg.vars["Auto reload"] then return end
 
-	local wep = me:GetActiveWeapon()
+function exechack_cc_hvh_obkak.autoReload(cmd)
+    if !exechack_cc_hvh_obkak.cfg.vars["Auto reload"] then return end
+
+	local wep = pLocalPlayer:GetActiveWeapon()
 
 	if IsValid(wep) then
 		if wep.Primary then
-			if wep:Clip1() == 0 and wep:GetMaxClip1() > 0 and me:GetAmmoCount(wep:GetPrimaryAmmoType()) > 0 then
+			if wep:Clip1() == 0 and wep:GetMaxClip1() > 0 and pLocalPlayer:GetAmmoCount(wep:GetPrimaryAmmoType()) > 0 then
 				cmd:AddKey(IN_RELOAD)
 			end
 		end
@@ -5488,10 +5873,10 @@ end
 
 // adaptive Cstrafe
 
-hvhobkak.last_ground_pos = 0
-hvhobkak.cstrafe_dir = 0
+exechack_cc_hvh_obkak.last_ground_pos = 0
+exechack_cc_hvh_obkak.cstrafe_dir = 0
 
-function hvhobkak.PredictVelocity( velocity, viewangles, dir, maxspeed, accel )
+function exechack_cc_hvh_obkak.PredictVelocity( velocity, viewangles, dir, maxspeed, accel )
 
 	local forward = viewangles:Forward()
 	local right = viewangles:Right()
@@ -5527,7 +5912,7 @@ function hvhobkak.PredictVelocity( velocity, viewangles, dir, maxspeed, accel )
 		return velocity
 	end
 	
-	local accelspeed = accel * wishspeed * TickInterval
+	local accelspeed = accel * wishspeed * flTickInterval
 	
 	if ( accelspeed > addspeed ) then
 		accelspeed = addspeed
@@ -5537,46 +5922,46 @@ function hvhobkak.PredictVelocity( velocity, viewangles, dir, maxspeed, accel )
 
 end
     
-function hvhobkak.PredictMovement( viewangles, dir, angle )
+function exechack_cc_hvh_obkak.PredictMovement( viewangles, dir, angle )
 
 	local pm
 
 	local sv_airaccelerate = GetConVarNumber( "sv_airaccelerate" )
 	local sv_gravity = GetConVarNumber( "sv_gravity" )
-	local maxspeed = me:GetMaxSpeed()
-	local jump_power = me:GetJumpPower()
+	local maxspeed = pLocalPlayer:GetMaxSpeed()
+	local jump_power = pLocalPlayer:GetJumpPower()
 
-	local origin = me:GetNetworkOrigin()
-	local velocity = me:GetAbsVelocity()
+	local origin = pLocalPlayer:GetNetworkOrigin()
+	local velocity = pLocalPlayer:GetAbsVelocity()
 	
-	local mins = me:OBBMins()
-	local maxs = me:OBBMaxs()
+	local mins = pLocalPlayer:OBBMins()
+	local maxs = pLocalPlayer:OBBMaxs()
 
-    local pticks = math_Round(hvhobkak.cfg.vars["CStrafe ticks"])
+    local pticks = math.Round(exechack_cc_hvh_obkak.cfg.vars["CStrafe ticks"])
 	
-	local on_ground = me:IsFlagSet( FL_ONGROUND )
+	local on_ground = pLocalPlayer:IsFlagSet( FL_ONGROUND )
 	
 	for i = 1, pticks do
 
-		viewangles.y = math_NormalizeAngle( math_deg( math_atan2( velocity.y, velocity.x ) ) + angle )
+		viewangles.y = math.NormalizeAngle( math.deg( math.atan2( velocity.y, velocity.x ) ) + angle )
 
-		velocity.z = velocity.z - ( sv_gravity * TickInterval * 0.5 )
+		velocity.z = velocity.z - ( sv_gravity * flTickInterval * 0.5 )
 
 		if ( on_ground ) then
 		
 			velocity.z = jump_power
-			velocity.z = velocity.z - ( sv_gravity * TickInterval * 0.5 )
+			velocity.z = velocity.z - ( sv_gravity * flTickInterval * 0.5 )
 			
 		end
 
-		velocity = hvhobkak.PredictVelocity( velocity, viewangles, dir, maxspeed, sv_airaccelerate )
+		velocity = exechack_cc_hvh_obkak.PredictVelocity( velocity, viewangles, dir, maxspeed, sv_airaccelerate )
 		
-		local endpos = origin + ( velocity * TickInterval )
+		local endpos = origin + ( velocity * flTickInterval )
 
 		pm = TraceHull( {
 			start = origin,
 			endpos = endpos,
-			filter = me,
+			filter = pLocalPlayer,
 			maxs = maxs,
 			mins = mins,
 			mask = MASK_PLAYERSOLID
@@ -5588,7 +5973,7 @@ function hvhobkak.PredictMovement( viewangles, dir, angle )
 		
 		if ( pm.Fraction != 1 ) then
 		
-			local time_left = TickInterval
+			local time_left = flTickInterval
 
 			for j = 1, 2 do
 			
@@ -5609,7 +5994,7 @@ function hvhobkak.PredictMovement( viewangles, dir, angle )
 				pm = TraceHull( {
 					start = pm.HitPos,
 					endpos = endpos,
-					filter = me,
+					filter = pLocalPlayer,
 					maxs = maxs,
 					mins = mins,
 					mask = MASK_PLAYERSOLID
@@ -5625,14 +6010,14 @@ function hvhobkak.PredictMovement( viewangles, dir, angle )
 		
 		origin = pm.HitPos
 		
-		if ( ( hvhobkak.last_ground_pos - origin.z ) > math_Round(hvhobkak.cfg.vars["CStrafe ground diff"]) ) then
+		if ( ( exechack_cc_hvh_obkak.last_ground_pos - origin.z ) > math.Round(exechack_cc_hvh_obkak.cfg.vars["CStrafe ground diff"]) ) then
 			return false
 		end
 		
 		pm = TraceHull( {
 			start =  Vector( origin.x, origin.y, origin.z + 2 ),
 			endpos = Vector( origin.x, origin.y, origin.z - 1 ),
-			filter = me,
+			filter = pLocalPlayer,
 			maxs = Vector( maxs.x, maxs.y, maxs.z * 0.5 ),
 			mins = mins,
 			mask = MASK_PLAYERSOLID
@@ -5640,7 +6025,7 @@ function hvhobkak.PredictMovement( viewangles, dir, angle )
 		
 		on_ground = ( ( pm.Fraction < 1 || pm.AllSolid || pm.StartSolid ) && pm.HitNormal.z >= 0.7 )
 		
-		velocity.z = velocity.z - ( sv_gravity * TickInterval * 0.5 )
+		velocity.z = velocity.z - ( sv_gravity * flTickInterval * 0.5 )
 		
 		if ( on_ground ) then
 			velocity.z = 0
@@ -5653,33 +6038,33 @@ function hvhobkak.PredictMovement( viewangles, dir, angle )
 
 end
 
-function hvhobkak.CircleStrafe( cmd )
+function exechack_cc_hvh_obkak.CircleStrafe( cmd )
 
 	local angle = 0
 	
-	while ( hvhobkak.cstrafe_dir < 2 ) do
+	while ( exechack_cc_hvh_obkak.cstrafe_dir < 2 ) do
 	
 		angle = 0
 		local path_found = false
-		local step = ( hvhobkak.cstrafe_dir == 1 ) && math_Round(hvhobkak.cfg.vars["CStrafe angle step"]) || -math_Round(hvhobkak.cfg.vars["CStrafe angle step"])
+		local step = ( exechack_cc_hvh_obkak.cstrafe_dir == 1 ) && math.Round(exechack_cc_hvh_obkak.cfg.vars["CStrafe angle step"]) || -math.Round(exechack_cc_hvh_obkak.cfg.vars["CStrafe angle step"])
 		
 		while ( true ) do
 		
-			if ( hvhobkak.cstrafe_dir == 1 ) then
+			if ( exechack_cc_hvh_obkak.cstrafe_dir == 1 ) then
 			
-				if ( angle > math_Round(hvhobkak.cfg.vars["CStrafe angle max step"]) ) then
+				if ( angle > math.Round(exechack_cc_hvh_obkak.cfg.vars["CStrafe angle max step"]) ) then
 					break
 				end
 			
 			else
 			
-				if ( angle < -math_Round(hvhobkak.cfg.vars["CStrafe angle max step"]) ) then
+				if ( angle < -math.Round(exechack_cc_hvh_obkak.cfg.vars["CStrafe angle max step"]) ) then
 					break
 				end
 			
 			end
 
-			if ( hvhobkak.PredictMovement( cmd:GetViewAngles(), hvhobkak.cstrafe_dir, angle ) ) then
+			if ( exechack_cc_hvh_obkak.PredictMovement( cmd:GetViewAngles(), exechack_cc_hvh_obkak.cstrafe_dir, angle ) ) then
 			
 				path_found = true
 				break
@@ -5694,23 +6079,23 @@ function hvhobkak.CircleStrafe( cmd )
 			break
 		end
 		
-		hvhobkak.cstrafe_dir = hvhobkak.cstrafe_dir + 1
+		exechack_cc_hvh_obkak.cstrafe_dir = exechack_cc_hvh_obkak.cstrafe_dir + 1
 	
 	end
 	
-	if ( hvhobkak.cstrafe_dir < 2 ) then
+	if ( exechack_cc_hvh_obkak.cstrafe_dir < 2 ) then
 	
-		local velocity = me:GetAbsVelocity()
+		local velocity = pLocalPlayer:GetAbsVelocity()
 		local viewangles = cmd:GetViewAngles()
 		
-		viewangles.y = math_NormalizeAngle( math_deg( math_atan2( velocity.y, velocity.x ) ) + angle )
+		viewangles.y = math.NormalizeAngle( math.deg( math.atan2( velocity.y, velocity.x ) ) + angle )
 		
 		cmd:SetViewAngles( viewangles )
-		cmd:SetSideMove( ( hvhobkak.cstrafe_dir == 1 ) && -10000 || 10000 )
+		cmd:SetSideMove( ( exechack_cc_hvh_obkak.cstrafe_dir == 1 ) && -10000 || 10000 )
 	
 	else
 	
-		hvhobkak.cstrafe_dir = 0
+		exechack_cc_hvh_obkak.cstrafe_dir = 0
 	
 	end
 
@@ -5721,21 +6106,21 @@ do
     local prev_yaw = 0
     local old_yaw = 0.0
 
-    function hvhobkak.AutoStrafe( cmd )
+    function exechack_cc_hvh_obkak.AutoStrafe( cmd )
         ztick = ztick + 1
 
-        if ( hvhobkak.IsKeyDown(hvhobkak.cfg.binds["Circle strafe"]) and hvhobkak.cfg.vars["Circle strafe"] ) then
+        if ( exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Circle strafe"]) and exechack_cc_hvh_obkak.cfg.vars["Circle strafe"] ) then
         
-            hvhobkak.CircleStrafe( cmd )
+            exechack_cc_hvh_obkak.CircleStrafe( cmd )
     
-        elseif ( hvhobkak.IsKeyDown(hvhobkak.cfg.binds["Z Hop"]) and hvhobkak.cfg.vars["Z Hop"] ) then
+        elseif ( exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Z Hop"]) and exechack_cc_hvh_obkak.cfg.vars["Z Hop"] ) then
             local handler = ztick / 3.14
             
-            cmd:SetSideMove( 5000 * math_sin(handler) )
-        elseif hvhobkak.cfg.vars["Air strafer"] and hvhobkak.cfg.vars["Strafe mode"] == 3 then
+            cmd:SetSideMove( 5000 * math.sin(handler) )
+        elseif exechack_cc_hvh_obkak.cfg.vars["Air strafer"] and exechack_cc_hvh_obkak.cfg.vars["Strafe mode"] == 3 then
     
             local get_velocity_degree = function(velocity)
-                local tmp = math_deg(math_atan(30.0 / velocity))
+                local tmp = math.deg(math.atan(30.0 / velocity))
                     
                 if (tmp > 90.0) then
                     return 90.0
@@ -5748,7 +6133,7 @@ do
     
             local M_RADPI = 57.295779513082
             local side_speed = 10000
-            local velocity = me:GetVelocity()
+            local velocity = pLocalPlayer:GetVelocity()
             velocity.z = 0.0
     
             local forwardmove = cmd:GetForwardMove()
@@ -5765,19 +6150,19 @@ do
             local flip = cmd:TickCount() % 2 == 0
     
             local turn_direction_modifier = flip && 1.0 || -1.0
-            local viewangles = Angle(hvhobkak.SilentAngle.x, hvhobkak.SilentAngle.y, hvhobkak.SilentAngle.z)
+            local viewangles = Angle(exechack_cc_hvh_obkak.SilentAngle.x, exechack_cc_hvh_obkak.SilentAngle.y, exechack_cc_hvh_obkak.SilentAngle.z)
     
             if (forwardmove || sidemove) then
                 cmd:SetForwardMove(0)
                 cmd:SetSideMove(0)
     
-                local turn_angle = math_atan2(-sidemove, forwardmove)
+                local turn_angle = math.atan2(-sidemove, forwardmove)
                 viewangles.y = viewangles.y + (turn_angle * M_RADPI)
             elseif (forwardmove) then
                 cmd:SetForwardMove(0)
             end
     
-            local strafe_angle = math_deg(math_atan(15 / velocity:Length2D()))
+            local strafe_angle = math.deg(math.atan(15 / velocity:Length2D()))
     
             if (strafe_angle > 90) then
                 strafe_angle = 90
@@ -5786,18 +6171,18 @@ do
             end
     
             local temp = Vector(0, viewangles.y - old_yaw, 0)
-            temp.y = math_NormalizeAngle(temp.y)
+            temp.y = math.NormalizeAngle(temp.y)
     
             local yaw_delta = temp.y
             old_yaw = viewangles.y
     
-            local abs_yaw_delta = math_abs(yaw_delta)
+            local abs_yaw_delta = math.abs(yaw_delta)
     
             if (abs_yaw_delta <= strafe_angle || abs_yaw_delta >= 30) then
                 local velocity_angles = velocity:Angle()
     
                 temp = Vector(0, viewangles.y - velocity_angles.y, 0)
-                temp.y = math_NormalizeAngle(temp.y)
+                temp.y = math.NormalizeAngle(temp.y)
     
                 local velocityangle_yawdelta = temp.y
                 local velocity_degree = get_velocity_degree(velocity:Length2D() * 128)
@@ -5825,63 +6210,28 @@ do
     
             local angles_move = move:Angle()
     
-            local normalized_x = math.modf(hvhobkak.SilentAngle.x + 180, 360) - 180
-            local normalized_y = math.modf(hvhobkak.SilentAngle.y + 180, 360) - 180
+            local normalized_x = math.modf(exechack_cc_hvh_obkak.SilentAngle.x + 180, 360) - 180
+            local normalized_y = math.modf(exechack_cc_hvh_obkak.SilentAngle.y + 180, 360) - 180
     
-            local yaw = math_rad(normalized_y - viewangles.y + angles_move.y)
+            local yaw = math.rad(normalized_y - viewangles.y + angles_move.y)
     
-            if (normalized_x >= 90 || normalized_x <= -90 || hvhobkak.SilentAngle.x >= 90 && hvhobkak.SilentAngle.x <= 200 || hvhobkak.SilentAngle.x <= -90 && hvhobkak.SilentAngle.x <= 200) then
-                cmd:SetForwardMove(-math_cos(yaw) * speed)
+            if (normalized_x >= 90 || normalized_x <= -90 || exechack_cc_hvh_obkak.SilentAngle.x >= 90 && exechack_cc_hvh_obkak.SilentAngle.x <= 200 || exechack_cc_hvh_obkak.SilentAngle.x <= -90 && exechack_cc_hvh_obkak.SilentAngle.x <= 200) then
+                cmd:SetForwardMove(-math.cos(yaw) * speed)
             else
-                cmd:SetForwardMove(math_cos(yaw) * speed)
+                cmd:SetForwardMove(math.cos(yaw) * speed)
             end
     
-            cmd:SetSideMove(math_sin(yaw) * speed)
+            cmd:SetSideMove(math.sin(yaw) * speed)
 
-        elseif hvhobkak.cfg.vars["Air strafer"] and hvhobkak.cfg.vars["Strafe mode"] == 2 then
+        elseif exechack_cc_hvh_obkak.cfg.vars["Air strafer"] and exechack_cc_hvh_obkak.cfg.vars["Strafe mode"] == 2 then
             cmd:SetForwardMove(0)
 
-            if me:IsFlagSet( FL_ONGROUND ) then
+            if pLocalPlayer:IsFlagSet( FL_ONGROUND ) then
                 cmd:SetForwardMove(10000)
             else
-                cmd:SetForwardMove(5850 / me:GetVelocity():Length2D())
+                cmd:SetForwardMove(5850 / pLocalPlayer:GetVelocity():Length2D())
                 cmd:SetSideMove((cmd:CommandNumber() % 2 == 0) && -400 || 400)
-            end
-
-            /*
-
-local ang_diff = math_NormalizeAngle( hvhobkak.SilentAngle.y - prev_yaw )
-            
-            if ( math_abs( ang_diff ) > 0 ) then
-            
-                if ( ang_diff > 0 ) then
-                    cmd:SetSideMove( -10000 )
-                else
-                    cmd:SetSideMove( 10000 )
-                end
-            
-            else
-            
-                local vel = me:GetAbsVelocity()
-                local vel_yaw = math_NormalizeAngle( math_deg( math_atan2( vel.y, vel.x ) ) )
-                local vel_yaw_diff = math_NormalizeAngle( hvhobkak.SilentAngle.y - vel_yaw )
-                
-                if ( vel_yaw_diff > 0 ) then
-                    cmd:SetSideMove( -10000 )
-                else
-                    cmd:SetSideMove( 10000 )
-                end
-    
-                local viewangles = cmd:GetViewAngles() //hvhobkak.SilentAngle //Angle( hvhobkak.SilentAngle.x, hvhobkak.SilentAngle.y, 0 )
-                viewangles.y = vel_yaw
-                cmd:SetViewAngles( viewangles )
-                
-            end
-    
-            prev_yaw = hvhobkak.SilentAngle.y
-            */
-            
-            
+            end            
         end
     end
 end
@@ -5891,53 +6241,53 @@ end
 
 */
 
-hvhobkak.aatarget = nil
+exechack_cc_hvh_obkak.aatarget = nil
 
-function hvhobkak.PredictedPos(ply)
-    return ply:GetPos() + ply:GetVelocity() * TickInterval
+function exechack_cc_hvh_obkak.PredictedPos(ply)
+    return ply:GetPos() + ply:GetVelocity() * flTickInterval
 end
 
-function hvhobkak.PredictedEyePos()
-    return me:EyePos() + me:GetVelocity() * TickInterval
+function exechack_cc_hvh_obkak.PredictedEyePos()
+    return pLocalPlayer:EyePos() + pLocalPlayer:GetVelocity() * flTickInterval
 end
 
-function hvhobkak.GetBaseYaw()
-    if not IsValid( hvhobkak.aatarget ) or hvhobkak.cfg.vars["Yaw base"] != 2 then
-        return hvhobkak.SilentAngle.y
+function exechack_cc_hvh_obkak.GetBaseYaw()
+    if not IsValid( exechack_cc_hvh_obkak.aatarget ) or exechack_cc_hvh_obkak.cfg.vars["Yaw base"] != 2 then
+        return exechack_cc_hvh_obkak.SilentAngle.y
     end
 
-    return math_NormalizeAngle( (hvhobkak.PredictedPos(hvhobkak.aatarget) - hvhobkak.PredictedEyePos()):Angle().y )
+    return math.NormalizeAngle( (exechack_cc_hvh_obkak.PredictedPos(exechack_cc_hvh_obkak.aatarget) - exechack_cc_hvh_obkak.PredictedEyePos()):Angle().y )
 end
 
-function hvhobkak.Freestand(cmd)
-	if !IsValid(hvhobkak.aatarget) then return false end
+function exechack_cc_hvh_obkak.Freestand(cmd)
+	if !IsValid(exechack_cc_hvh_obkak.aatarget) then return false end
 
-	local headpos = me:GetBonePosition(me:LookupBone("ValveBiped.Bip01_Head1"))
+	local headpos = pLocalPlayer:GetBonePosition(pLocalPlayer:LookupBone("ValveBiped.Bip01_Head1"))
 	if !headpos then return end
 
-	local selfpos = me:GetPos()
+	local selfpos = pLocalPlayer:GetPos()
 	local headoffset = Vector(selfpos.x, selfpos.y, headpos.z):Distance(headpos) + 5
 
 	local found = true
 
-	local pos = hvhobkak.aatarget:WorldToLocal(selfpos)
-	local bearing = math_deg(-math_atan2(pos.y, pos.x)) + 180 + 90
+	local pos = exechack_cc_hvh_obkak.aatarget:WorldToLocal(selfpos)
+	local bearing = math.deg(-math.atan2(pos.y, pos.x)) + 180 + 90
 	local left, right = bearing - 180 - 90, bearing - 180 + 90
 
 	local function CheckYaw(yaw)
-		yaw = math_rad(yaw)
-		local x, y = math_sin(yaw), math_cos(yaw)
+		yaw = math.rad(yaw)
+		local x, y = math.sin(yaw), math.cos(yaw)
 
 		local headoffsetvec = Vector(x, y, 0) * headoffset
 		headoffsetvec.z = headpos.z - selfpos.z
 
 		local tr = TraceLine({
-			start = hvhobkak.aatarget:EyePos() + hvhobkak.aatarget:GetVelocity() * TickInterval * 4,
+			start = exechack_cc_hvh_obkak.aatarget:EyePos() + exechack_cc_hvh_obkak.aatarget:GetVelocity() * flTickInterval * 4,
 			endpos = selfpos + headoffsetvec,
-			filter = hvhobkak.aatarget
+			filter = exechack_cc_hvh_obkak.aatarget
 		})
 
-		return tr.Fraction < 1 and tr.Entity != me
+		return tr.Fraction < 1 and tr.Entity != pLocalPlayer
 	end
 
 	local function Normalize(ang) return 360 - ang + 90 end
@@ -5947,7 +6297,7 @@ function hvhobkak.Freestand(cmd)
 	left, right = Normalize(left), Normalize(right)
 
 	do
-		local headlocal = me:WorldToLocal(headpos)
+		local headlocal = pLocalPlayer:WorldToLocal(headpos)
 		if headlocal.x > 0 then
 			left, right = right, left
 		end
@@ -5964,59 +6314,59 @@ function hvhobkak.Freestand(cmd)
 	return false
 end
 
-hvhobkak.realAngle = me:EyeAngles()
-hvhobkak.inverted = false
-hvhobkak.oldYaw = 0
-hvhobkak.SwaySide = 1
+exechack_cc_hvh_obkak.realAngle = pLocalPlayer:EyeAngles()
+exechack_cc_hvh_obkak.inverted = false
+exechack_cc_hvh_obkak.oldYaw = 0
+exechack_cc_hvh_obkak.SwaySide = 1
 
 local baseyaw = 0
 
-hvhobkak.CalcYaw = {
+exechack_cc_hvh_obkak.CalcYaw = {
     // Backward
     [1] = function( cmd ) 
         return baseyaw - 178 
     end, 
     // Fake forward
     [2] = function( cmd )
-        return hvhobkak.SendPacket and baseyaw or baseyaw + 178 
+        return exechack_cc_hvh_obkak.SendPacket and baseyaw or baseyaw + 178 
     end, 
     // Legit Delta
     [3] = function( cmd )     
-        return hvhobkak.SendPacket and baseyaw or baseyaw + ( hvhobkak.inverted and 43 or - 43 )
+        return exechack_cc_hvh_obkak.SendPacket and baseyaw or baseyaw + ( exechack_cc_hvh_obkak.inverted and 43 or - 43 )
     end,
     // Sideways 
     [4] = function( cmd )     
-        local delta = hvhobkak.inverted and 89 or -89
-        return baseyaw - ( hvhobkak.SendPacket and delta or -delta ) 
+        local delta = exechack_cc_hvh_obkak.inverted and 89 or -89
+        return baseyaw - ( exechack_cc_hvh_obkak.SendPacket and delta or -delta ) 
     end,
     // Half Sideways
     [5] = function( cmd )     
-        local delta = hvhobkak.inverted and 89 or -89
-        return baseyaw - ( hvhobkak.SendPacket and delta or 178 ) 
+        local delta = exechack_cc_hvh_obkak.inverted and 89 or -89
+        return baseyaw - ( exechack_cc_hvh_obkak.SendPacket and delta or 178 ) 
     end,
     // Fake Spin
     [6] = function( cmd )     
-        local add = math_NormalizeAngle( CurTime() * hvhobkak.cfg.vars["Spin speed"] * 10 )
-        return hvhobkak.SendPacket and ( hvhobkak.inverted and ( baseyaw - 178 ) or add ) or ( hvhobkak.inverted and add or ( baseyaw - 178 ) )
+        local add = math.NormalizeAngle( CurTime() * exechack_cc_hvh_obkak.cfg.vars["Spin speed"] * 10 )
+        return exechack_cc_hvh_obkak.SendPacket and ( exechack_cc_hvh_obkak.inverted and ( baseyaw - 178 ) or add ) or ( exechack_cc_hvh_obkak.inverted and add or ( baseyaw - 178 ) )
     end,
     // LBY Spin
     [7] = function( cmd )     
-        return ded.GetCurrentLowerBodyYaw( me:EntIndex() ) + ( hvhobkak.SendPacket and 180 or 0)
+        return ded.GetCurrentLowerBodyYaw( pLocalPlayer:EntIndex() ) + ( exechack_cc_hvh_obkak.SendPacket and 180 or 0)
     end,
     // LBY Breaker
     [8] = function( cmd )   
         local yaw = baseyaw - 178
 
-        if me:GetVelocity():Length2D() > 1 then
-            yaw = ded.GetCurrentLowerBodyYaw( me:EntIndex() ) + ( hvhobkak.SendPacket and 180 or 0)
-        elseif not hvhobkak.SendPacket then
-            local side = hvhobkak.inverted and -1 or 1
-            local lbyTarget = ded.GetTargetLowerBodyYaw( me:EntIndex() )
+        if pLocalPlayer:GetVelocity():Length2D() > 1 then
+            yaw = ded.GetCurrentLowerBodyYaw( pLocalPlayer:EntIndex() ) + ( exechack_cc_hvh_obkak.SendPacket and 180 or 0)
+        elseif not exechack_cc_hvh_obkak.SendPacket then
+            local side = exechack_cc_hvh_obkak.inverted and -1 or 1
+            local lbyTarget = ded.GetTargetLowerBodyYaw( pLocalPlayer:EntIndex() )
 
-            if math_abs( math_NormalizeAngle( lbyTarget - hvhobkak.oldYaw ) ) < hvhobkak.cfg.vars["LBY min delta"] then
-                yaw = math_NormalizeAngle( hvhobkak.oldYaw + hvhobkak.cfg.vars["LBY break delta"] * side)
+            if math.abs( math.NormalizeAngle( lbyTarget - exechack_cc_hvh_obkak.oldYaw ) ) < exechack_cc_hvh_obkak.cfg.vars["LBY min delta"] then
+                yaw = math.NormalizeAngle( exechack_cc_hvh_obkak.oldYaw + exechack_cc_hvh_obkak.cfg.vars["LBY break delta"] * side)
             else
-                yaw = math_NormalizeAngle( ded.GetCurrentLowerBodyYaw( me:EntIndex() ) - 44 * side )
+                yaw = math.NormalizeAngle( ded.GetCurrentLowerBodyYaw( pLocalPlayer:EntIndex() ) - 44 * side )
             end
         end
         
@@ -6024,79 +6374,378 @@ hvhobkak.CalcYaw = {
     end,
     // Sin Sway
     [9] = function( cmd )     
-        local add = hvhobkak.cfg.vars["Sin add"]
-        local sin = math_sin( CurTime() ) * hvhobkak.cfg.vars["Sin delta"]
-        return hvhobkak.SendPacket and baseyaw + sin + add or baseyaw - sin - add
+        local add = exechack_cc_hvh_obkak.cfg.vars["Sin add"]
+        local sin = math.sin( CurTime() ) * exechack_cc_hvh_obkak.cfg.vars["Sin delta"]
+        return exechack_cc_hvh_obkak.SendPacket and baseyaw + sin + add or baseyaw - sin - add
     end,
     // Pendulum Sway
     [10] = function( cmd )
         local ct = CurTime()
-        local delta = hvhobkak.cfg.vars["Sin delta"]
+        local delta = exechack_cc_hvh_obkak.cfg.vars["Sin delta"]
         local ct1 = ( ct % 0.9 )
         local ct2 = ( ct % 2 )
 
-        local x1 = ct2 * math_sin(ct1)
-        local y1 = ct2 * -1 * math_cos(ct1)
+        local x1 = ct2 * math.sin(ct1)
+        local y1 = ct2 * -1 * math.cos(ct1)
     
-        local x2 = x1 + ct1 * math_sin(ct2)
-        local y2 = y1 - ct1 * math_cos(ct2)
+        local x2 = x1 + ct1 * math.sin(ct2)
+        local y2 = y1 - ct1 * math.cos(ct2)
 
-        local sin = hvhobkak.SendPacket and x2 * delta or y2 * delta
+        local sin = exechack_cc_hvh_obkak.SendPacket and x2 * delta or y2 * delta
         return baseyaw + sin
     end,
     // Lag Sway
     [11] = function( cmd )     
-        local swaySpeed = (hvhobkak.fakeLagTicks + 1) / 12 * math.pi
-        local swayAmount = math_sin(CurTime() * swaySpeed) * 45
+        local swaySpeed = (exechack_cc_hvh_obkak.fakeLagTicks + 1) / 12 * math.pi
+        local swayAmount = math.sin(CurTime() * swaySpeed) * 45
     
-        return ( baseyaw - 180 ) + 55 * hvhobkak.SwaySide + swayAmount * hvhobkak.SwaySide * -1
+        return ( baseyaw - 180 ) + 55 * exechack_cc_hvh_obkak.SwaySide + swayAmount * exechack_cc_hvh_obkak.SwaySide * -1
     end,
     // Fake Jitter
     [12] = function( cmd )     
-        local delta = hvhobkak.cfg.vars["Jitter delta"]
+        local delta = exechack_cc_hvh_obkak.cfg.vars["Jitter delta"]
         
-        local a = hvhobkak.SendPacket and baseyaw - 178 or baseyaw - 178 + math_random( -delta, delta )
-        local b = hvhobkak.SendPacket and baseyaw - 178 + math_random( -delta, delta ) or baseyaw - 178
+        local a = exechack_cc_hvh_obkak.SendPacket and baseyaw - 178 or baseyaw - 178 + math.random( -delta, delta )
+        local b = exechack_cc_hvh_obkak.SendPacket and baseyaw - 178 + math.random( -delta, delta ) or baseyaw - 178
 
-        return hvhobkak.inverted and a or b
+        return exechack_cc_hvh_obkak.inverted and a or b
     end,
     // Kappa Jitter 
     [13] = function( cmd )    
-        local delta = hvhobkak.cfg.vars["Jitter delta"]
+        local delta = exechack_cc_hvh_obkak.cfg.vars["Jitter delta"]
 
-        local a = hvhobkak.SendPacket and baseyaw - 178 or baseyaw + ( delta * hvhobkak.SwaySide )
-        local b = hvhobkak.SendPacket and baseyaw + ( delta * hvhobkak.SwaySide ) or baseyaw - 178
+        local a = exechack_cc_hvh_obkak.SendPacket and baseyaw - 178 or baseyaw + ( delta * exechack_cc_hvh_obkak.SwaySide )
+        local b = exechack_cc_hvh_obkak.SendPacket and baseyaw + ( delta * exechack_cc_hvh_obkak.SwaySide ) or baseyaw - 178
 
-        return hvhobkak.inverted and a or b
+        return exechack_cc_hvh_obkak.inverted and a or b
     end,
     // Abu Jitter 
     [14] = function( cmd )   
-        local ctjit = math_sin( CurTime() * 30 ) * 25
+        local ctjit = math.sin( CurTime() * 30 ) * 25
 
-        return ctjit + ( hvhobkak.SendPacket and baseyaw - 160 * hvhobkak.SwaySide or baseyaw - 160 * -hvhobkak.SwaySide )
+        return ctjit + ( exechack_cc_hvh_obkak.SendPacket and baseyaw - 160 * exechack_cc_hvh_obkak.SwaySide or baseyaw - 160 * -exechack_cc_hvh_obkak.SwaySide )
     end,
     // Satanic spinner 
     [15] = function( cmd ) 
-        local side = hvhobkak.inverted and 1 or -1
-        local satanicvalue = math_sin( CurTime() * 666 ) * 666
+        local side = exechack_cc_hvh_obkak.inverted and 1 or -1
+        local satanicvalue = math.sin( CurTime() * 666 ) * 666
 
-        return math_NormalizeAngle( hvhobkak.SendPacket and satanicvalue * side or satanicvalue * -side )
+        return math.NormalizeAngle( exechack_cc_hvh_obkak.SendPacket and satanicvalue * side or satanicvalue * -side )
     end,
     // Custom aa
     [16] = function( cmd )   
-        return hvhobkak.SendPacket and baseyaw + hvhobkak.cfg.vars["Custom real"] or baseyaw + hvhobkak.cfg.vars["Custom fake"]
+        return exechack_cc_hvh_obkak.SendPacket and baseyaw + exechack_cc_hvh_obkak.cfg.vars["Custom real"] or baseyaw + exechack_cc_hvh_obkak.cfg.vars["Custom fake"]
     end,
     // Hand block 
-    [17] = function( cmd )  
+    [17] = function(cmd)
+        local target_angle = baseyaw - 90 
+        return target_angle
+    end,
 
+    // Low Delta
+    [18] = function( cmd )
+        local delta = exechack_cc_hvh_obkak.cfg.vars["Low delta value"] or 28  // Можно настроить в конфиге
+        local dynamic_delta = math.sin(CurTime() * 2) * (delta / 2)  // Плавное изменение дельты
+        
+        if exechack_cc_hvh_obkak.SendPacket then
+            return baseyaw - (exechack_cc_hvh_obkak.inverted and -delta or delta) + dynamic_delta
+        else
+            return baseyaw + (exechack_cc_hvh_obkak.inverted and -delta or delta) - dynamic_delta
+        end
+    end,
 
+    // Desync
+    [19] = function( cmd )        
+            local send = exechack_cc_hvh_obkak.SendPacket
+        local baseyaw = exechack_cc_hvh_obkak.GetBaseYaw()
+        local inverter = exechack_cc_hvh_obkak.cfg.vars["Inverter"]
 
+        local jitterRange = exechack_cc_hvh_obkak.cfg.vars["Jitter delta"] or 35
+        local jitter = math.random(-jitterRange, jitterRange)
 
+        local realYaw = baseyaw + (inverter and -exechack_cc_hvh_obkak.cfg.vars["Custom real"] or exechack_cc_hvh_obkak.cfg.vars["Custom real"])
+        local fakeYaw = baseyaw + (inverter and exechack_cc_hvh_obkak.cfg.vars["Custom fake"] or -exechack_cc_hvh_obkak.cfg.vars["Custom fake"]) + jitter
 
+        local timeSwitch = (CurTime() * 3) % 2 > 1
+        if timeSwitch then fakeYaw = fakeYaw + math.random(-20, 20) end
 
-
+        return send and realYaw or fakeYaw
+    end,
+    [20] = function( cmd )
+        
+        local tankaarad = 87
+        local a = exechack_cc_hvh_obkak.SendPacket and baseyaw - 178 or baseyaw + ( tankaarad * exechack_cc_hvh_obkak.SwaySide )
+        local b = exechack_cc_hvh_obkak.SendPacket and baseyaw + ( tankaarad * exechack_cc_hvh_obkak.SwaySide ) or baseyaw - 178
+    
+        return exechack_cc_hvh_obkak.inverted and a or b
 
     end,
+    // Fake switch
+    [21] = function(cmd)
+        if not exechack_cc_hvh_obkak.BruteBreaker then
+            exechack_cc_hvh_obkak.BruteBreaker = {
+                last_angles = {},
+                safe_zones = {},
+                next_switch = 0,
+                lby_timer = 0,
+                chaos_level = 1.0
+            }
+            for i = 1, #exechack_cc_hvh_obkak.BruteBreaker.avoid_angles-1 do
+                local mid = (exechack_cc_hvh_obkak.BruteBreaker.avoid_angles[i] + exechack_cc_hvh_obkak.BruteBreaker.avoid_angles[i+1])/2
+                table.insert(exechack_cc_hvh_obkak.BruteBreaker.safe_zones, mid)
+            end
+        end
+        local BB = exechack_cc_hvh_obkak.BruteBreaker
+        local REAL_POWER = exechack_cc_hvh_obkak.cfg.vars["Custom fake"] or 35 
+        local FAKE_POWER = exechack_cc_hvh_obkak.cfg.vars["Fake switch"] or 60 
+        local AVOID_FORCE = exechack_cc_hvh_obkak.cfg.vars["Avoid force"] or 2.5
+
+        local current_time = CurTime()
+        local vel = pLocalPlayer:GetVelocity():Length2D()
+        local is_moving = vel > 15
+        local lby = ded.GetCurrentLowerBodyYaw(pLocalPlayer:EntIndex())
+
+        local function get_safest_angle(base)
+            local best_angle = base
+            local best_score = -math.huge
+            
+            for _, angle in ipairs(BB.safe_zones) do
+                local test_angle = angle + math.random(-15, 15)
+                local score = 0
+
+                for _, brute_angle in ipairs(BB.avoid_angles) do
+                    local dist = math.abs(math.NormalizeAngle(test_angle - brute_angle))
+                    score = score + math.min(dist, 30) * AVOID_FORCE
+                end
+
+                score = score + math.random(0, 20)
+                
+                if score > best_score then
+                    best_score = score
+                    best_angle = test_angle
+                end
+            end
+            
+            return best_angle
+        end
+
+        if current_time > BB.next_switch then
+            BB.current_real_angle = get_safest_angle(baseyaw)
+            BB.next_switch = current_time + math.Rand(0.35, 0.65)
+            BB.chaos_level = 0.8 + math.random() * 0.7
+            
+            if math.random() < 0.2 then
+                BB.current_real_angle = BB.current_real_angle * 1.7
+            end
+        end
+
+        if current_time > BB.lby_timer then
+            BB.lby_offset = math.random() > 0.5 and 110 or -110
+            BB.lby_timer = current_time + math.Rand(1.3, 2.1)
+        end
+
+        local real_angle = BB.current_real_angle * (is_moving and 0.8 or 1.2)
+        if math.random() < 0.4 then
+            real_angle = real_angle + lby * 0.3 * BB.chaos_level
+        end
+
+        local fake_angle = 0
+        if is_moving then
+            fake_angle = math.sin(current_time * 18) * FAKE_POWER * 0.7 +
+                        math.cos(current_time * 7) * FAKE_POWER * 0.4 +
+                        math.random(-5, 5)
+        else
+            fake_angle = math.sin(current_time * 12) * FAKE_POWER *
+                        (exechack_cc_hvh_obkak.inverted and -1 or 1) *
+                        BB.chaos_level
+        end
+
+        return exechack_cc_hvh_obkak.SendPacket and (baseyaw + real_angle * REAL_POWER/35) or 
+            (baseyaw + fake_angle)
+    end,
+    // Dolphin Mode
+    [22] = function(cmd)
+        local wave1 = math.sin(CurTime() * 2) * 60
+        local wave2 = math.cos(CurTime() * 5) * 20
+        local combined = wave1 * 0.7 + wave2 * 0.3
+        
+        return exechack_cc_hvh_obkak.SendPacket and (baseyaw - combined) or 
+            (baseyaw + combined * (exechack_cc_hvh_obkak.inverted and -1 or 1))
+    end,
+    //Freeze Frame
+    [23] = function(cmd)
+        if not exechack_cc_hvh_obkak.last_freeze then
+            exechack_cc_hvh_obkak.last_freeze = CurTime()
+            exechack_cc_hvh_obkak.freeze_angle = baseyaw - 90
+        end
+        
+        if CurTime() - exechack_cc_hvh_obkak.last_freeze > 0.8 then
+            exechack_cc_hvh_obkak.last_freeze = CurTime()
+            exechack_cc_hvh_obkak.freeze_angle = baseyaw + math.random(-120, 120)
+        end
+        
+        return exechack_cc_hvh_obkak.freeze_angle
+    end,
+    // Invisible Man
+    [24] = function(cmd)
+        local real_offset = exechack_cc_hvh_obkak.cfg.vars["Custom real"] or 15
+        local fake_angle = math.sin(CurTime() * 3) * 60
+        
+        if exechack_cc_hvh_obkak.SendPacket then
+            cmd:SetViewAngles(Angle(0, baseyaw + real_offset, 0))
+            return real_offset
+        else
+            cmd:SetViewAngles(Angle(0, baseyaw + 179.9, 0))
+            return 179.9
+        end
+    end,
+    // Matrix Glitch
+    [25] = function(cmd)
+        local glitch_factor = math.floor(CurTime() * 10) % 3
+        local angles = {
+            baseyaw - 90,
+            baseyaw + 45,
+            baseyaw + 179
+        }
+        
+        return angles[glitch_factor + 1]
+    end,
+
+    // Unhittable
+    [26] = function(cmd)
+        local send = exechack_cc_hvh_obkak.SendPacket
+        local baseyaw = exechack_cc_hvh_obkak.GetBaseYaw()
+        local inverter = exechack_cc_hvh_obkak.cfg.vars["Inverter"]
+        
+        local realAngle = exechack_cc_hvh_obkak.cfg.vars["Real Angle"] or 124
+        local fakeAngle = exechack_cc_hvh_obkak.cfg.vars["Fake Angle"] or -47
+        
+        local jitterRange = exechack_cc_hvh_obkak.cfg.vars["Jitter Range"] or 12 
+        local jitter = math.random(-jitterRange, jitterRange)
+        
+        local microTicks = (CurTime() * 100) % 360
+        local microJitter = math.sin(microTicks * 0.1) * 15
+        
+        local timeSwitch = (CurTime() * 3) % 2 > 1
+        local timeMod = math.sin(CurTime() * 5) * 20
+        
+        local realYaw = baseyaw + (inverter and -realAngle or realAngle)
+        local fakeYaw = baseyaw + (inverter and fakeAngle or -fakeAngle) + jitter + microJitter
+
+        if timeSwitch then 
+            fakeYaw = fakeYaw + timeMod + math.random(-25, 25)
+        end
+
+        if math.floor(CurTime() * 3.33) % 2 == 0 then
+            fakeYaw = fakeYaw + math.random(-35, 35)
+        end
+
+        if exechack_cc_hvh_obkak.cfg.vars["Adaptive Mode"] then
+            local enemies = {}
+            local myPos = me:GetPos()
+            
+            for _, ply in pairs(player.GetAll()) do
+                if IsValid(ply) and ply ~= me and ply:Alive() then
+                    local dist = myPos:Distance(ply:GetPos())
+                    if dist < 1500 then
+                        local angleToEnemy = (ply:GetPos() - myPos):Angle().yaw
+                        table.insert(enemies, {angle = angleToEnemy, dist = dist})
+                    end
+                end
+            end
+            
+            if #enemies > 0 then
+                local avgAngle = 0
+                for _, enemy in pairs(enemies) do
+                    avgAngle = avgAngle + enemy.angle
+                end
+                avgAngle = avgAngle / #enemies
+
+                fakeYaw = avgAngle + 180 + math.random(-40, 40)
+            end
+        end
+        
+        if exechack_cc_hvh_obkak.cfg.vars["Velocity Factor"] then
+            local velocity = me:GetVelocity():Length()
+            if velocity > 100 then
+                local speedMod = math.min(velocity / 300, 1.5)
+                fakeYaw = fakeYaw + (math.random(-30, 30) * speedMod)
+            end
+        end
+        
+        realYaw = math.NormalizeAngle(realYaw)
+        fakeYaw = math.NormalizeAngle(fakeYaw)
+        
+        return send and realYaw or fakeYaw
+    end,
+    // Unhittable2
+    [27] = function(cmd)
+        local send = exechack_cc_hvh_obkak.SendPacket
+        local baseyaw = exechack_cc_hvh_obkak.GetBaseYaw()
+        local inverter = exechack_cc_hvh_obkak.cfg.vars["Inverter"]
+        local me = LocalPlayer()
+        if not IsValid(me) then return baseyaw end
+
+        local realAngle = inverter and -155 or 110
+        local fakeBase = inverter and 42 or -45
+        local jitterRange = 26
+        local microPower = 11
+        local oscStrength = 25
+        local velocityMod = 30
+        local timeSeed = math.floor(CurTime() * 4) % 2 == 0 and 1 or -1
+
+        local jitter = math.random(-jitterRange, jitterRange) * timeSeed
+
+        local time = CurTime()
+        local micro = math.sin(time * 3) * microPower + math.cos(time * 6.8) * (microPower * 0.6)
+
+        local osc = math.sin(time * 2.4) * oscStrength
+
+        if exechack_cc_hvh_obkak.cfg.vars["Adaptive Mode"] then
+            local myPos = me:GetPos()
+            local enemies = {}
+            for _, ply in ipairs(player.GetAll()) do
+                if IsValid(ply) and ply:Alive() and ply ~= me then
+                    local dist = myPos:Distance(ply:GetPos())
+                    if dist < 1500 then
+                        table.insert(enemies, (ply:GetPos() - myPos):Angle().yaw)
+                    end
+                end
+            end
+            if #enemies > 0 then
+                local avg = 0
+                for _, a in ipairs(enemies) do avg = avg + a end
+                avg = avg / #enemies
+                fakeBase = (avg - baseyaw + 180 + math.random(-35, 35))
+            end
+        end
+
+        if exechack_cc_hvh_obkak.cfg.vars["Velocity Factor"] then
+            local vel = me:GetVelocity():Length2D()
+            if vel > 120 then
+                fakeBase = fakeBase + math.sin(time * 10) * velocityMod
+            end
+        end
+
+        if exechack_cc_hvh_obkak.cfg.vars["AntiAim Pitch"] then
+            cmd:SetViewAngles(Angle(89, cmd:GetViewAngles().y, 0))
+        end
+
+        if math.floor(time * 3.5) % 3 == 0 then
+            fakeBase = fakeBase + math.random(-90, 90)
+        end
+
+        if math.floor(time * 2.25) % 2 == 0 then
+            fakeBase = fakeBase * -1
+        end
+
+        local realYaw = math.NormalizeAngle(baseyaw + realAngle)
+        local fakeYaw = math.NormalizeAngle(baseyaw + fakeBase + jitter + micro + osc)
+
+        return send and realYaw or fakeYaw
+    end
+
+
 } 
 
 
@@ -6136,25 +6785,40 @@ do
     local side = 1
 
     local function CalcPitch()
-        local cfg = hvhobkak.cfg.vars["Pitch"]
+        local cfg = exechack_cc_hvh_obkak.cfg.vars["Pitch"]
         local x = 0
 
         if cfg <= 5 then return pitches[cfg] end
 
-        if hvhobkak.SendPacket then
+        if exechack_cc_hvh_obkak.SendPacket then
             pitchflip = not pitchflip
         end
         
         if cfg == 6 then
             x = pitchflip and 180 or -180
         elseif cfg == 7 then
-            x = hvhobkak.SendPacket and 89 or -180
+            x = pitchflip and -180 or 271
+        elseif cfg == 7 then
+            x = exechack_cc_hvh_obkak.SendPacket and 89 or -180
         elseif cfg == 8 then
-            x = hvhobkak.cfg.vars["Custom pitch"] 
+            x = math.random(-180,95) and math.random(177,180)
+        elseif cfg == 9 then
+            x = math.random(-180,-55) and math.random(180,55)
+        elseif cfg == 10 then
+            x = math.random(180,95) and math.random(-180,-95)
+        elseif cfg == 11 then
+            x = math.random(-180,-95) and math.random(166,179+2)
+        elseif cfg == 12 then
+            x = math.random(-180,-115) and math.random(177,179+2)
+        elseif cfg == 13 then
+            x = pitchflip and -180 or 271
+        elseif cfg == 14 then    
+            x = exechack_cc_hvh_obkak.cfg.vars["Custom pitch"]
         end
 
         return x
     end
+
 
     /*
 
@@ -6166,16 +6830,16 @@ do
         elseif cfg == 8 then
             
         elseif cfg == 9 then
-            local sin = math_sin( CurTime() ) * 89
-            y = hvhobkak.SendPacket and baseyaw + sin or baseyaw - sin
+            local sin = math.sin( CurTime() ) * 89
+            y = exechack_cc_hvh_obkak.SendPacket and baseyaw + sin or baseyaw - sin
         elseif cfg == 10 then
             local side = ded.GetPreviousTick() % 2 == 1
 
-            y = hvhobkak.SendPacket and baseyaw - 180 or baseyaw + ( side and -89 or 89 )    
+            y = exechack_cc_hvh_obkak.SendPacket and baseyaw - 180 or baseyaw + ( side and -89 or 89 )    
         elseif cfg == 11 then
 
         elseif cfg == 12 then
-            y = baseyaw + ( hvhobkak.SendPacket && hvhobkak.cfg.vars["Custom fake"] || hvhobkak.cfg.vars["Custom real"] )
+            y = baseyaw + ( exechack_cc_hvh_obkak.SendPacket && exechack_cc_hvh_obkak.cfg.vars["Custom fake"] || exechack_cc_hvh_obkak.cfg.vars["Custom real"] )
         end
 
 "Backward", 
@@ -6191,26 +6855,26 @@ do
         "Lisp",
         "Custom",
 
-if hvhobkak.cfg.vars["Jitter"] == 2 and hvhobkak.SendPacket then
-            local r = math_random(-45,45)
-            local lbydiff = ded.GetTargetLBY(me:EntIndex()) - ded.GetCurrentLBY(me:EntIndex())
+if exechack_cc_hvh_obkak.cfg.vars["Jitter"] == 2 and exechack_cc_hvh_obkak.SendPacket then
+            local r = math.random(-45,45)
+            local lbydiff = ded.GetTargetLBY(pLocalPlayer:EntIndex()) - ded.GetCurrentLBY(pLocalPlayer:EntIndex())
 
-            if y + r > ded.GetTargetLBY(me:EntIndex()) then
-                y = y + math_random(-lbydiff,lbydiff)
+            if y + r > ded.GetTargetLBY(pLocalPlayer:EntIndex()) then
+                y = y + math.random(-lbydiff,lbydiff)
             else
                 y = y + r
             end
              
-        elseif hvhobkak.cfg.vars["Jitter"] == 3 and hvhobkak.SendPacket then
-            y = y + math_random(ded.GetCurrentLBY(me:EntIndex()),ded.GetTargetLBY(me:EntIndex()))
+        elseif exechack_cc_hvh_obkak.cfg.vars["Jitter"] == 3 and exechack_cc_hvh_obkak.SendPacket then
+            y = y + math.random(ded.GetCurrentLBY(pLocalPlayer:EntIndex()),ded.GetTargetLBY(pLocalPlayer:EntIndex()))
         end
 
         */
     
     local function micromovement(cmd)
-        if !hvhobkak.cfg.vars["Micromovement"] then return end
-        if !me:Alive() then return end
-        if !me:IsFlagSet( FL_ONGROUND ) then return end
+        if !exechack_cc_hvh_obkak.cfg.vars["Micromovement"] then return end
+        if !pLocalPlayer:Alive() then return end
+        if !pLocalPlayer:IsFlagSet( FL_ONGROUND ) then return end
         if cmd:KeyDown(IN_BACK) or cmd:KeyDown(IN_FORWARD) or cmd:KeyDown(IN_MOVELEFT) or cmd:KeyDown(IN_MOVERIGHT) then return end
 
         cmd:SetSideMove(mm_side and -15.0 or 15.0)
@@ -6218,40 +6882,40 @@ if hvhobkak.cfg.vars["Jitter"] == 2 and hvhobkak.SendPacket then
     end
 
     local function aacheck(cmd)
-        if !hvhobkak.cfg.vars["Anti aim"] then return false end
+        if !exechack_cc_hvh_obkak.cfg.vars["Anti aim"] then return false end
         if cmd:KeyDown(IN_ATTACK) then return false end
         if cmd:KeyDown(IN_USE) then return false end
-        if hvhobkak.moveType == MOVETYPE_LADDER then return false end
-        if hvhobkak.moveType == MOVETYPE_NOCLIP then return false end
+        if exechack_cc_hvh_obkak.moveType == MOVETYPE_LADDER then return false end
+        if exechack_cc_hvh_obkak.moveType == MOVETYPE_NOCLIP then return false end
 
-        if hvhobkak.cfg.binds["Anti aim"] != 0 and not hvhobkak.IsKeyDown(hvhobkak.cfg.binds["Anti aim"]) then
+        if exechack_cc_hvh_obkak.cfg.binds["Anti aim"] != 0 and not exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Anti aim"]) then
             return false
         end
 
         return true 
     end
 
-    function hvhobkak.AntiAim(cmd)
+    function exechack_cc_hvh_obkak.AntiAim(cmd)
         local freestandsucc, freestandsafe, freestandunsafe 
 
-        if hvhobkak.cfg.vars["Freestanding"] then
-            freestandsucc, freestandsafe, freestandunsafe = hvhobkak.Freestand(cmd)
+        if exechack_cc_hvh_obkak.cfg.vars["Freestanding"] then
+            freestandsucc, freestandsafe, freestandunsafe = exechack_cc_hvh_obkak.Freestand(cmd)
         end
 
-        if hvhobkak.SendPacket then
-            hvhobkak.SwaySide = hvhobkak.SwaySide * -1 
+        if exechack_cc_hvh_obkak.SendPacket then
+            exechack_cc_hvh_obkak.SwaySide = exechack_cc_hvh_obkak.SwaySide * -1 
         end
 
-        baseyaw = hvhobkak.GetBaseYaw()
+        baseyaw = exechack_cc_hvh_obkak.GetBaseYaw()
         pitch = CalcPitch()
-        yaw = hvhobkak.CalcYaw[hvhobkak.cfg.vars["Yaw"] ](cmd)
+        yaw = exechack_cc_hvh_obkak.CalcYaw[exechack_cc_hvh_obkak.cfg.vars["Yaw"] ](cmd)
 
-        if hvhobkak.cfg.vars["Yaw randomisation"] then
-            yaw = yaw + math_random( -0.9, 0.9 ) 
+        if exechack_cc_hvh_obkak.cfg.vars["Yaw randomisation"] then
+            yaw = yaw + math.random( -0.9, 0.9 ) 
         end 
 
         if freestandsucc then
-            yaw = hvhobkak.SendPacket and freestandunsafe or freestandsafe
+            yaw = exechack_cc_hvh_obkak.SendPacket and freestandunsafe or freestandsafe
         end
 
         if aacheck(cmd) then
@@ -6260,7 +6924,7 @@ if hvhobkak.cfg.vars["Jitter"] == 2 and hvhobkak.SendPacket then
             micromovement(cmd)
 
             cmd:SetViewAngles(pyAngle)
-            hvhobkak.oldYaw = pyAngle.y
+            exechack_cc_hvh_obkak.oldYaw = pyAngle.y
         end
     end
 end
@@ -6268,56 +6932,82 @@ end
 /*
     Fake lag  
 */
-hvhobkak.fakeLagTicks = 0
-hvhobkak.fakeLagfactor = 0
-hvhobkak.chokedTicks = 0
+exechack_cc_hvh_obkak.fakeLagTicks = 0
+exechack_cc_hvh_obkak.fakeLagfactor = 0
+exechack_cc_hvh_obkak.chokedTicks = 0
 
-hvhobkak.peeked = false 
-hvhobkak.peeking = false 
+exechack_cc_hvh_obkak.peeked = false 
+exechack_cc_hvh_obkak.peeking = false 
 
-function hvhobkak.FakeLagOnPeek()
-    hvhobkak.fakeLagTicks = 21 - hvhobkak.chokedTicks - 1 
+function exechack_cc_hvh_obkak.FakeLagOnPeek()
+    exechack_cc_hvh_obkak.fakeLagTicks = 21 - exechack_cc_hvh_obkak.chokedTicks - 1 
 
-    if hvhobkak.chokedTicks >= 20 then
-        hvhobkak.peeked = true
-		hvhobkak.peeking = false
-		hvhobkak.SendPacket = true
-        me.simtime_updated = true
-        ded.UpdateClientAnimation( me:EntIndex() )
+    if exechack_cc_hvh_obkak.chokedTicks >= 20 then
+        exechack_cc_hvh_obkak.peeked = true
+		exechack_cc_hvh_obkak.peeking = false
+		exechack_cc_hvh_obkak.SendPacket = true
+        pLocalPlayer.simtime_updated = true
+        --ded.UpdateClientAnimation( pLocalPlayer:EntIndex() )
 		return
     end
 end
 
-function hvhobkak.WarpOnPeek()
-	ded.StartShifting( true )
 
-	hvhobkak.peeked = true
-	hvhobkak.peeking = false
+if exechack_cc_hvh_obkak.cfg.vars["Lag fix"] then
+    if exechack_cc_hvh_obkak.cfg.vars["Backshoot"] then
+        local targetTime = ded.GetSimulationTime( ply:EntIndex() )
+        local timeOffset = ded.GetServerTime(cmd) - targetTime
+
+        -- Check if we can backtrack without cl_interp
+        local serverArriveTick = ded.GetServerTime(cmd) + ded.GetLatency(0) + ded.GetLatency(1)
+        local diff = serverArriveTick - ply.aimshots.sw_backshoot_data.simTime
+        if diff < 0.2 then 
+            local tick = math.floor(0.5 + (targetTime + exechack_cc_hvh_obkak.GetLerpTime()) / flTickInterval)
+            ded.SetCommandTick(cmd, tick)
+        else
+            ded.SetTargetInterp(ded.GetServerTime(cmd) - targetTime)
+
+            local tick = math.floor(0.5 + ded.GetServerTime(cmd) / flTickInterval)
+            ded.SetCommandTick(cmd, tick - 1)
+        end
+    else
+        local simTime = ded.GetSimulationTime(ply:EntIndex())
+        local tick = math.floor(0.5 + (simTime + exechack_cc_hvh_obkak.GetLerpTime()) / flTickInterval)
+        ded.SetCommandTick(cmd, tick)
+    end
 end
 
-function hvhobkak.CheckPeeking()
+
+function exechack_cc_hvh_obkak.WarpOnPeek()
+	ded.StartShifting( true )
+
+	exechack_cc_hvh_obkak.peeked = true
+	exechack_cc_hvh_obkak.peeking = false
+end
+
+function exechack_cc_hvh_obkak.CheckPeeking()
 	local plys
 
 	for extr = 1, 8 do
-        plys = hvhobkak.GetSortedPlayers( 1, extr, 1, true ) 
+        plys = exechack_cc_hvh_obkak.GetSortedPlayers( 1, extr, 1, true ) 
 		if plys then break end
 	end
 
-	if plys and !hvhobkak.peeking and !hvhobkak.peeked then
-		hvhobkak.peeking = true
-		hvhobkak.peeked = false
+	if plys and !exechack_cc_hvh_obkak.peeking and !exechack_cc_hvh_obkak.peeked then
+		exechack_cc_hvh_obkak.peeking = true
+		exechack_cc_hvh_obkak.peeked = false
 	elseif !plys then
-		hvhobkak.peeking = false
-		hvhobkak.peeked = false
+		exechack_cc_hvh_obkak.peeking = false
+		exechack_cc_hvh_obkak.peeked = false
 	end
 
-	if hvhobkak.peeking and !hvhobkak.peeked then
-		if !ded.GetIsShifting() and ded.GetCurrentCharge() >= hvhobkak.cfg.vars["Shift ticks"] and hvhobkak.cfg.vars["Warp on peek"] then
-			hvhobkak.WarpOnPeek()
-        elseif hvhobkak.cfg.vars["Freeze on peek"] then
-            ded.SetOutSequenceNr( ded.GetOutSequenceNr() + hvhobkak.maxFreezeTicks - 1 ) 
-		//elseif hvhobkak.cfg.vars["Fake lag options-On peek"] then
-		//	hvhobkak.FakeLagOnPeek()
+	if exechack_cc_hvh_obkak.peeking and !exechack_cc_hvh_obkak.peeked then
+		if !ded.GetIsShifting() and ded.GetCurrentCharge() >= exechack_cc_hvh_obkak.cfg.vars["Shift ticks"] and exechack_cc_hvh_obkak.cfg.vars["Warp on peek"] then
+			exechack_cc_hvh_obkak.WarpOnPeek()
+        elseif exechack_cc_hvh_obkak.cfg.vars["Freeze on peek"] then
+            ded.SetOutSequenceNr( ded.GetOutSequenceNr() + exechack_cc_hvh_obkak.maxFreezeTicks - 1 ) 
+		//elseif exechack_cc_hvh_obkak.cfg.vars["Fake lag options-On peek"] then
+		//	exechack_cc_hvh_obkak.FakeLagOnPeek()
 		end
 	end
 end
@@ -6328,78 +7018,78 @@ end
 do
     
     local function shouldlag(cmd)
-        if not hvhobkak.cfg.vars["Fake lag"] then return false end
-        if not me:Alive() then return false end
-        if hvhobkak.cfg.vars["Fakelag comp"] == 1 and ded.GetCurrentCharge() > 0 then return false end
-        if hvhobkak.cfg.vars["Fake lag options-Disable on ladder"] and hvhobkak.moveType == MOVETYPE_LADDER then return false end
-        if hvhobkak.cfg.vars["Fake lag options-Disable in attack"] and cmd:KeyDown(IN_ATTACK) then return false end
+        if not exechack_cc_hvh_obkak.cfg.vars["Fake lag"] then return false end
+        if not pLocalPlayer:Alive() then return false end
+        if exechack_cc_hvh_obkak.cfg.vars["Fakelag comp"] == 1 and ded.GetCurrentCharge() > 0 then return false end
+        if exechack_cc_hvh_obkak.cfg.vars["Fake lag options-Disable on ladder"] and exechack_cc_hvh_obkak.moveType == MOVETYPE_LADDER then return false end
+        if exechack_cc_hvh_obkak.cfg.vars["Fake lag options-Disable in attack"] and cmd:KeyDown(IN_ATTACK) then return false end
 
-        if hvhobkak.cfg.vars["Allah fly"] and not me:IsFlagSet( FL_ONGROUND ) then
+        if exechack_cc_hvh_obkak.cfg.vars["Allah fly"] and not pLocalPlayer:IsFlagSet( FL_ONGROUND ) then
             return false
         end
 
         return true
     end
 
-    function hvhobkak.FakeLag(cmd)
-        local factor = math_Round(hvhobkak.cfg.vars["Lag limit"])
+    function exechack_cc_hvh_obkak.FakeLag(cmd)
+        local factor = math.Round(exechack_cc_hvh_obkak.cfg.vars["Lag limit"])
 
-        if hvhobkak.cfg.vars["Fake lag options-Randomise"] then 
-            factor =  math_random(hvhobkak.cfg.vars["Lag randomisation"],factor) 
+        if exechack_cc_hvh_obkak.cfg.vars["Fake lag options-Randomise"] then 
+            factor =  math.random(exechack_cc_hvh_obkak.cfg.vars["Lag randomisation"],factor) 
         end
 
-        local velocity = me:GetVelocity():Length2D()
-        local pertick = velocity * TickInterval
-        local adaptive_factor = math_Clamp(math_ceil(64 / pertick),1,factor)
+        local velocity = pLocalPlayer:GetVelocity():Length2D()
+        local pertick = velocity * flTickInterval
+        local adaptive_factor = math.Clamp(math.ceil(64 / pertick),1,factor)
 
-        if hvhobkak.cfg.vars["Lag mode"] == 1 or hvhobkak.cfg.vars["Lag mode"] == 3 then
-            hvhobkak.fakeLagfactor = factor
-        elseif hvhobkak.cfg.vars["Lag mode"] == 2 then
-            hvhobkak.fakeLagfactor = adaptive_factor
+        if exechack_cc_hvh_obkak.cfg.vars["Lag mode"] == 1 or exechack_cc_hvh_obkak.cfg.vars["Lag mode"] == 3 then
+            exechack_cc_hvh_obkak.fakeLagfactor = factor
+        elseif exechack_cc_hvh_obkak.cfg.vars["Lag mode"] == 2 then
+            exechack_cc_hvh_obkak.fakeLagfactor = adaptive_factor
         end
 
-        if hvhobkak.cfg.vars["Allah walk"] and me:IsFlagSet( FL_ONGROUND ) and hvhobkak.IsKeyDown(hvhobkak.cfg.binds["allahwalk"]) then
-            hvhobkak.fakeLagfactor = 21
+        if exechack_cc_hvh_obkak.cfg.vars["Allah walk"] and pLocalPlayer:IsFlagSet( FL_ONGROUND ) and exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["allahwalk"]) then
+            exechack_cc_hvh_obkak.fakeLagfactor = 21
         end
 
-        //if hvhobkak.cfg.vars["Fakelag comp"] == 2 and ded.GetCurrentCharge() > 0 then 
-        //    local nfactor = hvhobkak.fakeLagfactor - ded.GetMaxShiftTicks() - 1
-        //    hvhobkak.fakeLagfactor = math_Clamp( nfactor, 0, 21 )
+        //if exechack_cc_hvh_obkak.cfg.vars["Fakelag comp"] == 2 and ded.GetCurrentCharge() > 0 then 
+        //    local nfactor = exechack_cc_hvh_obkak.fakeLagfactor - ded.GetMaxShiftTicks() - 1
+        //    exechack_cc_hvh_obkak.fakeLagfactor = math.Clamp( nfactor, 0, 21 )
         //end
 
         if shouldlag(cmd) then
-            hvhobkak.SendPacket = false
+            exechack_cc_hvh_obkak.SendPacket = false
 
-            if hvhobkak.fakeLagTicks <= 0 then
-                hvhobkak.fakeLagTicks = hvhobkak.fakeLagfactor
-                hvhobkak.SendPacket = true
-                me.simtime_updated = true
-                ded.UpdateClientAnimation( me:EntIndex() )
+            if exechack_cc_hvh_obkak.fakeLagTicks <= 0 then
+                exechack_cc_hvh_obkak.fakeLagTicks = exechack_cc_hvh_obkak.fakeLagfactor
+                exechack_cc_hvh_obkak.SendPacket = true
+                pLocalPlayer.simtime_updated = true
+               --ded.UpdateClientAnimation( pLocalPlayer:EntIndex() )
             else
-                hvhobkak.fakeLagTicks = hvhobkak.fakeLagTicks - 1
+                exechack_cc_hvh_obkak.fakeLagTicks = exechack_cc_hvh_obkak.fakeLagTicks - 1
             end
 
         else
-            if hvhobkak.fakeLagfactor > 0 then hvhobkak.fakeLagfactor = 0 end
-            hvhobkak.SendPacket = true
-            me.simtime_updated = true
-            ded.UpdateClientAnimation( me:EntIndex() )
+            if exechack_cc_hvh_obkak.fakeLagfactor > 0 then exechack_cc_hvh_obkak.fakeLagfactor = 0 end
+            exechack_cc_hvh_obkak.SendPacket = true
+            pLocalPlayer.simtime_updated = true
+            --ded.UpdateClientAnimation( pLocalPlayer:EntIndex() )
         end
     end
 end
 
-function hvhobkak.ClampMovementSpeed(cmd, speed)
+function exechack_cc_hvh_obkak.ClampMovementSpeed(cmd, speed)
 	local final_speed = speed;
 
-	local squirt = math_sqrt((cmd:GetForwardMove() * cmd:GetForwardMove()) + (cmd:GetSideMove() * cmd:GetSideMove()));
+	local squirt = math.sqrt((cmd:GetForwardMove() * cmd:GetForwardMove()) + (cmd:GetSideMove() * cmd:GetSideMove()));
 
 	if (squirt > speed) then
-		local squirt2 = math_sqrt((cmd:GetForwardMove() * cmd:GetForwardMove()) + (cmd:GetSideMove() * cmd:GetSideMove()));
+		local squirt2 = math.sqrt((cmd:GetForwardMove() * cmd:GetForwardMove()) + (cmd:GetSideMove() * cmd:GetSideMove()));
 
 		local cock1 = cmd:GetForwardMove() / squirt2;
 		local cock2 = cmd:GetSideMove() / squirt2;
 
-		local Velocity = me:GetVelocity():Length2D();
+		local Velocity = pLocalPlayer:GetVelocity():Length2D();
 
 		if (final_speed + 1.0 <= Velocity) then
 			cmd:SetForwardMove(0)
@@ -6411,43 +7101,43 @@ function hvhobkak.ClampMovementSpeed(cmd, speed)
     end
 end
 
-function hvhobkak.FastWalk( cmd )
-    if not hvhobkak.cfg.vars["Ground strafer"] then return end 
-    if math_abs(cmd:GetSideMove()) > 1 or math_abs(cmd:GetForwardMove()) < 1 then return end 
-    if not me:IsFlagSet( FL_ONGROUND ) then return end
+function exechack_cc_hvh_obkak.FastWalk( cmd )
+    if not exechack_cc_hvh_obkak.cfg.vars["Ground strafer"] then return end 
+    if math.abs(cmd:GetSideMove()) > 1 or math.abs(cmd:GetForwardMove()) < 1 then return end 
+    if not pLocalPlayer:IsFlagSet( FL_ONGROUND ) then return end
 
-    if hvhobkak.moveType == MOVETYPE_NOCLIP or hvhobkak.moveType == MOVETYPE_LADDER then return end
+    if exechack_cc_hvh_obkak.moveType == MOVETYPE_NOCLIP or exechack_cc_hvh_obkak.moveType == MOVETYPE_LADDER then return end
 
-    local waterLevel = me:WaterLevel()
+    local waterLevel = pLocalPlayer:WaterLevel()
 
     if waterLevel >= 2 then return end
     
 	cmd:SetSideMove(cmd:CommandNumber() % 2 == 0 and -5250 or 5250)
 end
 
-function hvhobkak.validMoveType()
-    return hvhobkak.moveType != MOVETYPE_LADDER and hvhobkak.moveType != MOVETYPE_NOCLIP and hvhobkak.moveType != MOVETYPE_OBSERVER 
+function exechack_cc_hvh_obkak.validMoveType()
+    return exechack_cc_hvh_obkak.moveType != MOVETYPE_LADDER and exechack_cc_hvh_obkak.moveType != MOVETYPE_NOCLIP and exechack_cc_hvh_obkak.moveType != MOVETYPE_OBSERVER 
 end
 
-function hvhobkak.isMoving(cmd)
+function exechack_cc_hvh_obkak.isMoving(cmd)
     if not cmd then
         return false
     end
 
-    return hvhobkak.hoppin or cmd:KeyDown(IN_MOVELEFT) or cmd:KeyDown(IN_MOVERIGHT) or cmd:KeyDown(IN_FORWARD) or cmd:KeyDown(IN_BACK) and not cmd:KeyDown(IN_JUMP)
+    return exechack_cc_hvh_obkak.hoppin or cmd:KeyDown(IN_MOVELEFT) or cmd:KeyDown(IN_MOVERIGHT) or cmd:KeyDown(IN_FORWARD) or cmd:KeyDown(IN_BACK) and not cmd:KeyDown(IN_JUMP)
 end
 
-function hvhobkak.Stop(cmd)
-    if hvhobkak.validMoveType() and me:IsFlagSet( FL_ONGROUND ) then
+function exechack_cc_hvh_obkak.Stop(cmd)
+    if exechack_cc_hvh_obkak.validMoveType() and pLocalPlayer:IsFlagSet( FL_ONGROUND ) then
 
-        local moving = hvhobkak.isMoving(cmd)
+        local moving = exechack_cc_hvh_obkak.isMoving(cmd)
 
         if not moving then
 
-            local vel = me:GetVelocity()
+            local vel = pLocalPlayer:GetVelocity()
             local dir = vel:Angle()
                 
-            dir.yaw = hvhobkak.SilentAngle.y - dir.yaw
+            dir.yaw = exechack_cc_hvh_obkak.SilentAngle.y - dir.yaw
                 
             local newmove = dir:Forward() * vel:Length2D()
         
@@ -6461,8 +7151,8 @@ end
 
 // Slidewalk 
 
-function hvhobkak.SlideWalk( cmd )
-    local ticksToStop = hvhobkak.fakeLagfactor
+function exechack_cc_hvh_obkak.SlideWalk( cmd )
+    local ticksToStop = exechack_cc_hvh_obkak.fakeLagfactor
 
 
 
@@ -6479,26 +7169,26 @@ end
 
 // Auto peak 
 
-hvhobkak.startedPeeking = false 
-hvhobkak.needToMoveBack = false
-hvhobkak.startPeekPosition = Vector(0,0,0)
+exechack_cc_hvh_obkak.startedPeeking = false 
+exechack_cc_hvh_obkak.needToMoveBack = false
+exechack_cc_hvh_obkak.startPeekPosition = Vector(0,0,0)
 
-function hvhobkak.MoveTo( cmd, pos )
-    local ang = ( pos - me:GetPos() ):Angle().y
+function exechack_cc_hvh_obkak.MoveTo( cmd, pos )
+    local ang = ( pos - pLocalPlayer:GetPos() ):Angle().y
 
     cmd:SetForwardMove(1000)
     cmd:SetSideMove(0)
 
     cmd:AddKey(IN_SPEED)
 
-    hvhobkak.MovementFix( cmd, ang )
+    exechack_cc_hvh_obkak.MovementFix( cmd, ang )
 end
 
-function hvhobkak.checkAutopeak( cmd )
-    if hvhobkak.startedPeeking and cmd:KeyDown(IN_ATTACK) then 
-        hvhobkak.needToMoveBack = true
-    elseif !hvhobkak.startedPeeking and !cmd:KeyDown(IN_ATTACK) then
-        hvhobkak.needToMoveBack = false
+function exechack_cc_hvh_obkak.checkAutopeak( cmd )
+    if exechack_cc_hvh_obkak.startedPeeking and cmd:KeyDown(IN_ATTACK) then 
+        exechack_cc_hvh_obkak.needToMoveBack = true
+    elseif !exechack_cc_hvh_obkak.startedPeeking and !cmd:KeyDown(IN_ATTACK) then
+        exechack_cc_hvh_obkak.needToMoveBack = false
     end  
 end
 
@@ -6510,30 +7200,30 @@ do
 
     local nullangle = Angle(0,0,0)
 
-    function hvhobkak.drawAutopeak()
-        local col = hvhobkak.needToMoveBack and colorA or colorB
+    function exechack_cc_hvh_obkak.drawAutopeak()
+        local col = exechack_cc_hvh_obkak.needToMoveBack and colorA or colorB
     
-        cam_Start3D2D( hvhobkak.startPeekPosition, nullangle, 0.5 )
-            cam_IgnoreZ( true )
+        cam.Start3D2D( exechack_cc_hvh_obkak.startPeekPosition, nullangle, 0.5 )
+            cam.IgnoreZ( true )
 
-            surface_SetDrawColor( col )
-            surface_SetMaterial( apmat )
-            surface_DrawTexturedRect( -32, -32, 64, 64 )
+            surface.SetDrawColor( col )
+            surface.SetMaterial( apmat )
+            surface.DrawTexturedRect( -32, -32, 64, 64 )
 
-            cam_IgnoreZ( false )
-        cam_End3D2D()
+            cam.IgnoreZ( false )
+        cam.End3D2D()
     end
 end
 
-function hvhobkak.autopeakThink()
-    if hvhobkak.IsKeyDown(hvhobkak.cfg.binds["Auto peak"]) then
-        if not hvhobkak.startedPeeking then
-            hvhobkak.startPeekPosition = me:GetPos()     
+function exechack_cc_hvh_obkak.autopeakThink()
+    if exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Auto peak"]) then
+        if not exechack_cc_hvh_obkak.startedPeeking then
+            exechack_cc_hvh_obkak.startPeekPosition = pLocalPlayer:GetPos()     
         end
 
-        hvhobkak.startedPeeking = true
+        exechack_cc_hvh_obkak.startedPeeking = true
     else
-        hvhobkak.startedPeeking = false
+        exechack_cc_hvh_obkak.startedPeeking = false
     end
 end
 
@@ -6543,84 +7233,51 @@ end
 
 
 
-/*// Movement 
-hvhobkak.holdingOnGround = false 
-hvhobkak.badMoveTypes = { 
-    ["MOVETYPE_NOCLIP"] = true, ["MOVETYPE_LADDER"] = true, ["MOVETYPE_OBSERVER"] = true 
-}
-
-function hvhobkak.BunnyHop(cmd)
-    local moveType = me:GetMoveType()
-    local waterLevel = me:WaterLevel()
-
-    if hvhobkak.badMoveTypes[moveType] then return end 
-
-    if me:IsFlagSet( FL_ONGROUND ) then
-
-        --[[if hvhobkak.holdingOnGround then 
-            hvhobkak.holdingOnGround = false
-
-            cmd:RemoveKey(IN_JUMP)
-        end
-
-        if cmd:KeyDown(IN_JUMP) then
-            hvhobkak.holdingOnGround = true 
-        end
-
-        return ]]
-    else 
-        cmd:RemoveKey(IN_JUMP)
-        return
-    end
-
-    //if waterLevel >= 2 then return end 
-end
-*/
 
 // Sequence Manipulation 
 
-hvhobkak.freezedTicks = 0
-hvhobkak.maxFreezeTicks = math_Round( 1 / TickInterval ) 
-function hvhobkak.AnimationFreezer()
-    if not hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Animation freezer"] ) then return end
+exechack_cc_hvh_obkak.freezedTicks = 0
+exechack_cc_hvh_obkak.maxFreezeTicks = math.Round( 1 / flTickInterval ) 
+function exechack_cc_hvh_obkak.AnimationFreezer()
+    if not exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Animation freezer"] ) then return end
 
-    if hvhobkak.freezedTicks < hvhobkak.maxFreezeTicks then
-        ded.SetOutSequenceNr( ded.GetOutSequenceNr() + hvhobkak.maxFreezeTicks - 1 ) 
+    if exechack_cc_hvh_obkak.freezedTicks < exechack_cc_hvh_obkak.maxFreezeTicks then
+        ded.SetOutSequenceNr( ded.GetOutSequenceNr() + exechack_cc_hvh_obkak.maxFreezeTicks - 1 ) 
 
-        hvhobkak.freezedTicks = hvhobkak.freezedTicks + 1
+        exechack_cc_hvh_obkak.freezedTicks = exechack_cc_hvh_obkak.freezedTicks + 1
     else
-        hvhobkak.freezedTicks = 0
+        exechack_cc_hvh_obkak.freezedTicks = 0
     end
 end
 
-hvhobkak.seqshit = false
-function hvhobkak.SequenceShit(cmd)
-    if not hvhobkak.cfg.vars["Sequence manip"] or not hvhobkak.IsKeyDown(hvhobkak.cfg.binds["Sequence manip"]) then
+exechack_cc_hvh_obkak.seqshit = false
+function exechack_cc_hvh_obkak.SequenceShit(cmd)
+    if not exechack_cc_hvh_obkak.cfg.vars["Sequence manip"] or not exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Sequence manip"]) then
         
-        if hvhobkak.seqshit then
-            hvhobkak.seqshit = false 
+        if exechack_cc_hvh_obkak.seqshit then
+            exechack_cc_hvh_obkak.seqshit = false 
         end
 
         return 
     end
 
-    local amt = hvhobkak.cfg.vars["Sequence min random"] and math_random(hvhobkak.cfg.vars["Sequence min"],hvhobkak.cfg.vars["OutSequence"]) or hvhobkak.cfg.vars["OutSequence"] 
+    local amt = exechack_cc_hvh_obkak.cfg.vars["Sequence min random"] and math.random(exechack_cc_hvh_obkak.cfg.vars["Sequence min"],exechack_cc_hvh_obkak.cfg.vars["OutSequence"]) or exechack_cc_hvh_obkak.cfg.vars["OutSequence"] 
 
-    hvhobkak.seqshit = true
-    hvhobkak.SendPacket = true
+    exechack_cc_hvh_obkak.seqshit = true
+    exechack_cc_hvh_obkak.SendPacket = true
     ded.SetOutSequenceNr(ded.GetOutSequenceNr() + amt)
 end
 
 // Handjob ( arm breaker )
  
-function hvhobkak.PerformHandjob( cmd )
-    local mode = hvhobkak.cfg.vars["Handjob mode"]
+function exechack_cc_hvh_obkak.PerformHandjob( cmd )
+    local mode = exechack_cc_hvh_obkak.cfg.vars["Handjob mode"]
     local shouldjerk = true
 
     if mode == 2 then
         shouldjerk = (cmd:CommandNumber() % 12) >= 6
     elseif mode == 3 then
-        shouldjerk = math_random(0, 1) == 0 
+        shouldjerk = math.random(0, 1) == 0 
     end
 
     ded.SetTyping(cmd, shouldjerk)
@@ -6628,22 +7285,22 @@ end
 
 // create move hook 
 
-hvhobkak.norf = {
+exechack_cc_hvh_obkak.norf = {
     ["laserjetpack"] = true,
     ["weapon_physgun"] = true,
 }
 
-hvhobkak.vapecd = false
-hvhobkak.tyaga = 0
-hvhobkak.maxvape = hvhobkak.TIME_TO_TICKS(5)
-hvhobkak.hoppin = false
+exechack_cc_hvh_obkak.vapecd = false
+exechack_cc_hvh_obkak.tyaga = 0
+exechack_cc_hvh_obkak.maxvape = 5 * math.floor(1 / (engine.TickInterval() or 0.015))
+exechack_cc_hvh_obkak.hoppin = false
 local ic = false
 
-hvhobkak.slams = {}
+exechack_cc_hvh_obkak.slams = {}
 
-function hvhobkak.OnEntityCreated(ent)
-    if ent:GetClass() == "npc_satchel" and ent:GetOwner() == me then 
-        hvhobkak.slams[ #hvhobkak.slams + 1 ] = ent
+function exechack_cc_hvh_obkak.OnEntityCreated(ent)
+    if ent:GetClass() == "npc_satchel" and ent:GetOwner() == pLocalPlayer then 
+        exechack_cc_hvh_obkak.slams[ #exechack_cc_hvh_obkak.slams + 1 ] = ent
     end
 end
 
@@ -6651,203 +7308,229 @@ end
 
 
 
+local bWasOnGround = false 
 
-function hvhobkak.CreateMove(cmd)
-    hvhobkak.SilentAngles(cmd)
 
-    hvhobkak.aimingrn = false
+function exechack_cc_hvh_obkak.CreateMove(cmd)
+    exechack_cc_hvh_obkak.DoSilentAngleUpdate( cmd )
+
+    exechack_cc_hvh_obkak.aimingrn = false
 
     //if ( ded.GetChokedPackets() > 14 ) then ded.SetChokedPackets( 14 ) end
 
-    if cmd:CommandNumber() == 0 then return end
+    if cmd:CommandNumber() == 0 then 
+        return 
+    end
 
-    //if ded.GetIsShifting() then hvhobkak.shiftedTicks = hvhobkak.shiftedTicks + 1 end
+    exechack_cc_hvh_obkak.flServerTime = ded.GetServerTime( cmd )
 
-    local w = me:GetActiveWeapon()
-    hvhobkak.activeWeapon       = IsValid( w ) and w or false
-    hvhobkak.activeWeaponClass  = IsValid( w ) and w:GetClass() or false 
-    hvhobkak.moveType           = me:GetMoveType() 
+    //if ded.GetIsShifting() then exechack_cc_hvh_obkak.shiftedTicks = exechack_cc_hvh_obkak.shiftedTicks + 1 end
 
-    //if hvhobkak.cfg.vars["Passive recharge"] and ded.GetCurrentCharge() < ded.GetMaxShiftTicks() and not me:Alive() then
+    local w = pLocalPlayer:GetActiveWeapon()
+    exechack_cc_hvh_obkak.activeWeapon       = IsValid( w ) and w or false
+    exechack_cc_hvh_obkak.activeWeaponClass  = IsValid( w ) and w:GetClass() or false 
+    exechack_cc_hvh_obkak.moveType           = pLocalPlayer:GetMoveType() 
+
+    //if exechack_cc_hvh_obkak.cfg.vars["Passive recharge"] and ded.GetCurrentCharge() < ded.GetMaxShiftTicks() and not pLocalPlayer:Alive() then
     //    ded.SetReloadKeyPressed( true )
     //end
 
 
-    if hvhobkak.cfg.vars["Silent aim"] then cmd:SetViewAngles(hvhobkak.SilentAngle) end
+    if exechack_cc_hvh_obkak.cfg.vars["Silent aim"] then cmd:SetViewAngles(exechack_cc_hvh_obkak.SilentAngle) end
 
     //if ded.GetIsShifting() then
         //  ded.AdjustTickbase()
     //    print("shifting")
     //end
 
-    if hvhobkak.cfg.vars["Flashlight spam"] and input_IsKeyDown( KEY_F ) then
+    if exechack_cc_hvh_obkak.cfg.vars["Flashlight spam"] and input.IsKeyDown( KEY_F ) then
         cmd:SetImpulse(100)
     end
 
-    if hvhobkak.cfg.vars["Auto Vape"] then
+    if exechack_cc_hvh_obkak.cfg.vars["Auto Vape"] then
         if cmd:KeyDown( IN_ATTACK ) then
-            if hvhobkak.tyaga >= hvhobkak.maxvape then
+            if exechack_cc_hvh_obkak.tyaga >= exechack_cc_hvh_obkak.maxvape then
                 cmd:RemoveKey( IN_ATTACK )
-                hvhobkak.tyaga = 0
-            elseif hvhobkak.tyaga < hvhobkak.maxvape then
-                hvhobkak.tyaga = hvhobkak.tyaga + 1 
+                exechack_cc_hvh_obkak.tyaga = 0
+            elseif exechack_cc_hvh_obkak.tyaga < exechack_cc_hvh_obkak.maxvape then
+                exechack_cc_hvh_obkak.tyaga = exechack_cc_hvh_obkak.tyaga + 1 
             end
         else
-            hvhobkak.tyaga = 0
+            exechack_cc_hvh_obkak.tyaga = 0
         end
     end 
 
 
-    if hvhobkak.vapecd then 
-        hvhobkak.vapecd = false 
+    if exechack_cc_hvh_obkak.vapecd then 
+        exechack_cc_hvh_obkak.vapecd = false 
         cmd:RemoveKey( IN_ATTACK2 ) 
-    elseif hvhobkak.cfg.vars["Vape spam"] and hvhobkak.activeWeapon and not hvhobkak.vapecd and StartsWith( hvhobkak.activeWeaponClass, "weapon_vape" ) then
+    elseif exechack_cc_hvh_obkak.cfg.vars["Vape spam"] and exechack_cc_hvh_obkak.activeWeapon and not exechack_cc_hvh_obkak.vapecd and string.StartsWith( exechack_cc_hvh_obkak.activeWeaponClass, "weapon_vape" ) then
         cmd:AddKey( IN_ATTACK2 )
-        hvhobkak.vapecd = true
+        exechack_cc_hvh_obkak.vapecd = true
     end   
 
-    if hvhobkak.cfg.vars["Handjob"] then
-        hvhobkak.PerformHandjob( cmd )
+    if exechack_cc_hvh_obkak.cfg.vars["Handjob"] then
+        exechack_cc_hvh_obkak.PerformHandjob( cmd )
     end 
 
-    //if hvhobkak.cfg.vars["Fake latency"] then
-    //    local amt = hvhobkak.cfg.vars["Max latency"]
+    //if exechack_cc_hvh_obkak.cfg.vars["Fake latency"] then
+    //    local amt = exechack_cc_hvh_obkak.cfg.vars["Max latency"]
     //    ded.SetInSequenceNr(ded.GetInSequenceNr() - amt)
     //end
 
-    if hvhobkak.SkipCommand then 
+    if exechack_cc_hvh_obkak.SkipCommand then 
         cmd:RemoveKey( IN_ATTACK ) 
     
-        hvhobkak.SkipCommand = !hvhobkak.SkipCommand 
+        exechack_cc_hvh_obkak.SkipCommand = !exechack_cc_hvh_obkak.SkipCommand 
     end
 
-    if ( me:IsFlagSet( FL_ONGROUND ) ) then
-		hvhobkak.last_ground_pos = me:GetNetworkOrigin().z
+    if ( pLocalPlayer:IsFlagSet( FL_ONGROUND ) ) then
+		exechack_cc_hvh_obkak.last_ground_pos = pLocalPlayer:GetNetworkOrigin().z
 	end
 
-    if hvhobkak.cfg.vars["Animation freezer"] then hvhobkak.AnimationFreezer() end
+    if exechack_cc_hvh_obkak.cfg.vars["Animation freezer"] then exechack_cc_hvh_obkak.AnimationFreezer() end
     
-	hvhobkak.SequenceShit(cmd)
+	exechack_cc_hvh_obkak.SequenceShit(cmd)
 
-    if not hvhobkak.seqshit then
-        hvhobkak.FakeLag(cmd)
+    if not exechack_cc_hvh_obkak.seqshit then
+        exechack_cc_hvh_obkak.FakeLag(cmd)
 
-        if hvhobkak.cfg.vars["Allah walk"] and me:IsFlagSet( FL_ONGROUND ) and hvhobkak.IsKeyDown(hvhobkak.cfg.binds["allahwalk"]) then
+        if exechack_cc_hvh_obkak.cfg.vars["Allah walk"] and pLocalPlayer:IsFlagSet( FL_ONGROUND ) and exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["allahwalk"]) then
             
-            if hvhobkak.fakeLagTicks != 20 then
-                hvhobkak.ClampMovementSpeed(cmd, 0)
+            if exechack_cc_hvh_obkak.fakeLagTicks != 20 then
+                exechack_cc_hvh_obkak.ClampMovementSpeed(cmd, 0)
             else
-                hvhobkak.ClampMovementSpeed(cmd, me:GetWalkSpeed())
+                exechack_cc_hvh_obkak.ClampMovementSpeed(cmd, pLocalPlayer:GetWalkSpeed())
             end
 
-            //if(hvhobkak.fakeLagTicks <= 20) then
-            //    hvhobkak.ClampMovementSpeed(cmd, 0)
-            //    hvhobkak.Stop(cmd)
-                //me:SetPoseParameter("move_x", 0)
-	            //me:SetPoseParameter("move_y", 0)
+            //if(exechack_cc_hvh_obkak.fakeLagTicks <= 20) then
+            //    exechack_cc_hvh_obkak.ClampMovementSpeed(cmd, 0)
+            //    exechack_cc_hvh_obkak.Stop(cmd)
+                //pLocalPlayer:SetPoseParameter("move_x", 0)
+	            //pLocalPlayer:SetPoseParameter("move_y", 0)
             //else
-             //   hvhobkak.ClampMovementSpeed(cmd, me:GetWalkSpeed())
+             //   exechack_cc_hvh_obkak.ClampMovementSpeed(cmd, pLocalPlayer:GetWalkSpeed())
             //end
 
-            --print(hvhobkak.fakeLagTicks,me:GetVelocity():Length2D())
+            --print(exechack_cc_hvh_obkak.fakeLagTicks,pLocalPlayer:GetVelocity():Length2D())
         end
     end
 
-    if hvhobkak.cfg.vars["Fake lag options-On peek"] or hvhobkak.cfg.vars["Warp on peek"] or hvhobkak.cfg.vars["Freeze on peek"] then
-        hvhobkak.CheckPeeking()
+    if exechack_cc_hvh_obkak.cfg.vars["Fake lag options-On peek"] or exechack_cc_hvh_obkak.cfg.vars["Warp on peek"] or exechack_cc_hvh_obkak.cfg.vars["Freeze on peek"] then
+        exechack_cc_hvh_obkak.CheckPeeking()
     end
     
     // Movement
     
-    hvhobkak.FastWalk( cmd )
+    exechack_cc_hvh_obkak.FastWalk( cmd )
 
-    if hvhobkak.cfg.vars["Sprint"] then cmd:AddKey(IN_SPEED) end
+    if exechack_cc_hvh_obkak.cfg.vars["Sprint"] then cmd:AddKey(IN_SPEED) end
 
-    hvhobkak.hoppin = false
+    exechack_cc_hvh_obkak.hoppin = false
 
-    if me:GetMoveType() != MOVETYPE_NOCLIP and me:GetMoveType() != MOVETYPE_LADDER and me:GetMoveType() != MOVETYPE_OBSERVER then
+    if pLocalPlayer:GetMoveType() != MOVETYPE_NOCLIP and pLocalPlayer:GetMoveType() != MOVETYPE_LADDER and pLocalPlayer:GetMoveType() != MOVETYPE_OBSERVER then
         if ( cmd:KeyDown( IN_JUMP ) ) then
-    
-            if ( !me:IsFlagSet( FL_ONGROUND ) ) and hvhobkak.cfg.vars["Bhop"] then
+            local bIsOnGround = pLocalPlayer:IsFlagSet( FL_ONGROUND )
+
+            if ( not bIsOnGround or bWasOnGround ) then
                 cmd:RemoveKey( IN_JUMP )
-                hvhobkak.hoppin = true
+
+                bWasOnGround = false 
+
+                if ( not bWasOnGround ) then
+                    exechack_cc_hvh_obkak.AutoStrafe( cmd )
+                end
+            else
+                bWasOnGround = true
             end
-    
-            hvhobkak.AutoStrafe( cmd )
+
+            exechack_cc_hvh_obkak.hoppin = true
         end
     end
     
-	if hvhobkak.cfg.vars["Fast stop"] then
-        hvhobkak.Stop(cmd)
+	if exechack_cc_hvh_obkak.cfg.vars["Fast stop"] then
+        exechack_cc_hvh_obkak.Stop(cmd)
     end
 
-    if hvhobkak.cfg.vars["Water jump"] and me:WaterLevel() > 1 then
+    if exechack_cc_hvh_obkak.cfg.vars["Water jump"] and pLocalPlayer:WaterLevel() > 1 then
         cmd:AddKey( IN_JUMP )
 
-    elseif hvhobkak.cfg.vars["Jesus lag"] and hvhobkak.SendPacket and me:WaterLevel() == 1 then
+    elseif exechack_cc_hvh_obkak.cfg.vars["Jesus lag"] and exechack_cc_hvh_obkak.SendPacket and pLocalPlayer:WaterLevel() == 1 then
         cmd:AddKey( IN_DUCK )
     end
 
-    if hvhobkak.cfg.vars["Fake duck"] and hvhobkak.IsKeyDown(hvhobkak.cfg.binds["Fake duck"]) then
-        if hvhobkak.fakeLagTicks > (hvhobkak.fakeLagfactor / 2) then
+    if exechack_cc_hvh_obkak.cfg.vars["Fake duck"] and exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Fake duck"]) then
+        if exechack_cc_hvh_obkak.fakeLagTicks > (exechack_cc_hvh_obkak.fakeLagfactor / 2) then
             cmd:AddKey(IN_DUCK)
         else
             cmd:RemoveKey(IN_DUCK)
         end
     end
 
-    hvhobkak.targetVector = false
+    exechack_cc_hvh_obkak.targetVector = false
 
 	ded.StartPrediction(cmd)
+        local wish_yaw = exechack_cc_hvh_obkak.SilentAngle.y 
 
-        local wish_yaw = hvhobkak.SilentAngle.y 
-
-        if ( hvhobkak.IsKeyDown(hvhobkak.cfg.binds["Circle strafe"]) and hvhobkak.cfg.vars["Circle strafe"] ) then
+        if ( exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Circle strafe"]) and exechack_cc_hvh_obkak.cfg.vars["Circle strafe"] ) then
             wish_yaw = cmd:GetViewAngles().y
         end
 
-        if hvhobkak.cfg.vars["Crossbow prediction"] and hvhobkak.activeWeaponClass == "weapon_crossbow" then
-            hvhobkak.CrossbowPred( cmd )
-        elseif hvhobkak.cfg.vars["Prop aimbot"] then
-            hvhobkak.PropAim(cmd)
+        if exechack_cc_hvh_obkak.cfg.vars["Crossbow prediction"] and exechack_cc_hvh_obkak.activeWeaponClass == "weapon_crossbow" then
+            exechack_cc_hvh_obkak.CrossbowPred( cmd )
+        elseif exechack_cc_hvh_obkak.cfg.vars["Prop aimbot"] then
+            exechack_cc_hvh_obkak.PropAim(cmd)
         else
-            hvhobkak.Aim(cmd)
-        end 
+            if not exechack_cc_hvh_obkak.Aim(cmd) and cmd:KeyDown(IN_ATTACK) then
+                local va = Angle( exechack_cc_hvh_obkak.SilentAngle.p, exechack_cc_hvh_obkak.SilentAngle.y, 0 )
+
+                if exechack_cc_hvh_obkak.cfg.vars["Norecoil"] then
+                    va = exechack_cc_hvh_obkak.NoRecoil(va)
+                end
+
+                if exechack_cc_hvh_obkak.cfg.vars["Nospread"] then
+                    va = exechack_cc_hvh_obkak.NoSpread(cmd,va)
+                end
+
+                cmd:SetViewAngles( va )
+                
+            end
+        end
         
-        if hvhobkak.cfg.vars["Silent aim"] then
-            hvhobkak.MovementFix( cmd, wish_yaw )
+        if exechack_cc_hvh_obkak.cfg.vars["Silent aim"] then
+            exechack_cc_hvh_obkak.MovementFix( cmd, wish_yaw )
         end
 
     ded.FinishPrediction() 
 
-    if hvhobkak.cfg.vars["Trigger bot"] and hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Trigger bot"] ) then
-        local tr = me:GetEyeTrace().Entity 
+    if exechack_cc_hvh_obkak.cfg.vars["Trigger bot"] and exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Trigger bot"] ) then
+        local tr = pLocalPlayer:GetEyeTrace().Entity 
         
         if tr and tr:IsPlayer() then
             cmd:AddKey( IN_ATTACK )
         end
     end
 
-    if hvhobkak.cfg.vars["Double tap"] and hvhobkak.cfg.vars["Tickbase shift"] and cmd:KeyDown( IN_ATTACK ) then
-        //hvhobkak.shiftedTicks = 0
+    if exechack_cc_hvh_obkak.cfg.vars["Double tap"] and exechack_cc_hvh_obkak.cfg.vars["Tickbase shift"] and cmd:KeyDown( IN_ATTACK ) then
+        //exechack_cc_hvh_obkak.shiftedTicks = 0
         ded.StartShifting( true )
     end
 
-    if hvhobkak.cfg.vars["Auto detonator"] and #hvhobkak.slams > 0 then
-        local d = hvhobkak.cfg.vars["AutoD distance"]
+    if exechack_cc_hvh_obkak.cfg.vars["Auto detonator"] and #exechack_cc_hvh_obkak.slams > 0 then
+        local d = exechack_cc_hvh_obkak.cfg.vars["AutoD distance"]
         d = d * d 
 
-        local plys = player_GetAll()
+        local plys = player.GetAll()
 
         for jjj = 1, #plys do
-            if plys[ jjj ] == me then continue end
+            if plys[ jjj ] == pLocalPlayer then continue end
             
-            for k, v in pairs(hvhobkak.slams) do
-                if not IsValid(v) then hvhobkak.slams[k] = nil continue end
+            for k, v in pairs(exechack_cc_hvh_obkak.slams) do
+                if not IsValid(v) then exechack_cc_hvh_obkak.slams[k] = nil continue end
     
                 local pos = v:GetPos()
     
-                if pos:DistToSqr( plys[ jjj ]:GetPos() + plys[ jjj ]:GetVelocity() * ( TickInterval * 4 ) ) < d then
+                if pos:DistToSqr( plys[ jjj ]:GetPos() + plys[ jjj ]:GetVelocity() * ( flTickInterval * 4 ) ) < d then
                     cmd:AddKey( IN_ATTACK2 )
                     break
                 end
@@ -6855,35 +7538,35 @@ function hvhobkak.CreateMove(cmd)
         end
     end
 
-    if hvhobkak.cfg.vars["Auto peak"] then
-        local ppos = hvhobkak.startPeekPosition
-        local pposd = me:GetPos():DistToSqr(ppos)
+    if exechack_cc_hvh_obkak.cfg.vars["Auto peak"] then
+        local ppos = exechack_cc_hvh_obkak.startPeekPosition
+        local pposd = pLocalPlayer:GetPos():DistToSqr(ppos)
 
-        if hvhobkak.needToMoveBack and pposd < 1024 then //or hvhobkak.IsMovementKeysDown( cmd )
-            hvhobkak.needToMoveBack = false
+        if exechack_cc_hvh_obkak.needToMoveBack and pposd < 1024 then //or exechack_cc_hvh_obkak.IsMovementKeysDown( cmd )
+            exechack_cc_hvh_obkak.needToMoveBack = false
         end
 
-        if hvhobkak.startedPeeking then
-            //if not hvhobkak.IsMovementKeysDown( cmd ) then
-            //    hvhobkak.needToMoveBack = true
+        if exechack_cc_hvh_obkak.startedPeeking then
+            //if not exechack_cc_hvh_obkak.IsMovementKeysDown( cmd ) then
+            //    exechack_cc_hvh_obkak.needToMoveBack = true
             //end
 
-            if hvhobkak.needToMoveBack then
-                hvhobkak.MoveTo( cmd, ppos )
+            if exechack_cc_hvh_obkak.needToMoveBack then
+                exechack_cc_hvh_obkak.MoveTo( cmd, ppos )
 
-                if hvhobkak.cfg.vars["Auto peak tp"] and hvhobkak.cfg.vars["Tickbase shift"] then
-                    //hvhobkak.shiftedTicks = 0
+                if exechack_cc_hvh_obkak.cfg.vars["Auto peak tp"] and exechack_cc_hvh_obkak.cfg.vars["Tickbase shift"] then
+                    //exechack_cc_hvh_obkak.shiftedTicks = 0
                     ded.StartShifting( true )
                 end
             end
         end
 
-        hvhobkak.checkAutopeak( cmd )
+        exechack_cc_hvh_obkak.checkAutopeak( cmd )
     end
 
-    hvhobkak.autoReload(cmd)
+    exechack_cc_hvh_obkak.autoReload(cmd)
 
-    if hvhobkak.cfg.vars["Use spam"] then
+    if exechack_cc_hvh_obkak.cfg.vars["Use spam"] then
         if cmd:KeyDown(IN_USE) then
             cmd:RemoveKey(IN_USE)
         else
@@ -6891,27 +7574,19 @@ function hvhobkak.CreateMove(cmd)
         end
     end
 
-    if hvhobkak.cfg.vars["Auto GTA"] then
-        local tr = me:GetEyeTrace().Entity
+    if exechack_cc_hvh_obkak.cfg.vars["Auto GTA"] then
+        local tr = pLocalPlayer:GetEyeTrace().Entity
 
         if IsValid( tr ) and tr:IsVehicle() then
             cmd:AddKey(IN_USE)
         end
     end
 
-    if hvhobkak.cfg.vars["Ghost follower"] then
-        local tar = player.GetBySteamID( hvhobkak.cfg.vars["GFID"] )
+    if exechack_cc_hvh_obkak.cfg.vars["Ghost follower"] then
+        local tar = player.GetBySteamID( exechack_cc_hvh_obkak.cfg.vars["GFID"] )
 
         if IsValid( tar ) then 
-            local pDriving = me:GetDrivingEntity()
-
-            if ( IsValid( pDriving ) and not pDriving:IsOnFire() ) then
-                net.Start( "properties" )
-                    net.WriteString( "ignite" )
-                    net.WriteEntity( pDriving )
-                net.SendToServer()
-            end
-            local tang = ( tar:GetPos() - me:EyePos() ):Angle()
+            local tang = ( tar:GetPos() - pLocalPlayer:EyePos() ):Angle()
 
             cmd:ClearMovement()
             cmd:ClearButtons()
@@ -6922,18 +7597,18 @@ function hvhobkak.CreateMove(cmd)
             cmd:AddKey(IN_SPEED)
 
             cmd:SetViewAngles( tang )
-            hvhobkak.MovementFix( cmd, tang.y )
+            exechack_cc_hvh_obkak.MovementFix( cmd, tang.y )
         end
     end
 
-    if hvhobkak.cfg.vars["Air lag duck"] and hvhobkak.SendPacket then
-        local startPosUnducked = me:GetPos()
-        local isDucking = bit.band(me:GetFlags(), FL_DUCKING) != 0
+    if exechack_cc_hvh_obkak.cfg.vars["Air lag duck"] and exechack_cc_hvh_obkak.SendPacket then
+        local startPosUnducked = pLocalPlayer:GetPos()
+        local isDucking = bit.band(pLocalPlayer:GetFlags(), FL_DUCKING) != 0
         if isDucking then
             startPosUnducked.z = startPosUnducked.z - (72 - 36)
         end
 
-        ded.StartSimulation( me:EntIndex() )
+        ded.StartSimulation( pLocalPlayer:EntIndex() )
 
         local shouldduck = true 
 
@@ -6942,7 +7617,7 @@ function hvhobkak.CreateMove(cmd)
 
             local simData = ded.GetSimulationData()
 
-            local maxs = me:OBBMaxs()
+            local maxs = pLocalPlayer:OBBMaxs()
             maxs.z = 72 
 
             if isDucking then
@@ -6952,13 +7627,13 @@ function hvhobkak.CreateMove(cmd)
             local trace = TraceHull({
                 start = startPosUnducked,
                 endpos = simData.m_vecAbsOrigin,
-                mins = me:OBBMins(),
+                mins = pLocalPlayer:OBBMins(),
                 maxs = maxs,
-                filter = me,
+                filter = pLocalPlayer,
                 mask = MASK_PLAYERSOLID
             })
 
-            if me:IsOnGround() and trace.Hit then
+            if pLocalPlayer:IsOnGround() and trace.Hit then
                 shouldduck = false 
                 break
             end
@@ -6966,28 +7641,28 @@ function hvhobkak.CreateMove(cmd)
 
         ded.FinishSimulation()
 
-        if shouldduck and !me:IsFlagSet( FL_ONGROUND ) then 
+        if shouldduck and !pLocalPlayer:IsFlagSet( FL_ONGROUND ) then 
             cmd:AddKey( IN_DUCK )   
         end
     end
 
-    if hvhobkak.fcenabled then
+    if exechack_cc_hvh_obkak.fcenabled then
         cmd:ClearMovement()
         cmd:ClearButtons()
 
-        cmd:SetViewAngles(hvhobkak.fcangles)
+        cmd:SetViewAngles(exechack_cc_hvh_obkak.fcangles)
     end
 
-    /*if hvhobkak.cfg.vars["Dodge projectiles"] and ded.GetCurrentCharge() >= ded.GetMaxShiftTicks() and not ded.GetIsShifting() then
-        local entitys = ents_GetAll()
+    /*if exechack_cc_hvh_obkak.cfg.vars["Dodge projectiles"] and ded.GetCurrentCharge() >= ded.GetMaxShiftTicks() and not ded.GetIsShifting() then
+        local entitys = ents.GetAll()
 
         for i = 1, #entitys do
             local v = entitys[ i ]
 
             if v:GetClass() != "crossbow_bolt" then continue end 
 
-            local mypos = me:GetPos() + me:GetVelocity() * TickInterval 
-            local entpos = v:GetPos() + ( v:GetAngles():Forward() * 3500 ) * TickInterval
+            local mypos = pLocalPlayer:GetPos() + pLocalPlayer:GetVelocity() * flTickInterval 
+            local entpos = v:GetPos() + ( v:GetAngles():Forward() * 3500 ) * flTickInterval
 
             if mypos:DistToSqr( entpos ) > 320 then
                 cmd:ClearMovement()
@@ -7000,17 +7675,17 @@ function hvhobkak.CreateMove(cmd)
         end
     end*/
 
-    if hvhobkak.SendPacket then
-        hvhobkak.chokedTicks = 0 
+    if exechack_cc_hvh_obkak.SendPacket then
+        exechack_cc_hvh_obkak.chokedTicks = 0 
     else
-        hvhobkak.chokedTicks = hvhobkak.chokedTicks + 1
+        exechack_cc_hvh_obkak.chokedTicks = exechack_cc_hvh_obkak.chokedTicks + 1
     end
 
-    if not hvhobkak.cfg.vars["Silent aim"] then hvhobkak.SilentAngle = cmd:GetViewAngles() end
+    if not exechack_cc_hvh_obkak.cfg.vars["Silent aim"] then exechack_cc_hvh_obkak.SilentAngle = cmd:GetViewAngles() end
 
-    ded.SetBSendPacket( hvhobkak.SendPacket )
+    ded.SetBSendPacket( exechack_cc_hvh_obkak.SendPacket )
 
-    if hvhobkak.cfg.vars["Lag mode"] == 3 and hvhobkak.SendPacket then
+    if exechack_cc_hvh_obkak.cfg.vars["Lag mode"] == 3 and exechack_cc_hvh_obkak.SendPacket then
         ded.SetOutSequenceNr(ded.GetOutSequenceNr() + 8)
     end
 end 
@@ -7018,14 +7693,14 @@ end
 /* 
     Render Scene / Anti screengrab 
 */
-hvhobkak.UnSafeFrame = false
-hvhobkak.renderTarget = GetRenderTarget( "YaPidoras" .. os.time(), scrw, scrh )
+exechack_cc_hvh_obkak.UnSafeFrame = false
+exechack_cc_hvh_obkak.renderTarget = GetRenderTarget( "YaPidoras" .. os.time(), screenWidth, screenHeight )
 
 do
-    local oldsky, oldskycolor, oldwallcolor = hvhobkak.cfg.vars["Custom sky"], hvhobkak.cfg.vars["Sky color"], hvhobkak.cfg.vars["Wall color"]
-    local oldskyclr, oldwallclr = hvhobkak.cfg.colors["Sky color"], hvhobkak.cfg.colors["Wall color"]
+    local oldsky, oldskycolor, oldwallcolor = exechack_cc_hvh_obkak.cfg.vars["Custom sky"], exechack_cc_hvh_obkak.cfg.vars["Sky color"], exechack_cc_hvh_obkak.cfg.vars["Wall color"]
+    local oldskyclr, oldwallclr = exechack_cc_hvh_obkak.cfg.colors["Sky color"], exechack_cc_hvh_obkak.cfg.colors["Wall color"]
 
-    local worldcollerp = string_ToColor( hvhobkak.cfg.colors["Wall color"] )
+    local worldcollerp = string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Wall color"] )
     local worldmats = Entity( 0 ):GetMaterials()
 
     local origsky = GetConVar("sv_skyname"):GetString()
@@ -7044,7 +7719,7 @@ do
     end
 
     local function setSkyColor( setcolor )
-        local cfg = string_ToColor( hvhobkak.cfg.colors["Sky color"] )
+        local cfg = string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Sky color"] )
         local vector = setcolor and Vector( cfg.r/255, cfg.g/255, cfg.b/255 ) or Vector( 1, 1, 1 )
 
         for i = 1, 6 do
@@ -7053,8 +7728,8 @@ do
     end
 
     local function setWallColor( setcolor )
-        local cfg = string_ToColor( hvhobkak.cfg.colors["Wall color"] )
-        worldcollerp = hvhobkak.ColorLerp( worldcollerp, cfg )
+        local cfg = string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Wall color"] )
+        worldcollerp = exechack_cc_hvh_obkak.ColorLerp( worldcollerp, cfg )
         local vector = setcolor and Vector( worldcollerp.r/255, worldcollerp.g/255, worldcollerp.b/255 ) or Vector( 1, 1, 1 )
 
         for i = 1, #worldmats do
@@ -7065,10 +7740,10 @@ do
         end
     end
 
-    function hvhobkak.RenderScene()
+    function exechack_cc_hvh_obkak.RenderScene()
 
-        local newname, newcolor, newcolor2 = hvhobkak.cfg.vars["Custom sky"], hvhobkak.cfg.vars["Sky color"], hvhobkak.cfg.vars["Wall color"]
-        local newskyclr, newwallclr = hvhobkak.cfg.colors["Sky color"],hvhobkak.cfg.colors["Wall color"]
+        local newname, newcolor, newcolor2 = exechack_cc_hvh_obkak.cfg.vars["Custom sky"], exechack_cc_hvh_obkak.cfg.vars["Sky color"], exechack_cc_hvh_obkak.cfg.vars["Wall color"]
+        local newskyclr, newwallclr = exechack_cc_hvh_obkak.cfg.colors["Sky color"],exechack_cc_hvh_obkak.cfg.colors["Wall color"]
         
         if newskyclr != oldskyclr or newcolor != oldskycolor then
             setSkyColor( newcolor )
@@ -7090,12 +7765,12 @@ do
 
         // Esp shit
 
-        if ( !gui.IsConsoleVisible() && !gui.IsGameUIVisible() ) || hvhobkak.UnSafeFrame then
+        if ( !gui.IsConsoleVisible() && !gui.IsGameUIVisible() ) || exechack_cc_hvh_obkak.UnSafeFrame then
             local view = {
                 x = 0,
                 y = 0,
-                w = scrw,
-                h = scrh,
+                w = screenWidth,
+                h = screenHeight,
                 dopostprocess = true,
                 origin = vOrigin,
                 angles = vAngle,
@@ -7106,17 +7781,17 @@ do
             }
          
             render.RenderView( view )
-            render.CopyTexture( nil, hvhobkak.renderTarget )
+            render.CopyTexture( nil, exechack_cc_hvh_obkak.renderTarget )
          
-            cam_Start2D()
-                hook_Run( "Ungrabbable2D" )
-            cam_End2D()
+            cam.Start2D()
+                hook.Run( "Ungrabbable2D" )
+            cam.End2D()
 
-            cam_Start3D()
-                hook_Run( "Ungrabbable3D" )
-            cam_End3D()
+            cam.Start3D()
+                hook.Run( "Ungrabbable3D" )
+            cam.End3D()
     
-            render.SetRenderTarget( hvhobkak.renderTarget )
+            render.SetRenderTarget( exechack_cc_hvh_obkak.renderTarget )
          
             return true
         end
@@ -7124,51 +7799,51 @@ do
 
 end
 
-function hvhobkak.PreScreenGrab()
-    if hvhobkak.UnSafeFrame then return end
-	hvhobkak.UnSafeFrame = true
+function exechack_cc_hvh_obkak.PreScreenGrab()
+    if exechack_cc_hvh_obkak.UnSafeFrame then return end
+	exechack_cc_hvh_obkak.UnSafeFrame = true
  
-	render_Clear( 0, 0, 0, 255, true, true )
-	render_RenderView( {
-		origin = me:EyePos(),
-		angles = me:EyeAngles(),
+	render.Clear( 0, 0, 0, 255, true, true )
+	render.RenderView( {
+		origin = pLocalPlayer:EyePos(),
+		angles = pLocalPlayer:EyeAngles(),
 		x = 0,
 		y = 0,
-		w = scrw,
-		h = scrh,
+		w = screenWidth,
+		h = screenHeight,
 		dopostprocess = true,
 		drawhud = true,
 		drawmonitors = true,
 		drawviewmodel = true
 	} )
  
-	hvhobkak.UnSafeFrame = false
+	exechack_cc_hvh_obkak.UnSafeFrame = false
 end
 
-hvhobkak.prikol = Material( "a/prikol" ):GetTexture( "$basetexture" ) //  Material( file_Read( "prikol.png", "DATA" ) )
+exechack_cc_hvh_obkak.prikol = Material( "a/prikol" ):GetTexture( "$basetexture" ) //  Material( file.Read( "prikol.png", "DATA" ) )
 
 function render.Capture( data )
-    hvhobkak.PreScreenGrab()
+    exechack_cc_hvh_obkak.PreScreenGrab()
 
-    if hvhobkak.cfg.vars["Screengrab image"] then 
+    if exechack_cc_hvh_obkak.cfg.vars["Screengrab image"] then 
         cam.Start2D()
-            render.DrawTextureToScreen( hvhobkak.prikol )
+            render.DrawTextureToScreen( exechack_cc_hvh_obkak.prikol )
         cam.End2D()
     end
 
-	return render_Capture( data )
+	return render.Capture( data )
 end
 
 function _G.render.Capture( data )
-    hvhobkak.PreScreenGrab()
+    exechack_cc_hvh_obkak.PreScreenGrab()
 
-    if hvhobkak.cfg.vars["Screengrab image"] then 
+    if exechack_cc_hvh_obkak.cfg.vars["Screengrab image"] then 
         cam.Start2D()
-            render.DrawTextureToScreen( hvhobkak.prikol )
+            render.DrawTextureToScreen( exechack_cc_hvh_obkak.prikol )
         cam.End2D()
     end
 
-	return render_Capture( data )
+	return render.Capture( data )
 end
 
 
@@ -7176,8 +7851,8 @@ end
     ESP, Chams
 */
 
-function hvhobkak.IsValidPlayer(pl)
-    if pl == me then return false end
+function exechack_cc_hvh_obkak.IsValidPlayer(pl)
+    if pl == pLocalPlayer then return false end
     if not IsValid(pl) then return false end
     if not pl:Alive() then return false end
 
@@ -7185,54 +7860,54 @@ function hvhobkak.IsValidPlayer(pl)
     return true
 end
 
-function hvhobkak.GetEntPos(ent)
-    local min, max = ent:OBBMins(), ent:OBBMaxs()
+local vertexMatrix = {
+    Vector( -1, -1, -1 ),
+	Vector( -1, -1, 1 ),
+	Vector( -1, 1, -1 ),
+	Vector( -1, 1, 1 ),
+	Vector( 1, -1, -1 ),
+	Vector( 1, -1, 1 ),
+	Vector( 1, 1, -1 ),
+	Vector( 1, 1, 1 )
+}
 
-    local points = {
-        Vector( max.x, max.y, max.z ),
-        Vector( max.x, max.y, min.z ),
-        Vector( max.x, min.y, min.z ),
-        Vector( max.x, min.y, max.z ),
-        Vector( min.x, min.y, min.z ),
-        Vector( min.x, min.y, max.z ),
-        Vector( min.x, max.y, min.z ),
-        Vector( min.x, max.y, max.z )
-    }
+function exechack_cc_hvh_obkak.GetEntPos( entity )
+    local pos, mins, maxs = entity:GetPos(), entity:GetCollisionBounds()
 
-    local MaxX, MinX, MaxY, MinY
-    local isVisible = false
+	local size = ( maxs - mins ) * 0.5
+	local boxCenter = pos + ( mins + maxs ) * 0.5
 
-    for i = 1, #points do
-        local v = points[i]
-        local p = ent:LocalToWorld( v ):ToScreen()
-        isVisible = p.visible 
-        
-		if MaxX != nil then
-            MaxX, MaxY, MinX, MinY = math_max( MaxX, p.x ), math_max( MaxY, p.y), math_min( MinX, p.x ), math_min( MinY, p.y)
-        else
-            MaxX, MaxY, MinX, MinY = p.x, p.y, p.x, p.y
-        end
+	local iMinX, iMinY = math.huge, math.huge
+	local iMaxX, iMaxY = -math.huge, -math.huge
 
-    end
+	for i = 1, 8 do
+		local screenPos = ( boxCenter + vertexMatrix[ i ] * size ):ToScreen()
 
-    return MaxX, MaxY, MinX, MinY, isVisible
+        iMinX, iMinY, iMaxX, iMaxY = math.min( iMinX, screenPos.x ), math.min( iMinY, screenPos.y ), math.max( iMaxX, screenPos.x ), math.max( iMaxY, screenPos.y )
+	end
+
+	if ( iMinX <= 0 or iMinY <= 0 or iMaxX >= screenWidth or iMaxY >= screenHeight ) then
+		return false
+	end
+
+    return math.ceil( iMaxX ), math.ceil( iMaxY ), math.floor( iMinX ), math.floor( iMinY )
 end
 
-function hvhobkak.getTextX(v,tw,pos)
+function exechack_cc_hvh_obkak.getTextX(v,tw,pos)
     if pos == 1 or pos == 2 then
         return tw/2
     elseif pos == 3 then
         return 0
     elseif pos == 4 then 
         local f = tw
-        if hvhobkak.cfg.vars["Health bar"] and v.Health > 0 then
+        if exechack_cc_hvh_obkak.cfg.vars["Health bar"] and v.Health > 0 then
             if f == 0 then
                 f = f + 8
             else 
                 f = f + 5
             end
         end
-        if hvhobkak.cfg.vars["Armor bar"] and v.Armor > 0 then
+        if exechack_cc_hvh_obkak.cfg.vars["Armor bar"] and v.Armor > 0 then
             if f == 0 then
                 f = f + 8
             else 
@@ -7243,7 +7918,7 @@ function hvhobkak.getTextX(v,tw,pos)
     end
 end
 
-function hvhobkak.getTextY(max,min,th,pos,tbpos)
+function exechack_cc_hvh_obkak.getTextY(max,min,th,pos,tbpos)
     if pos == 1 then
         return min-th-th*tbpos
     elseif pos == 2 then
@@ -7255,11 +7930,11 @@ function hvhobkak.getTextY(max,min,th,pos,tbpos)
     end
 end
 
-function hvhobkak.SortByDistance( f, s )
+function exechack_cc_hvh_obkak.SortByDistance( f, s )
     return f[1]:GetPos():DistToSqr( EyePos() ) > s[1]:GetPos():DistToSqr( EyePos() )
 end
 
-function hvhobkak.GenerateArrowPoss(x, y, scale, ang)
+function exechack_cc_hvh_obkak.GenerateArrowPoss(x, y, scale, ang)
     local ang1 = Angle(0, ang, 0):Forward() * scale
     local ang2 = Angle(0, ang + 120, 0):Forward() * (scale - 1)
     local ang3 = Angle(0, ang - 120, 0):Forward() * (scale - 1)
@@ -7273,49 +7948,49 @@ function hvhobkak.GenerateArrowPoss(x, y, scale, ang)
     return poly
 end
 
-function hvhobkak.DrawOutlinedPoly( poly )
+function exechack_cc_hvh_obkak.DrawOutlinedPoly( poly )
     local last = nil
     for i = 1, #poly do
         local v = poly[ i ]
         if last then
-            surface_DrawLine(last.x, last.y, v.x, v.y)
+            surface.DrawLine(last.x, last.y, v.x, v.y)
             last = v
         else
             last = v
         end
     end
-    surface_DrawLine(last.x, last.y, poly[1].x, poly[1].y)
+    surface.DrawLine(last.x, last.y, poly[1].x, poly[1].y)
 end
 
-hvhobkak.Fonts = {
+exechack_cc_hvh_obkak.Fonts = {
     [1] = "veranda",
     [2] = "veranda_s",
 }
 
 
-hvhobkak.BarPadding = 0
+exechack_cc_hvh_obkak.BarPadding = 0
 
-function hvhobkak.DrawBar(MaxX, MaxY, MinX, MinY, Pos, Current, Max, BarColor, BackColor, Gradient, GradientColor)
-    if hvhobkak.BarPadding == 0 then
-        hvhobkak.BarPadding = 6
+function exechack_cc_hvh_obkak.DrawBar(MaxX, MaxY, MinX, MinY, Pos, Current, Max, BarColor, BackColor, Gradient, GradientColor)
+    if exechack_cc_hvh_obkak.BarPadding == 0 then
+        exechack_cc_hvh_obkak.BarPadding = 6
     else
-        hvhobkak.BarPadding = 11
+        exechack_cc_hvh_obkak.BarPadding = 11
     end
 
-    local BarX, BarY = MinX-hvhobkak.BarPadding, MinY-1
-    local BarW, BarH = math_floor( MaxX - MinX ), 4
+    local BarX, BarY = MinX-exechack_cc_hvh_obkak.BarPadding, MinY-1
+    local BarW, BarH = math.floor( MaxX - MinX ), 4
     local FillW, FillH = math.ceil(Current / Max * BarW), BarH
 
     if Pos > 2 then
-        BarW, BarH = 4, math_floor( MaxY - MinY ) + 2
+        BarW, BarH = 4, math.floor( MaxY - MinY ) + 2
         FillW, FillH = BarW, math.ceil(Current / Max * BarH)
     end
 
     FillW = math.min(FillW, BarW)
     FillH = math.min(FillH, BarH)
 
-    surface_SetDrawColor(BackColor)
-    surface_DrawRect(BarX, BarY, BarW, BarH)
+    surface.SetDrawColor(BackColor)
+    surface.DrawRect(BarX, BarY, BarW, BarH)
 
     BarX, BarY = BarX + 1, BarY + 1
 
@@ -7326,247 +8001,329 @@ function hvhobkak.DrawBar(MaxX, MaxY, MinX, MinY, Pos, Current, Max, BarColor, B
     BarW, BarH = BarW - 2, BarH - 2
     FillW, FillH = FillW - 2, FillH - 2
 
-    surface_SetDrawColor(BarColor)
-    surface_DrawRect(BarX, BarY, FillW, FillH)
+    surface.SetDrawColor(BarColor)
+    surface.DrawRect(BarX, BarY, FillW, FillH)
 
     if Gradient then
-        surface_SetDrawColor(GradientColor)
-        surface_SetMaterial(hvhobkak.Materials["Gradient"])
-        surface_DrawTexturedRect(BarX, BarY, FillW, FillH)
+        surface.SetDrawColor(GradientColor)
+        surface.SetMaterial(exechack_cc_hvh_obkak.Materials["Gradient"])
+        surface.DrawTexturedRect(BarX, BarY, FillW, FillH)
     end
 end
 
-function hvhobkak.DrawESP()
-    local d = hvhobkak.cfg.vars["ESP Distance"]
-    local ed = hvhobkak.cfg.vars["Ent ESP Distance"]
-    local pos = me:GetPos()
+local cheaters = {}
+
+cheaters.list = {}
+cheaters.list_temp = {}
+cheaters.fetch_link = "https://raw.githubusercontent.com/HEWWORLDPROJECT/Baze/refs/heads/main/baze.json"
+
+function cheaters.fetch_on_success(body, length, headers, code)
+    local tbl = util.JSONToTable(body)
+    if tbl != nil then
+        cheaters.list_temp = {}
+        cheaters.list_temp = tbl
+    end
+end
+
+function cheaters.fetch_on_failure(msg)
+    print(msg)
+end
+
+function cheaters.update()
+    http.Fetch(cheaters.fetch_link, cheaters.fetch_on_success, cheaters.fetch_on_failure, nil)
+    cheaters.list = cheaters.list_temp
+end
+
+cheaters.update()
+
+timer.Create("CheatersUpdate", 10, 0, function()
+    cheaters.update()
+end)
+
+function exechack_cc_hvh_obkak.DrawESP()
+    local d = exechack_cc_hvh_obkak.cfg.vars["ESP Distance"]
+    local ed = exechack_cc_hvh_obkak.cfg.vars["Ent ESP Distance"]
+    local pos = pLocalPlayer:GetPos()
     d = d * d
     ed = ed * ed
 
-    surface_SetFont( hvhobkak.Fonts[ hvhobkak.cfg.vars["ESP Font"] ] )
+    surface.SetFont( exechack_cc_hvh_obkak.Fonts[ exechack_cc_hvh_obkak.cfg.vars["ESP Font"] ] )
 
-    for i = 1, #hvhobkak.entityCache do
-        local v = hvhobkak.entityCache[ i ]
+    for i = 1, #exechack_cc_hvh_obkak.entityCache do
+        local v = exechack_cc_hvh_obkak.entityCache[ i ]
 
         if not IsValid( v.entity ) then return end 
 
         if v.position:DistToSqr( pos ) > ed then continue end
 
-        local MaxX, MaxY, MinX, MinY, isVisible = hvhobkak.GetEntPos( v.entity )
-        local XLen, YLen = MaxX - MinX, MaxY - MinY
+        local MaxX, MaxY, MinX, MinY = exechack_cc_hvh_obkak.GetEntPos( v.entity )
 
-        if not isVisible then continue end
-
-        surface_SetAlphaMultiplier( v.entity:IsDormant() and 0.35 or 1 )
-
-        surface_SetTextColor( hvhobkak.Colors[255] )
-
-        if hvhobkak.cfg.vars["Ent class"] then
-            local tw, th = surface_GetTextSize( v.class )
-
-            surface_SetTextPos( ( MaxX + (MinX - MaxX) / 2 ) - tw / 2 , MinY - th )
-            surface_DrawText( v.class )
+        if ( not MaxX ) then
+            continue 
         end
 
-        if hvhobkak.cfg.vars["Ent box"] then
-            if hvhobkak.cfg.vars["Ent box style"] == 1 then
-                surface_SetDrawColor(hvhobkak.Colors[0])
-                surface_DrawOutlinedRect(MinX-1,MinY-1,XLen+2,YLen+2,3)
+        local XLen, YLen = MaxX - MinX, MaxY - MinY
+
+        surface.SetAlphaMultiplier( v.entity:IsDormant() and 0.35 or 1 )
+
+        surface.SetTextColor( exechack_cc_hvh_obkak.Colors[255] )
+
+        if exechack_cc_hvh_obkak.cfg.vars["Ent class"] then
+            local tw, th = surface.GetTextSize( v.class )
+
+            surface.SetTextPos( ( MaxX + (MinX - MaxX) / 2 ) - tw / 2 , MinY - th )
+            surface.DrawText( v.class )
+        end
+
+        if exechack_cc_hvh_obkak.cfg.vars["Ent box"] then
+            if exechack_cc_hvh_obkak.cfg.vars["Ent box style"] == 1 then
+                surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[0])
+                surface.DrawOutlinedRect(MinX-1,MinY-1,XLen+2,YLen+2,3)
         
-                surface_SetDrawColor( hvhobkak.Colors[255] )
-                surface_DrawOutlinedRect(MinX,MinY,XLen,YLen,1)
-            elseif hvhobkak.cfg.vars["Ent box style"] == 2 then
-                local wlen, hlen = math_floor( XLen / 3 ), math_floor( YLen / 3 )
+                surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[255] )
+                surface.DrawOutlinedRect(MinX,MinY,XLen,YLen,1)
+            elseif exechack_cc_hvh_obkak.cfg.vars["Ent box style"] == 2 then
+                local wlen, hlen = math.floor( XLen / 3 ), math.floor( YLen / 3 )
     
-                surface_SetDrawColor(hvhobkak.Colors[0])
+                surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[0])
     
                 // Left up
-                surface_DrawRect( MinX - 1, MinY - 1, wlen, 3 )
-                surface_DrawRect( MinX - 1, MinY - 1, 3, hlen )
+                surface.DrawRect( MinX - 1, MinY - 1, wlen, 3 )
+                surface.DrawRect( MinX - 1, MinY - 1, 3, hlen )
     
                 // Right up
-                surface_DrawRect( MaxX - wlen + 2, MinY - 1, wlen, 3 )
-                surface_DrawRect( MaxX - 1, MinY - 1, 3, hlen )
+                surface.DrawRect( MaxX - wlen + 2, MinY - 1, wlen, 3 )
+                surface.DrawRect( MaxX - 1, MinY - 1, 3, hlen )
     
                 // Left down
-                surface_DrawRect( MinX - 1, MaxY - 2, wlen, 3 )
-                surface_DrawRect( MinX - 1, MaxY - hlen, 3, hlen )
+                surface.DrawRect( MinX - 1, MaxY - 2, wlen, 3 )
+                surface.DrawRect( MinX - 1, MaxY - hlen, 3, hlen )
     
                 // Right down
-                surface_DrawRect( MaxX - wlen + 2, MaxY - 2, wlen, 3 )
-                surface_DrawRect( MaxX - 1, MaxY - hlen, 3, hlen )
+                surface.DrawRect( MaxX - wlen + 2, MaxY - 2, wlen, 3 )
+                surface.DrawRect( MaxX - 1, MaxY - hlen, 3, hlen )
     
-                surface_SetDrawColor( hvhobkak.Colors[255] )
+                surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[255] )
     
                 wlen = wlen - 2
                 hlen = hlen - 2 
     
                 // Left up
-                surface_DrawRect( MinX, MinY, wlen, 1 )
-                surface_DrawRect( MinX, MinY, 1, hlen )
+                surface.DrawRect( MinX, MinY, wlen, 1 )
+                surface.DrawRect( MinX, MinY, 1, hlen )
     
                 // Right up
-                surface_DrawRect( MaxX - wlen + 1, MinY, wlen, 1 )
-                surface_DrawRect( MaxX, MinY, 1, hlen )
+                surface.DrawRect( MaxX - wlen + 1, MinY, wlen, 1 )
+                surface.DrawRect( MaxX, MinY, 1, hlen )
     
                 // Left down
-                surface_DrawRect( MinX, MaxY - 1, wlen, 1 )
-                surface_DrawRect( MinX, MaxY - hlen - 1, 1, hlen )
+                surface.DrawRect( MinX, MaxY - 1, wlen, 1 )
+                surface.DrawRect( MinX, MaxY - hlen - 1, 1, hlen )
     
                 // Right down
-                surface_DrawRect( MaxX - wlen + 1, MaxY - 1, wlen, 1 )
-                surface_DrawRect( MaxX, MaxY - hlen - 1, 1, hlen )
-            elseif hvhobkak.cfg.vars["Ent box style"] == 3 then
-                cam_Start3D()
-                render_DrawWireframeBox( v.position, v.entity:GetAngles(), v.entity:OBBMins(), v.entity:OBBMaxs(), hvhobkak.Colors[255], true )
-                cam_End3D()
+                surface.DrawRect( MaxX - wlen + 1, MaxY - 1, wlen, 1 )
+                surface.DrawRect( MaxX, MaxY - hlen - 1, 1, hlen )
+            elseif exechack_cc_hvh_obkak.cfg.vars["Ent box style"] == 3 then
+                cam.Start3D()
+                render.DrawWireframeBox( v.position, v.entity:GetAngles(), v.entity:OBBMins(), v.entity:OBBMaxs(), exechack_cc_hvh_obkak.Colors[255], true )
+                cam.End3D()
             end
         end
     end
 
-    local plys = player_GetAll()
+    local plys = player.GetAll()
 
-    local color_box     = string_ToColor( hvhobkak.cfg.colors["Box esp"] )
-    local color_box_g   = string_ToColor( hvhobkak.cfg.colors["Box gradient"] )
+    local color_box     = string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Box esp"] )
+    local color_box_g   = string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Box gradient"] )
+    
+    if exechack_cc_hvh_obkak.cfg.vars["Russian Ultimate"] then
+        color_box = Color(213, 43, 30)
+        color_box_g = Color(255, 255, 255)
+    elseif exechack_cc_hvh_obkak.cfg.vars["Ukrainian Ultimate"] then
+        color_box = Color(0, 87, 183)
+        color_box_g = Color(255, 215, 0)
+    elseif exechack_cc_hvh_obkak.cfg.vars["Tesak Ultimate"] then
+        color_box = Color(255, 0, 0)
+        color_box_g = Color(139, 0, 0)
+    end
 
-    local myEyePos = me:EyePos()
+    local myEyePos = pLocalPlayer:EyePos()
 
     for i = 1, #plys do
-        local v = hvhobkak.playerCache[ plys[i] ]
+        local v = exechack_cc_hvh_obkak.playerCache[ plys[i] ]
 
-        if not v or not hvhobkak.IsValidPlayer(v.entity) then continue end
+        if not v or not exechack_cc_hvh_obkak.IsValidPlayer(v.entity) then continue end
         
         local vp = v.GetPos
         local distance = vp:DistToSqr(pos)
 		if distance > d then continue end
 
-        surface_SetAlphaMultiplier( v.entity:IsDormant() and 0.35 or 1 )
+        surface.SetAlphaMultiplier( v.entity:IsDormant() and 0.35 or 1 )
 
-        local MaxX, MaxY, MinX, MinY, isVisible = hvhobkak.GetEntPos( v.entity )
+        local MaxX, MaxY, MinX, MinY = exechack_cc_hvh_obkak.GetEntPos( v.entity )
+
+        if ( not MaxX ) then
+            continue 
+        end
+
         local XLen, YLen = MaxX - MinX, MaxY - MinY
 
         local teamcolor = v.TeamColor
 
-        if hvhobkak.cfg.vars["OOF Arrows"] then 
-            local xScale, yScale = scrw / 250, scrh / 250
+        if exechack_cc_hvh_obkak.cfg.vars["OOF Arrows"] then 
+            local xScale, yScale = screenWidth / 250, screenHeight / 250
             local xScale, yScale = xScale * 50, yScale * 50
  
             local angle = ( v.entity:EyePos() - myEyePos ):Angle() 
-            local addPos = Angle(0, (hvhobkak.SilentAngle.y - angle.y) - 90, 0):Forward()
-            local pos = Vector(scrw / 2, scrh / 2, 0) + Vector(addPos.x * xScale, addPos.y * yScale, 0)
+            local addPos = Angle(0, (exechack_cc_hvh_obkak.SilentAngle.y - angle.y) - 90, 0):Forward()
+            local pos = Vector(screenWidth / 2, screenHeight / 2, 0) + Vector(addPos.x * xScale, addPos.y * yScale, 0)
 
-            if math.abs( math.NormalizeAngle(angle.y - hvhobkak.SilentAngle.y) ) >= 60 then
-                local poly = hvhobkak.GenerateArrowPoss(pos.x, pos.y, 16, (hvhobkak.SilentAngle.y - angle.y) - 90)
-                local poly1 = hvhobkak.GenerateArrowPoss(pos.x, pos.y, 17, (hvhobkak.SilentAngle.y - angle.y) - 90)
-                local poly2 = hvhobkak.GenerateArrowPoss(pos.x, pos.y, 15, (hvhobkak.SilentAngle.y - angle.y) - 90)
+            if math.abs( math.NormalizeAngle(angle.y - exechack_cc_hvh_obkak.SilentAngle.y) ) >= 60 then
+                local poly = exechack_cc_hvh_obkak.GenerateArrowPoss(pos.x, pos.y, 16, (exechack_cc_hvh_obkak.SilentAngle.y - angle.y) - 90)
+                local poly1 = exechack_cc_hvh_obkak.GenerateArrowPoss(pos.x, pos.y, 17, (exechack_cc_hvh_obkak.SilentAngle.y - angle.y) - 90)
+                local poly2 = exechack_cc_hvh_obkak.GenerateArrowPoss(pos.x, pos.y, 15, (exechack_cc_hvh_obkak.SilentAngle.y - angle.y) - 90)
                 
-                if hvhobkak.cfg.vars["OOF Style"] == 1 then
-                    surface_SetDrawColor( hvhobkak.Colors[0] )
-                    hvhobkak.DrawOutlinedPoly( poly1 )
-                    hvhobkak.DrawOutlinedPoly( poly2 )
+                if exechack_cc_hvh_obkak.cfg.vars["OOF Style"] == 1 then
+                    surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[0] )
+                    exechack_cc_hvh_obkak.DrawOutlinedPoly( poly1 )
+                    exechack_cc_hvh_obkak.DrawOutlinedPoly( poly2 )
 
-                    surface_SetDrawColor( teamcolor ) 
-                    hvhobkak.DrawOutlinedPoly( poly )
+                    surface.SetDrawColor( teamcolor ) 
+                    exechack_cc_hvh_obkak.DrawOutlinedPoly( poly )
                 else
-                    local ang2 = Angle(0, (hvhobkak.SilentAngle.y - angle.y) - 90 + 120, 0):Forward() * (scale - 1)
-                    surface_SetDrawColor( teamcolor ) 
+                    local ang2 = Angle(0, (exechack_cc_hvh_obkak.SilentAngle.y - angle.y) - 90 + 120, 0):Forward() * (scale - 1)
+                    surface.SetDrawColor( teamcolor ) 
                     
-                    surface_DrawLine( pos.x, pos.y, pos.x, pos.y + ang2.y )
-                    //surface_DrawLine(last.x, last.y, v.x, v.y)
-                    //surface_DrawLine(last.x, last.y, v.x, v.y)
-                    //surface_DrawLine(last.x, last.y, v.x, v.y)
+                    surface.DrawLine( pos.x, pos.y, pos.x, pos.y + ang2.y )
+                    //surface.DrawLine(last.x, last.y, v.x, v.y)
+                    //surface.DrawLine(last.x, last.y, v.x, v.y)
+                    //surface.DrawLine(last.x, last.y, v.x, v.y)
                 end
                 
             end
         end
 
-        if not isVisible then continue end
-
-        if hvhobkak.cfg.vars["Box esp"] then
-            if hvhobkak.cfg.vars["Box style"] == 1 then
-                surface_SetDrawColor(hvhobkak.Colors[0])
-                surface_DrawOutlinedRect(MinX-1,MinY-1,XLen+2,YLen+2,3)
+        if exechack_cc_hvh_obkak.cfg.vars["Box esp"] then
+            if exechack_cc_hvh_obkak.cfg.vars["Box style"] == 1 then
+                surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[0])
+                surface.DrawOutlinedRect(MinX-1,MinY-1,XLen+2,YLen+2,3)
         
-                surface_SetDrawColor( hvhobkak.cfg.vars["Box team color"] and teamcolor or color_box )
-                surface_DrawOutlinedRect(MinX,MinY,XLen,YLen,1)
-            elseif hvhobkak.cfg.vars["Box style"] == 2 then
-                local wlen, hlen = math_floor( XLen / 3 ), math_floor( YLen / 3 )
+                if exechack_cc_hvh_obkak.cfg.vars["Russian Ultimate"] then
+                    local stripHeight = YLen / 3
+                    surface.SetDrawColor(255, 255, 255)
+                    surface.DrawLine(MinX, MinY, MaxX, MinY)
+                    surface.DrawLine(MinX, MinY, MinX, MinY + stripHeight)
+                    surface.DrawLine(MaxX, MinY, MaxX, MinY + stripHeight)
+                    surface.DrawLine(MinX, MinY + stripHeight, MaxX, MinY + stripHeight)
+                    
+                    surface.SetDrawColor(0, 57, 166)
+                    surface.DrawLine(MinX, MinY + stripHeight, MinX, MinY + stripHeight * 2)
+                    surface.DrawLine(MaxX, MinY + stripHeight, MaxX, MinY + stripHeight * 2)
+                    surface.DrawLine(MinX, MinY + stripHeight * 2, MaxX, MinY + stripHeight * 2)
+                    
+                    surface.SetDrawColor(213, 43, 30)
+                    surface.DrawLine(MinX, MinY + stripHeight * 2, MinX, MaxY)
+                    surface.DrawLine(MaxX, MinY + stripHeight * 2, MaxX, MaxY)
+                    surface.DrawLine(MinX, MaxY, MaxX, MaxY)
+                elseif exechack_cc_hvh_obkak.cfg.vars["Ukrainian Ultimate"] then
+                    local stripHeight = YLen / 2
+                    surface.SetDrawColor(0, 87, 183)
+                    surface.DrawLine(MinX, MinY, MaxX, MinY)
+                    surface.DrawLine(MinX, MinY, MinX, MinY + stripHeight)
+                    surface.DrawLine(MaxX, MinY, MaxX, MinY + stripHeight)
+                    surface.DrawLine(MinX, MinY + stripHeight, MaxX, MinY + stripHeight)
+                    
+                    surface.SetDrawColor(255, 215, 0)
+                    surface.DrawLine(MinX, MinY + stripHeight, MinX, MaxY)
+                    surface.DrawLine(MaxX, MinY + stripHeight, MaxX, MaxY)
+                    surface.DrawLine(MinX, MaxY, MaxX, MaxY)
+                elseif exechack_cc_hvh_obkak.cfg.vars["Tesak Ultimate"] then
+                    surface.SetDrawColor( color_box )
+                    surface.DrawOutlinedRect(MinX,MinY,XLen,YLen,1)
+                    
+                    surface.SetFont("DermaDefault")
+                    for j = 1, 3 do
+                        local particleX = MinX + math.random(-30, XLen + 30)
+                        local particleY = MinY + math.random(-20, YLen + 20)
+                        local alpha = math.random(100, 255)
+                        surface.SetTextColor(255, 0, 0, alpha)
+                        surface.SetTextPos(particleX, particleY)
+                        surface.DrawText("1488")
+                    end
+                else
+                    surface.SetDrawColor( exechack_cc_hvh_obkak.cfg.vars["Box team color"] and teamcolor or color_box )
+                    surface.DrawOutlinedRect(MinX,MinY,XLen,YLen,1)
+                end
+            elseif exechack_cc_hvh_obkak.cfg.vars["Box style"] == 2 then
+                local wlen, hlen = math.floor( XLen / 3 ), math.floor( YLen / 3 )
 
-                surface_SetDrawColor(hvhobkak.Colors[0])
-
-                // Left up
-                surface_DrawRect( MinX - 1, MinY - 1, wlen, 3 )
-                surface_DrawRect( MinX - 1, MinY - 1, 3, hlen )
-
-                // Right up
-                surface_DrawRect( MaxX - wlen + 2, MinY - 1, wlen, 3 )
-                surface_DrawRect( MaxX - 1, MinY - 1, 3, hlen )
+                surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[0])
 
                 // Left down
-                surface_DrawRect( MinX - 1, MaxY - 2, wlen, 3 )
-                surface_DrawRect( MinX - 1, MaxY - hlen, 3, hlen )
+                surface.DrawRect( MinX - 1, MaxY - 2, wlen, 3 )
+                surface.DrawRect( MinX - 1, MaxY - hlen, 3, hlen )
 
                 // Right down
-                surface_DrawRect( MaxX - wlen + 2, MaxY - 2, wlen, 3 )
-                surface_DrawRect( MaxX - 1, MaxY - hlen, 3, hlen )
+                surface.DrawRect( MaxX - wlen + 2, MaxY - 2, wlen, 3 )
+                surface.DrawRect( MaxX - 1, MaxY - hlen, 3, hlen )
 
-                surface_SetDrawColor( hvhobkak.cfg.vars["Box team color"] and teamcolor or color_box )
+                surface.SetDrawColor( exechack_cc_hvh_obkak.cfg.vars["Box team color"] and teamcolor or color_box )
 
                 wlen = wlen - 2
                 hlen = hlen - 2 
 
                 // Left up
-                surface_DrawRect( MinX, MinY, wlen, 1 )
-                surface_DrawRect( MinX, MinY, 1, hlen )
+                surface.DrawRect( MinX, MinY, wlen, 1 )
+                surface.DrawRect( MinX, MinY, 1, hlen )
  
                 // Right up
-                surface_DrawRect( MaxX - wlen + 1, MinY, wlen, 1 )
-                surface_DrawRect( MaxX, MinY, 1, hlen )
+                surface.DrawRect( MaxX - wlen + 1, MinY, wlen, 1 )
+                surface.DrawRect( MaxX, MinY, 1, hlen )
  
                 // Left down
-                surface_DrawRect( MinX, MaxY - 1, wlen, 1 )
-                surface_DrawRect( MinX, MaxY - hlen - 1, 1, hlen )
+                surface.DrawRect( MinX, MaxY - 1, wlen, 1 )
+                surface.DrawRect( MinX, MaxY - hlen - 1, 1, hlen )
  
                 // Right down
-                surface_DrawRect( MaxX - wlen + 1, MaxY - 1, wlen, 1 )
-                surface_DrawRect( MaxX, MaxY - hlen - 1, 1, hlen )
-            elseif hvhobkak.cfg.vars["Box style"] == 3 then
-                local wlen, hlen = math_floor( XLen / 3 ), math_floor( YLen / 3 )
-                local xc = math_floor( XLen / 2 )
+                surface.DrawRect( MaxX - wlen + 1, MaxY - 1, wlen, 1 )
+                surface.DrawRect( MaxX, MaxY - hlen - 1, 1, hlen )
+            elseif exechack_cc_hvh_obkak.cfg.vars["Box style"] == 3 then
+                local wlen, hlen = math.floor( XLen / 3 ), math.floor( YLen / 3 )
+                local xc = math.floor( XLen / 2 )
 
-                surface_SetDrawColor(hvhobkak.Colors[0])
-
-                // Left
-                surface_DrawRect( MinX - 1, MinY - 1 + hlen, 3, hlen )
-
-                surface_DrawLine( MinX - 1, MinY - 1 + hlen, MinX + xc, MinY - 1 )
-                surface_DrawLine( MinX + 1, MinY - 1 + hlen, MinX + xc, MinY + 1 )
-
-                surface_DrawLine( MinX - 1, MinY - 2 + hlen * 2, MinX + xc, MinY + 1 + YLen )
-                surface_DrawLine( MinX + 1, MinY - 2 + hlen * 2, MinX + xc, MinY - 1 + YLen )
-
-                // Right
-                surface_DrawRect( MaxX - 1, MinY - 1 + hlen, 3, hlen )
-
-                surface_DrawLine( MaxX - 1, MinY - 1 + hlen, MinX + xc, MinY + 1 )
-                surface_DrawLine( MaxX + 1, MinY - 1 + hlen, MinX + xc, MinY - 1 )
-
-                surface_DrawLine( MaxX - 1, MinY - 2 + hlen * 2, MinX + xc, MinY - 1 + YLen )
-                surface_DrawLine( MaxX + 1, MinY - 2 + hlen * 2, MinX + xc, MinY + 1 + YLen )
-
-                surface_SetDrawColor( hvhobkak.cfg.vars["Box team color"] and teamcolor or color_box )
+                surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[0])
 
                 // Left
-                surface_DrawRect( MinX, MinY + hlen - 1, 1, hlen )
-                surface_DrawLine( MinX, MinY - 1 + hlen, MinX + xc, MinY )
-                surface_DrawLine( MinX, MinY - 2 + hlen * 2, MinX + xc, MinY + YLen )
+                surface.DrawRect( MinX - 1, MinY - 1 + hlen, 3, hlen )
+
+                surface.DrawLine( MinX - 1, MinY - 1 + hlen, MinX + xc, MinY - 1 )
+                surface.DrawLine( MinX + 1, MinY - 1 + hlen, MinX + xc, MinY + 1 )
+
+                surface.DrawLine( MinX - 1, MinY - 2 + hlen * 2, MinX + xc, MinY + 1 + YLen )
+                surface.DrawLine( MinX + 1, MinY - 2 + hlen * 2, MinX + xc, MinY - 1 + YLen )
 
                 // Right
-                surface_DrawRect( MaxX, MinY + hlen - 1, 1, hlen )
-                surface_DrawLine( MaxX, MinY - 1 + hlen, MinX + xc, MinY )
-                surface_DrawLine( MaxX, MinY - 2 + hlen * 2, MinX + xc, MinY + YLen )
-            elseif hvhobkak.cfg.vars["Box style"] == 4 then
-                local wlen, hlen = math_floor( XLen / 3 ) + 3, math_floor( YLen / 3 ) + 3
+                surface.DrawRect( MaxX - 1, MinY - 1 + hlen, 3, hlen )
+
+                surface.DrawLine( MaxX - 1, MinY - 1 + hlen, MinX + xc, MinY + 1 )
+                surface.DrawLine( MaxX + 1, MinY - 1 + hlen, MinX + xc, MinY - 1 )
+
+                surface.DrawLine( MaxX - 1, MinY - 2 + hlen * 2, MinX + xc, MinY - 1 + YLen )
+                surface.DrawLine( MaxX + 1, MinY - 2 + hlen * 2, MinX + xc, MinY + 1 + YLen )
+
+                surface.SetDrawColor( exechack_cc_hvh_obkak.cfg.vars["Box team color"] and teamcolor or color_box )
+
+                // Left
+                surface.DrawRect( MinX, MinY + hlen - 1, 1, hlen )
+                surface.DrawLine( MinX, MinY - 1 + hlen, MinX + xc, MinY )
+                surface.DrawLine( MinX, MinY - 2 + hlen * 2, MinX + xc, MinY + YLen )
+
+                // Right
+                surface.DrawRect( MaxX, MinY + hlen - 1, 1, hlen )
+                surface.DrawLine( MaxX, MinY - 1 + hlen, MinX + xc, MinY )
+                surface.DrawLine( MaxX, MinY - 2 + hlen * 2, MinX + xc, MinY + YLen )
+            elseif exechack_cc_hvh_obkak.cfg.vars["Box style"] == 4 then
+                local wlen, hlen = math.floor( XLen / 3 ) + 3, math.floor( YLen / 3 ) + 3
                 local x, y, xw, xh = MinX - 3, MinY - 3, MaxX + 3, MaxY + 3
                 local polys = {}
 
@@ -7582,29 +8339,29 @@ function hvhobkak.DrawESP()
                         { x = x, y = y + hlen },
                     }
     
-                    surface_SetDrawColor( i == 2 and teamcolor or hvhobkak.Colors[0] ) 
-                    hvhobkak.DrawOutlinedPoly( polys )
+                    surface.SetDrawColor( i == 2 and teamcolor or exechack_cc_hvh_obkak.Colors[0] ) 
+                    exechack_cc_hvh_obkak.DrawOutlinedPoly( polys )
                     
                     wlen, hlen = wlen - i, hlen - i
 
                     y, x = y + i, x + i
                     xw, xh = xw - i, xh - i
                 end
-            elseif hvhobkak.cfg.vars["Box style"] == 5 then
-                cam_Start3D()
-                render_DrawWireframeBox(v.entity:GetPos(), v.entity:GetAngles(), v.entity:OBBMins(), v.entity:OBBMaxs(), hvhobkak.cfg.vars["Box team color"] and teamcolor or color_box, true)
-                cam_End3D()
+            elseif exechack_cc_hvh_obkak.cfg.vars["Box style"] == 5 then
+                cam.Start3D()
+                render.DrawWireframeBox(v.entity:GetPos(), v.entity:GetAngles(), v.entity:OBBMins(), v.entity:OBBMaxs(), exechack_cc_hvh_obkak.cfg.vars["Box team color"] and teamcolor or color_box, true)
+                cam.End3D()
             end
         end
 
         // Sight lines 
 
-        if hvhobkak.cfg.vars["Sight lines"] then 
+        if exechack_cc_hvh_obkak.cfg.vars["Sight lines"] then 
             local tr = v.entity:GetEyeTrace()
             local startpos, hitpos = tr.StartPos:ToScreen(), tr.HitPos:ToScreen()
 
-            surface_SetDrawColor( teamcolor )
-            surface_DrawLine( startpos.x, startpos.y, hitpos.x, hitpos.y )
+            surface.SetDrawColor( teamcolor )
+            surface.DrawLine( startpos.x, startpos.y, hitpos.x, hitpos.y )
         end
 
         // text 
@@ -7613,34 +8370,69 @@ function hvhobkak.DrawESP()
         local poses = { [1] = MaxX + (MinX - MaxX) / 2, [3] = MaxX+5, [4] = MinX-5 }
         poses[2] = poses[1]
 
-        surface_SetTextColor( hvhobkak.Colors[255] )
+        surface.SetTextColor( exechack_cc_hvh_obkak.Colors[255] )
 
-        if hvhobkak.cfg.vars["Name"] then 
-            local name = v.Name
-            local pos = hvhobkak.cfg.vars["Name pos"]
-            local tw, th = surface_GetTextSize(name)
+if exechack_cc_hvh_obkak.cfg.vars["Name"] then 
+    local name = v.Name
+    local pos = exechack_cc_hvh_obkak.cfg.vars["Name pos"]
+    local tw, th = surface.GetTextSize(name)
 
-            surface_SetTextPos(poses[pos]-hvhobkak.getTextX(v,tw,pos), hvhobkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
-            surface_DrawText(name)
+    if exechack_cc_hvh_obkak.cfg.priorityList and exechack_cc_hvh_obkak.cfg.priorityList[v.entity:SteamID()] then
+        surface.SetTextColor(255, 0, 0, 255)
+    elseif exechack_cc_hvh_obkak.cfg.friends[v.entity:SteamID()] or v.entity:GetFriendStatus() == "friend" then
+        surface.SetTextColor(0, 255, 0, 255)
+    elseif exechack_cc_hvh_obkak.trackedPlayers and exechack_cc_hvh_obkak.trackedPlayers[steamId] then
+        surface.SetTextColor(255, 0, 0, 255)
+    else
+        surface.SetTextColor(255, 255, 255, 255)
+    end
 
-            ttbl[pos] = ttbl[pos] + 0.8
-        end
 
-        if hvhobkak.cfg.vars["Usergroup"] then 
+    surface.SetTextPos(poses[pos]-exechack_cc_hvh_obkak.getTextX(v,tw,pos), exechack_cc_hvh_obkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
+    surface.DrawText(name)
+
+    ttbl[pos] = ttbl[pos] + 0.8
+end
+
+        surface.SetTextColor( exechack_cc_hvh_obkak.Colors[255] )
+
+        if exechack_cc_hvh_obkak.cfg.vars["Usergroup"] then 
             local name = v.GetUserGroup
-            local pos = hvhobkak.cfg.vars["Usergroup pos"]
-            local tw, th = surface_GetTextSize(name)
+            local pos = exechack_cc_hvh_obkak.cfg.vars["Usergroup pos"]
+            local tw, th = surface.GetTextSize(name)
 
-            surface_SetTextPos(poses[pos]-hvhobkak.getTextX(v,tw,pos),hvhobkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
-            surface_DrawText(name)
+            surface.SetTextPos(poses[pos]-exechack_cc_hvh_obkak.getTextX(v,tw,pos),exechack_cc_hvh_obkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
+            surface.DrawText(name)
 
             ttbl[pos] = ttbl[pos] + 0.8
         end
 
-        if hvhobkak.cfg.vars["Weapon"] then 
-            local name = hvhobkak.cfg.vars["Show ammo"] and v.WeaponClass .. " (" .. v.WeaponAmmo .. ")" or v.WeaponClass
+        if exechack_cc_hvh_obkak.cfg.vars["Mark"] then 
+            local gay = cheaters.list[v.entity:SteamID()]
+            
+            if gay != nil then    
+                local name = gay
+                if name == "" then
+                    name = "cheater"
+                end
+
+                local pos = exechack_cc_hvh_obkak.cfg.vars["Mark pos"]
+                local tw, th = surface.GetTextSize(name)
+
+                surface.SetTextColor(255, 0, 0, 255)
+                surface.SetTextPos(poses[pos]-exechack_cc_hvh_obkak.getTextX(v,tw,pos), exechack_cc_hvh_obkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
+                surface.DrawText(name)
+
+                ttbl[pos] = ttbl[pos] + 0.8
+            end
+        end
+
+        surface.SetTextColor( exechack_cc_hvh_obkak.Colors[255] )
+
+        if exechack_cc_hvh_obkak.cfg.vars["Weapon"] then 
+            local name = exechack_cc_hvh_obkak.cfg.vars["Show ammo"] and v.WeaponClass .. " (" .. v.WeaponAmmo .. ")" or v.WeaponClass
            
-            if hvhobkak.cfg.vars["Show reloading"] then
+            if exechack_cc_hvh_obkak.cfg.vars["Show reloading"] then
                 for i = 0, 13 do
                     if v.entity:IsValidLayer(i) then
                         if v.entity:GetSequenceActivityName(v.entity:GetLayerSequence(i)):find("RELOAD") then
@@ -7651,55 +8443,55 @@ function hvhobkak.DrawESP()
                 end
             end
 
-            local pos = hvhobkak.cfg.vars["Weapon pos"]
-            local tw, th = surface_GetTextSize(name)
+            local pos = exechack_cc_hvh_obkak.cfg.vars["Weapon pos"]
+            local tw, th = surface.GetTextSize(name)
 
-            surface_SetTextPos(poses[pos]-hvhobkak.getTextX(v,tw,pos),hvhobkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
-            surface_DrawText(name)
+            surface.SetTextPos(poses[pos]-exechack_cc_hvh_obkak.getTextX(v,tw,pos),exechack_cc_hvh_obkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
+            surface.DrawText(name)
 
             ttbl[pos] = ttbl[pos] + 0.8
         end
 
-        if hvhobkak.cfg.vars["Team"] then 
+        if exechack_cc_hvh_obkak.cfg.vars["Team"] then 
             local name = v.TeamName
-            local pos = hvhobkak.cfg.vars["Team pos"]
-            local tw, th = surface_GetTextSize(name)
+            local pos = exechack_cc_hvh_obkak.cfg.vars["Team pos"]
+            local tw, th = surface.GetTextSize(name)
 
-            surface_SetTextPos(poses[pos]-hvhobkak.getTextX(v,tw,pos),hvhobkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
-            surface_DrawText(name)
+            surface.SetTextPos(poses[pos]-exechack_cc_hvh_obkak.getTextX(v,tw,pos),exechack_cc_hvh_obkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
+            surface.DrawText(name)
 
             ttbl[pos] = ttbl[pos] + 0.8
         end
 
-        if hvhobkak.cfg.vars["DarkRP Money"] then 
+        if exechack_cc_hvh_obkak.cfg.vars["DarkRP Money"] then 
             local name = v.MoneyVar
-            local pos = hvhobkak.cfg.vars["Money pos"]
-            local tw, th = surface_GetTextSize(name)
+            local pos = exechack_cc_hvh_obkak.cfg.vars["Money pos"]
+            local tw, th = surface.GetTextSize(name)
 
-            surface_SetTextPos(poses[pos]-hvhobkak.getTextX(v,tw,pos),hvhobkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
-            surface_DrawText(name)
+            surface.SetTextPos(poses[pos]-exechack_cc_hvh_obkak.getTextX(v,tw,pos),exechack_cc_hvh_obkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
+            surface.DrawText(name)
 
             ttbl[pos] = ttbl[pos] + 0.8
         end
         
-        hvhobkak.BarPadding = 0
+        exechack_cc_hvh_obkak.BarPadding = 0
         
         local health = v.Health
         local maxhealth = v.GetMaxHealth
 
         if health > 0 then
-            if hvhobkak.cfg.vars["Health"] then 
-                local pos = hvhobkak.cfg.vars["Health pos"]
-                local tw, th = surface_GetTextSize(health)
+            if exechack_cc_hvh_obkak.cfg.vars["Health"] then 
+                local pos = exechack_cc_hvh_obkak.cfg.vars["Health pos"]
+                local tw, th = surface.GetTextSize(health)
     
-                surface_SetTextPos(poses[pos]-hvhobkak.getTextX(v,tw,pos),hvhobkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
-                surface_DrawText(health)
+                surface.SetTextPos(poses[pos]-exechack_cc_hvh_obkak.getTextX(v,tw,pos),exechack_cc_hvh_obkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
+                surface.DrawText(health)
     
                 ttbl[pos] = ttbl[pos] + 0.8
             end
 
-            if hvhobkak.cfg.vars["Health bar"] then 
-                hvhobkak.DrawBar( MaxX, MaxY, MinX, MinY, 4, health, maxhealth, string_ToColor( hvhobkak.cfg.colors["Health"] ), Color(0, 0, 0), hvhobkak.cfg.vars["Health bar gradient"], string_ToColor( hvhobkak.cfg.colors["Health bar gradient"] ) )
+            if exechack_cc_hvh_obkak.cfg.vars["Health bar"] then 
+                exechack_cc_hvh_obkak.DrawBar( MaxX, MaxY, MinX, MinY, 4, health, maxhealth, string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Health"] ), Color(0, 0, 0), exechack_cc_hvh_obkak.cfg.vars["Health bar gradient"], string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Health bar gradient"] ) )
             end
         end
 
@@ -7707,45 +8499,62 @@ function hvhobkak.DrawESP()
         local maxarmor = v.GetMaxArmor
 
         if armor > 0 then
-            if hvhobkak.cfg.vars["Armor"] then 
-                local pos = hvhobkak.cfg.vars["Armor pos"]
-                local tw, th = surface_GetTextSize(armor)
+            if exechack_cc_hvh_obkak.cfg.vars["Armor"] then 
+                local pos = exechack_cc_hvh_obkak.cfg.vars["Armor pos"]
+                local tw, th = surface.GetTextSize(armor)
     
-                surface_SetTextPos(poses[pos]-hvhobkak.getTextX(v,tw,pos),hvhobkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
-                surface_DrawText(armor)
+                surface.SetTextPos(poses[pos]-exechack_cc_hvh_obkak.getTextX(v,tw,pos),exechack_cc_hvh_obkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
+                surface.DrawText(armor)
     
                 ttbl[pos] = ttbl[pos] + 0.8
             end
 
-            if hvhobkak.cfg.vars["Armor bar"] then 
-                hvhobkak.DrawBar( MaxX, MaxY, MinX, MinY, 4, armor, maxarmor, string_ToColor( hvhobkak.cfg.colors["Armor"] ), Color(0, 0, 0), hvhobkak.cfg.vars["Armor bar gradient"], string_ToColor( hvhobkak.cfg.colors["Armor bar gradient"] ) )
+            if exechack_cc_hvh_obkak.cfg.vars["Armor bar"] then 
+                exechack_cc_hvh_obkak.DrawBar( MaxX, MaxY, MinX, MinY, 4, armor, maxarmor, string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Armor"] ), Color(0, 0, 0), exechack_cc_hvh_obkak.cfg.vars["Armor bar gradient"], string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Armor bar gradient"] ) )
             end
         end
 
-        if hvhobkak.cfg.vars["Break LC"] and v.break_lc then
+        if exechack_cc_hvh_obkak.cfg.vars["Break LC"] and v.break_lc then
             local name = "Breaking LC"
-            local pos = hvhobkak.cfg.vars["Break LC pos"]
-            local tw, th = surface_GetTextSize(name)
+            local pos = exechack_cc_hvh_obkak.cfg.vars["Break LC pos"]
+            local tw, th = surface.GetTextSize(name)
 
-            surface_SetTextPos(poses[pos]-hvhobkak.getTextX(v,tw,pos),hvhobkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
-            surface_DrawText(name)
+            surface.SetTextPos(poses[pos]-exechack_cc_hvh_obkak.getTextX(tw,pos),exechack_cc_hvh_obkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
+            surface.DrawText(name)
 
             ttbl[pos] = ttbl[pos] + 0.8
         end
 
-        if hvhobkak.cfg.vars["Simtime updated"] then
+        if exechack_cc_hvh_obkak.cfg.vars["Simtime updated"] then
             local name = v.simtime_updated and "Updated" or "Same"
-            local pos = hvhobkak.cfg.vars["Simtime pos"]
-            local tw, th = surface_GetTextSize(name)
+            local pos = exechack_cc_hvh_obkak.cfg.vars["Simtime pos"]
+            local tw, th = surface.GetTextSize(name)
 
-            surface_SetTextPos(poses[pos]-hvhobkak.getTextX(v,tw,pos),hvhobkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
-            surface_DrawText(name)
+            surface.SetTextPos(poses[pos]-exechack_cc_hvh_obkak.getTextX(v,tw,pos),exechack_cc_hvh_obkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
+            surface.DrawText(name)
+
+            ttbl[pos] = ttbl[pos] + 0.8
+        end
+
+        if exechack_cc_hvh_obkak.cfg.vars["FakeLag Show"] then
+            local flticks = v.flticks or 0
+            local choked = ded.GetChokedCommands()
+            if flticks == 0 and choked > 0 then
+                flticks = choked
+            end
+            local name = "FL: " .. flticks .. " ticks"
+            local pos = exechack_cc_hvh_obkak.cfg.vars["FakeLag Show pos"]
+            local tw, th = surface.GetTextSize(name)
+
+            surface.SetTextColor(string.ToColor(exechack_cc_hvh_obkak.cfg.colors["FakeLag Show"]))
+            surface.SetTextPos(poses[pos]-exechack_cc_hvh_obkak.getTextX(v,tw,pos),exechack_cc_hvh_obkak.getTextY(MaxY,MinY,th,pos,ttbl[pos]))
+            surface.DrawText(name)
 
             ttbl[pos] = ttbl[pos] + 0.8
         end
  
-        if hvhobkak.cfg.vars["Skeleton"] then
-            surface_SetDrawColor( string_ToColor( hvhobkak.cfg.colors["Skeleton"] ) )
+        if exechack_cc_hvh_obkak.cfg.vars["Skeleton"] then
+            surface.SetDrawColor( string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Skeleton"] ) )
 
 		    for i = 0, v.entity:GetBoneCount() - 1 do
                 if (!v.entity:BoneHasFlag(i, BONE_USED_BY_HITBOX)) then continue end
@@ -7771,125 +8580,246 @@ function hvhobkak.DrawESP()
 
 			    local screen1, screen2 = BonePos:ToScreen(), ParentPos:ToScreen()
 
-			    surface_DrawLine(screen1.x, screen1.y, screen2.x, screen2.y)
+			    surface.DrawLine(screen1.x, screen1.y, screen2.x, screen2.y)
 		    end
         end
 
-        if hvhobkak.cfg.vars["Show records"] and hvhobkak.canBacktrack(v) then
-            local len = #hvhobkak.btrecords[ v ]
+function exechack_cc_hvh_obkak.DrawFakeModelHitboxes()
+    if not exechack_cc_hvh_obkak.cfg.vars["Hitbox"] then return end
+    if not IsValid(exechack_cc_hvh_obkak.fakeModel) then return end
+    if not pLocalPlayer:Alive() then return end
+    if exechack_cc_hvh_obkak.hideHitboxes then return end 
+    
+    local mymodel = pLocalPlayer:GetModel()
+    if exechack_cc_hvh_obkak.newModel != mymodel then
+        exechack_cc_hvh_obkak.fakeModel = exechack_cc_hvh_obkak.CS_Model(mymodel)
+        exechack_cc_hvh_obkak.newModel = mymodel
+    end
+
+    local tbl = {
+        layers = exechack_cc_hvh_obkak.fakeAngles.layers,
+        angles = exechack_cc_hvh_obkak.fakeAngles.angle,
+        sequence = exechack_cc_hvh_obkak.fakeAngles.seq,
+        cycle = exechack_cc_hvh_obkak.fakeAngles.cycle,
+        origin = exechack_cc_hvh_obkak.fakeAngles.origin,
+        movex = exechack_cc_hvh_obkak.fakeAngles.movex,
+        movey = exechack_cc_hvh_obkak.fakeAngles.movey,
+    }
+    exechack_cc_hvh_obkak.CS_Model_update(pLocalPlayer, exechack_cc_hvh_obkak.fakeModel, tbl)
+
+    if exechack_cc_hvh_obkak.fakeModel:GetHitBoxGroupCount() != nil then
+        cam.Start3D(EyePos(), EyeAngles())
+            for group = 0, exechack_cc_hvh_obkak.fakeModel:GetHitBoxGroupCount() - 1 do 
+                for hitbox = 0, exechack_cc_hvh_obkak.fakeModel:GetHitBoxCount(group) - 1 do
+                    local bone = exechack_cc_hvh_obkak.fakeModel:GetHitBoxBone(hitbox, group)
+                    if not bone then continue end
+                    
+                    local pos, ang = exechack_cc_hvh_obkak.fakeModel:GetBonePosition(bone)
+                    if not pos then continue end
+                    
+                    local mins, maxs = exechack_cc_hvh_obkak.fakeModel:GetHitBoxBounds(hitbox, group)
+                    render.DrawWireframeBox(
+                        pos, 
+                        ang, 
+                        mins, 
+                        maxs, 
+                        string.ToColor(exechack_cc_hvh_obkak.cfg.colors["Hitbox"]), 
+                        true
+                    )
+                end
+            end
+        cam.End3D()
+    end
+end
+
+hook.Add("PostDrawOpaqueRenderables", "exechack_cc_hvh_obkak_DrawFakeHitboxes", exechack_cc_hvh_obkak.DrawFakeModelHitboxes)
+
+hook.Add("Think", "exechack_cc_hvh_obkak_HideHitboxesKey", function()
+    if input.IsKeyDown(KEY_END) then
+        if not exechack_cc_hvh_obkak.hideKeyPressed then
+            exechack_cc_hvh_obkak.hideHitboxes = not exechack_cc_hvh_obkak.hideHitboxes
+            exechack_cc_hvh_obkak.hideKeyPressed = true
+        end
+    else
+        exechack_cc_hvh_obkak.hideKeyPressed = false
+    end
+end)
+
+        if exechack_cc_hvh_obkak.cfg.vars["Show records"] and exechack_cc_hvh_obkak.canBacktrack(v) then
+            local len = #exechack_cc_hvh_obkak.btrecords[ v ]
 
             for i = 1, len do
-                local pos = ( hvhobkak.btrecords[v][i].aimpos ):ToScreen()
-                surface_SetDrawColor( hvhobkak.backtracktick == i and hvhobkak.Colors["Red"] or hvhobkak.Colors[255] )
-                surface_DrawRect(pos.x,pos.y,2,2)
+                local pos = ( exechack_cc_hvh_obkak.btrecords[v][i].aimpos ):ToScreen()
+                surface.SetDrawColor( exechack_cc_hvh_obkak.backtracktick == i and exechack_cc_hvh_obkak.Colors["Red"] or exechack_cc_hvh_obkak.Colors[255] )
+                surface.DrawRect(pos.x,pos.y,2,2)
             end
         end
 
-        if hvhobkak.cfg.vars["Backtrack skeleton"] and hvhobkak.canBacktrack(v) then
-            local len = #hvhobkak.btrecords[ v ]
+        if exechack_cc_hvh_obkak.cfg.vars["Backtrack skeleton"] and exechack_cc_hvh_obkak.canBacktrack(v) then
+            local len = #exechack_cc_hvh_obkak.btrecords[ v ]
 
-            surface_SetDrawColor( hvhobkak.Colors[255] )
+            surface.SetDrawColor( exechack_cc_hvh_obkak.Colors[255] )
 
             for i = 1, len do
-                local data = hvhobkak.btrecords[ v ][ i ].skeleton
+                local data = exechack_cc_hvh_obkak.btrecords[ v ][ i ].skeleton
 
                 for nbone = 1, #data do
                     local screen1, screen2 = data[nbone][1]:ToScreen(), data[nbone][2]:ToScreen()
         
-                    surface_DrawLine(screen1.x,screen1.y,screen2.x,screen2.y)
+                    surface.DrawLine(screen1.x,screen1.y,screen2.x,screen2.y)
                 end
             end
         end
     end
 
-    surface_SetAlphaMultiplier(1)
+    surface.SetAlphaMultiplier(1)
 end
 
 
 surface.CreateFont("DTFont", { font = "Verdana", size = 15, antialias = false, outline = true } )
 surface.CreateFont("XVIDEOS FONT", { font = "Verdana", size = 45, antialias = false, shadow = true } )
 
-hvhobkak.fovColor = Color( 255, 255, 255 )
-hvhobkak.gradFov = false
+exechack_cc_hvh_obkak.fovColor = Color( 255, 255, 255 )
+exechack_cc_hvh_obkak.gradFov = false
+
+hook.Add("PostDrawTranslucentRenderables", "DrawPlayerHat", function()
+            if exechack_cc_hvh_obkak.cfg.vars["Player Hat"] and exechack_cc_hvh_obkak.tpenabled then
+                local ply = LocalPlayer()
+                if not IsValid(ply) or not ply:Alive() then return end
+
+                local headHitbox = ply:LookupAttachment("eyes")
+                local headAttachment = ply:GetAttachment(headHitbox)
+                if not headAttachment then return end
+
+                local headPos = headAttachment.Pos
+
+                local radius = 10
+                local height = 15  
+                local baseOffset = 5  
+
+                local coneTop = headPos + Vector(0, 0, height)
+                local basePos = headPos + Vector(0, 0, baseOffset)
+
+                cam.Start3D()
+
+                    local segments = 16
+                    for i = 1, segments do
+                        local theta1 = ((i - 1) / segments) * 2 * math.pi
+                        local theta2 = (i / segments) * 2 * math.pi
+
+                        local x1 = math.cos(theta1) * radius
+                        local y1 = math.sin(theta1) * radius
+                        local x2 = math.cos(theta2) * radius
+                        local y2 = math.sin(theta2) * radius
+
+                        local base1 = basePos + Vector(x1, y1, 0)
+                        local base2 = basePos + Vector(x2, y2, 0)
+
+                        local time = CurTime() % 1
+                        local color = HSVToColor(time * 360, 1, 1)
+
+                        render.DrawLine(base1, coneTop, color, false)
+                        render.DrawLine(base1, base2, color, false)
+                    end
+                cam.End3D()
+            end
+        end)
 
 
 
-
-
-
-//hvhobkak.bgmaterial = Material( "a/paws.png", "noclamp smooth" )
+//exechack_cc_hvh_obkak.bgmaterial = Material( "a/paws.png", "noclamp smooth" )
 
 
 
 do
-    local lc, blc = Color(125,255,64), Color(255,64,125)
-
-    local indx, indy = scrw / 2 - 100, scrh/2 + 250
+    local lc = Color(125, 255, 64)   
+    local blc = Color(255, 64, 125)  
+    local indx, indy = screenWidth / 2 - 100, screenHeight/2 + 250
     local charge = 0
 
     local gradcolor, chargedcolor, unchargedcolor = Color(200,200,200,128), Color(0,255,128), Color(255,155,0)
 
     local chargestate, ccharge, chargecolor = "NO CHARGE", 200, chargedcolor
 
-    -- local watermarkx = scrw + 245
-    -- local watermarkc = Color( 232, 232, 232, 235)
 
-    function hvhobkak.DrawSomeShit()
-
-        //if hvhobkak.frame:IsVisible() then
-        //    surface_SetDrawColor( hvhobkak.accent )
-        //    surface_SetMaterial( hvhobkak.bgmaterial )
-        //    surface_DrawTexturedRect( 0, 0, scrw, scrh )
-        //end
-
-        surface_SetFont("DTFont")
-
-        //local os_date = os.date("%d.%m.%Y # %H:%M:%S")
-        //surface_SimpleText(10,10, os_date, Color(243, 252, 134))
-        
-        local latency = math_Round( ( ded.GetLatency(0) + ded.GetLatency(1) ) * 1000 ) 
-        local currentlby = math_Round( ded.GetCurrentLowerBodyYaw( me:EntIndex() ) ) 
-        local targetlby = math_Round( ded.GetTargetLowerBodyYaw( me:EntIndex() ) ) 
-
-        surface_SimpleText(38,scrh-200, "VEL: " .. math_Round(me:GetVelocity():Length2D()), lc)
-        surface_SimpleText(38,scrh-180, "LBY: " .. currentlby .. " (" .. targetlby .. ")", currentlby != targetlby and blc or lc)
-        surface_SimpleText(38,scrh-160, "AT: " .. latency .. " ms",latency > 50 and blc or lc)
-        surface_SimpleText(38,scrh-140, "FT: " .. hvhobkak.fakeLagTicks,hvhobkak.SendPacket and blc or lc)
-        surface_SimpleText(38,scrh-120, "LC", me.break_lc and blc or lc)
-        
-        if hvhobkak.cfg.vars["Auto Vape"] then
-            surface_SimpleText(38,scrh-220,"Vape: ", hvhobkak.tyaga == 0 and blc or lc)
+    function exechack_cc_hvh_obkak.DrawSomeShit()
+        if exechack_cc_hvh_obkak.cfg.vars.Indicators then 
+            surface.SetFont("DTFont")
             
-            surface_SetDrawColor( 0, 0, 0 )
-            surface_DrawRect( 78, scrh-219, 60, 14 )
+            local latency = math.Round((ded.GetLatency(0) + ded.GetLatency(1)) * 1000)
+            local velocity = math.Round(pLocalPlayer:GetVelocity():Length2D())
+            local choked = ded.GetChokedCommands()
 
-            surface_SetDrawColor( lc )
-            surface_DrawRect( 79, scrh-218, hvhobkak.tyaga / hvhobkak.maxvape * 58, 12 )
-        end
-        
+            local accent_color = Color(0, 180, 255, 255)      
+            local success_color = Color(120, 255, 180, 255)   
+            local warning_color = Color(255, 150, 80, 255)    
+            local error_color = Color(255, 80, 150, 255)     
+            local bg_dark = Color(20, 20, 25, 230)           
 
-        if hvhobkak.cfg.vars["Tickbase shift"] and hvhobkak.cfg.vars["Tickbase indicator"] then
-            /*local max, cur = hvhobkak.cfg.vars["Charge ticks"], ded.GetCurrentCharge()
-            local dtw = cur / max * 30
 
-            local x, y = scrwc - 7, scrhc + 10
-
-            surface_SimpleText( x, y, "DT", blc ) // 
-
-            render.SetScissorRect( x, y, x + dtw, y + 30, true )
-                surface_SimpleText( x, y, "DT", lc )
-            render.SetScissorRect( 0, 0, 0, 0, false )*/
-
-            if ded.GetCurrentCharge() <= hvhobkak.cfg.vars["Shift ticks"] then
-                ccharge = ded.GetCurrentCharge() * 196 / hvhobkak.cfg.vars["Shift ticks"]
+            local function DrawDoubleText(text, x, y, col1, col2, offset)
+                surface.SetTextColor(col1.r, col1.g, col1.b, 220)
+                surface.SetTextPos(x, y)
+                surface.DrawText(text)
+                
+                surface.SetTextColor(col2.r, col2.g, col2.b, 150)
+                surface.SetTextPos(x + offset, y + offset)
+                surface.DrawText(text)
             end
 
-            charge = math_Approach(charge,ccharge,FrameTime()*700)
+            local function DrawStaticCircle(x, y, radius, col)
+                surface.SetDrawColor(col)
+                draw.NoTexture()
+                surface.DrawTexturedRectRotated(x, y, radius*2, radius*2, 0)
+            end
+
+            local y_pos = screenHeight/2 - 45
+            local x_pos = 15
+            
+            surface.SetDrawColor(bg_dark)
+            surface.DrawRect(x_pos - 5, y_pos - 5, 200, 90)
+            
+            DrawDoubleText("» Lag Compensation", x_pos, y_pos, 
+                        pLocalPlayer.break_lc and error_color or success_color,
+                        Color(255, 255, 255, 100), 1)
+
+            DrawDoubleText(string.format("» Fakelag Tick: %i", choked), x_pos, y_pos + 15, 
+                        choked > 1 and warning_color or error_color,
+                        Color(255, 255, 255, 80), 1.2)
+
+            DrawDoubleText(string.format("» Speed: %i", velocity), x_pos, y_pos + 30, 
+                        velocity > 100 and accent_color or success_color,
+                        Color(255, 255, 255, 90), 1.1)
+
+            DrawDoubleText(string.format("» Ping: %ims", latency), x_pos, y_pos + 45, 
+                        latency > 50 and warning_color or success_color,
+                        Color(255, 255, 255, 85), 1.3)
+        end
+
+
+        if exechack_cc_hvh_obkak.cfg.vars["Auto Vape"] then
+            surface.SetTextColor( exechack_cc_hvh_obkak.tyaga == 0 and blc or lc )
+            surface.SetTextPos( 38,screenHeight-220 ) 
+            surface.DrawText( "Vape: " ) 
+            
+            surface.SetDrawColor( 0, 0, 0 )
+            surface.DrawRect( 78, screenHeight-219, 60, 14 )
+
+            surface.SetDrawColor( lc )
+            surface.DrawRect( 79, screenHeight-218, exechack_cc_hvh_obkak.tyaga / exechack_cc_hvh_obkak.maxvape * 58, 12 )
+        end
+        
+        if exechack_cc_hvh_obkak.cfg.vars["Tickbase shift"] and exechack_cc_hvh_obkak.cfg.vars["Tickbase indicator"] then
+            if ded.GetCurrentCharge() <= exechack_cc_hvh_obkak.cfg.vars["Shift ticks"] then
+                ccharge = ded.GetCurrentCharge() * 196 / exechack_cc_hvh_obkak.cfg.vars["Shift ticks"]
+            end
+
+            charge = math.Approach(charge,ccharge,FrameTime()*700)
 
             if ded.GetCurrentCharge() == 0 then
                 chargestate = "NO CHARGE"
                 chargecolor = unchargedcolor
-            elseif ded.GetCurrentCharge() < hvhobkak.cfg.vars["Shift ticks"] and hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Auto recharge"] ) then
+            elseif ded.GetCurrentCharge() < exechack_cc_hvh_obkak.cfg.vars["Shift ticks"] and exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Auto recharge"] ) then
                 chargestate = "CHARGING"
                 chargecolor = unchargedcolor
             else
@@ -7897,183 +8827,267 @@ do
                 chargecolor = chargedcolor
             end
 
-            local tw, th = surface_GetTextSize(chargestate)
+            local tw, th = surface.GetTextSize(chargestate)
 
-            surface_SetDrawColor(hvhobkak.Colors[12])
-            surface_DrawRect(indx,indy,200,30)
+            surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[12])
+            surface.DrawRect(indx,indy,200,30)
 
-            surface_SetDrawColor(chargecolor) 
-            surface_DrawRect(indx+2,indy+2,charge,26)
+            surface.SetDrawColor(chargecolor) 
+            surface.DrawRect(indx+2,indy+2,charge,26)
 
-            surface_SimpleTexturedRect(indx+2,indy+2,charge,26,gradcolor,hvhobkak.Materials["Gradient right"])
+            surface.SetDrawColor( gradcolor )
+            surface.SetMaterial( exechack_cc_hvh_obkak.Materials["Gradient right"] )
+            surface.DrawTexturedRect( indx+2,indy+2,charge,26 )
 
-            surface_SimpleText(indx+2,indy-20,"CHARGE "..ded.GetCurrentCharge(),hvhobkak.Colors[245])
-            surface_SimpleText(indx+196-tw,indy-20,chargestate,hvhobkak.Colors[245])
+            surface.SetTextColor( exechack_cc_hvh_obkak.Colors[245] )
+
+            surface.SetTextPos( indx+2,indy-20 ) 
+            surface.DrawText( "CHARGE "..ded.GetCurrentCharge() ) 
+
+            surface.SetTextPos( indx+196-tw,indy-20 ) 
+            surface.DrawText( chargestate ) 
         end
 
-        
-
-        
-        
-        -- watermarkx = watermarkx - 1
-
-        -- if watermarkx < -925 then
-        --     watermarkx = scrw + 100
-        -- end
-
-        -- surface_SetFont("XVIDEOS FONT")
-        -- surface_SimpleText(watermarkx,10,"This video was uploaded to WWW.XVIDEOS.COM",watermarkc)
-        
         local CT = CurTime()
         local FT = FrameTime() * 128
 
-        if hvhobkak.cfg.vars["Hitmarker"] and #hvhobkak.hitmarkers > 0 then
-            local hm = string_ToColor( hvhobkak.cfg.colors["Hitmarker"] ) 
+        if exechack_cc_hvh_obkak.cfg.vars["Hitmarker"] and #exechack_cc_hvh_obkak.hitmarkers > 0 then
+            local hm = string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Hitmarker"] ) 
     
-            surface_SetDrawColor( hm )
+            surface.SetDrawColor( hm )
 
-            for i = #hvhobkak.hitmarkers, 1, -1  do
-                local v = hvhobkak.hitmarkers[ i ]
+            for i = #exechack_cc_hvh_obkak.hitmarkers, 1, -1  do
+                local v = exechack_cc_hvh_obkak.hitmarkers[ i ]
     
-                if v.time < CT - 1 then table_remove( hvhobkak.hitmarkers, i ) continue end 
+                if v.time < CT - 1 then table.remove( exechack_cc_hvh_obkak.hitmarkers, i ) continue end 
     
-                v.add = math_Approach( v.add, v.add - (CT - 1) * 5, FT )
+                v.add = math.Approach( v.add, v.add - (CT - 1) * 5, FT )
 
-                surface_DrawLine( scrwc - v.add, scrhc - v.add, scrwc - 10 - v.add, scrhc - 10 - v.add )
-                surface_DrawLine( scrwc + v.add, scrhc - v.add, scrwc + 10 + v.add, scrhc - 10 - v.add )
-                surface_DrawLine( scrwc - v.add, scrhc + v.add, scrwc - 10 - v.add, scrhc + 10 + v.add )
-                surface_DrawLine( scrwc + v.add, scrhc + v.add, scrwc + 10 + v.add, scrhc + 10 + v.add )
+                surface.DrawLine( ( screenWidth * 0.5 ) - v.add, ( screenHeight * 0.5 ) - v.add, ( screenWidth * 0.5 ) - 10 - v.add, ( screenHeight * 0.5 ) - 10 - v.add )
+                surface.DrawLine( ( screenWidth * 0.5 ) + v.add, ( screenHeight * 0.5 ) - v.add, ( screenWidth * 0.5 ) + 10 + v.add, ( screenHeight * 0.5 ) - 10 - v.add )
+                surface.DrawLine( ( screenWidth * 0.5 ) - v.add, ( screenHeight * 0.5 ) + v.add, ( screenWidth * 0.5 ) - 10 - v.add, ( screenHeight * 0.5 ) + 10 + v.add )
+                surface.DrawLine( ( screenWidth * 0.5 ) + v.add, ( screenHeight * 0.5 ) + v.add, ( screenWidth * 0.5 ) + 10 + v.add, ( screenHeight * 0.5 ) + 10 + v.add )
             end
         end
 
-        if hvhobkak.cfg.vars["Hitnumbers"] and #hvhobkak.hitnums > 0 then 
-            local n, c = string_ToColor( hvhobkak.cfg.colors["Hitnumbers"] ), string_ToColor( hvhobkak.cfg.colors["Hitnumbers krit"] )
+        if exechack_cc_hvh_obkak.cfg.vars["Hitnumbers"] and #exechack_cc_hvh_obkak.hitnums > 0 then 
+            local n, c = string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Hitnumbers"] ), string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Hitnumbers krit"] )
         
-            surface_SetFont( "veranda_scr" )
+            surface.SetFont( "veranda_scr" )
 
-            for i = #hvhobkak.hitnums, 1, -1 do
-                local v = hvhobkak.hitnums[ i ]
+            for i = #exechack_cc_hvh_obkak.hitnums, 1, -1 do
+                local v = exechack_cc_hvh_obkak.hitnums[ i ]
 
-                if v.time < CT - 1 then table_remove( hvhobkak.hitnums, i ) continue end 
+                if v.time < CT - 1 then table.remove( exechack_cc_hvh_obkak.hitnums, i ) continue end 
 
-                surface_SetTextColor( v.crit and c or n )
+                surface.SetTextColor( v.crit and c or n )
 
-                v.add = math_Approach( v.add, v.add - (CT - 1) * 5, FT / 2 )
+                v.add = math.Approach( v.add, v.add - (CT - 1) * 5, FT / 2 )
 
-                surface_SetTextPos( scrwc - v.add * v.xdir, scrhc - v.add * v.ydir )
-                surface_DrawText( v.dmg )
+                surface.SetTextPos( ( screenWidth * 0.5 ) - v.add * v.xdir, ( screenHeight * 0.5 ) - v.add * v.ydir )
+                surface.DrawText( v.dmg )
             end
         end
 
-        if hvhobkak.cfg.vars["Fov limit"] and hvhobkak.cfg.vars["Show FOV"] then 
-            local col = string_ToColor( hvhobkak.cfg.colors["Show FOV"] )
+        if exechack_cc_hvh_obkak.cfg.vars["Headshot indicator"] and #exechack_cc_hvh_obkak.headshotindicators > 0 then 
+            local col = string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Headshot indicator"] )
+        
+            surface.SetFont( "veranda_scr" )
+
+            for i = #exechack_cc_hvh_obkak.headshotindicators, 1, -1 do
+                local v = exechack_cc_hvh_obkak.headshotindicators[ i ]
+
+                if v.time < CT - 1 then table.remove( exechack_cc_hvh_obkak.headshotindicators, i ) continue end 
+
+                surface.SetTextColor( col )
+
+                v.add = math.Approach( v.add, v.add - (CT - 1) * 5, FT / 2 )
+
+                surface.SetTextPos( ( screenWidth * 0.5 ) - v.add * v.xdir, ( screenHeight * 0.5 ) - v.add * v.ydir )
+                surface.DrawText( "HEADSHOT!" )
+            end
+        end
+
+        if exechack_cc_hvh_obkak.cfg.vars["Fov limit"] and exechack_cc_hvh_obkak.cfg.vars["Show FOV"] then 
+            local col = string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Show FOV"] )
             
-            local radius = hvhobkak.GetFovRadius()
+            local radius = exechack_cc_hvh_obkak.GetFovRadius()
         
-            surface_SetDrawColor( 0, 0, 0, 128 )
-            surface_DrawCircle( scrwc, scrhc, radius + 1 )
+            surface.SetDrawColor( 0, 0, 0, 128 )
+            surface.DrawCircle( ( screenWidth * 0.5 ), ( screenHeight * 0.5 ), radius + 1 )
 
-            surface_SetDrawColor( col.r, col.g, col.b )
-            surface_DrawCircle( scrwc, scrhc, radius )
+            surface.SetDrawColor( col.r, col.g, col.b )
+            surface.DrawCircle( ( screenWidth * 0.5 ), ( screenHeight * 0.5 ), radius )
 
-            surface_SetDrawColor( 0, 0, 0, 128 )
-            surface_DrawCircle( scrwc, scrhc, radius - 1 )
+            surface.SetDrawColor( 0, 0, 0, 128 )
+            surface.DrawCircle( ( screenWidth * 0.5 ), ( screenHeight * 0.5 ), radius - 1 )
         end
 
-        if hvhobkak.target and hvhobkak.targetVector then
-            if hvhobkak.cfg.vars["Aimbot snapline"] then 
-                local pos = hvhobkak.targetVector:ToScreen()
-                surface_SetDrawColor( string_ToColor( hvhobkak.cfg.colors["Aimbot snapline"] ) )
-                surface_DrawLine( pos.x, pos.y, scrwc, scrhc )
+        if exechack_cc_hvh_obkak.target and exechack_cc_hvh_obkak.targetVector then
+            if exechack_cc_hvh_obkak.cfg.vars["Aimbot snapline"] then 
+                local pos = exechack_cc_hvh_obkak.targetVector:ToScreen()
+                surface.SetDrawColor( string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Aimbot snapline"] ) )
+                surface.DrawLine( pos.x, pos.y, ( screenWidth * 0.5 ), ( screenHeight * 0.5 ) )
             end
     
-            if hvhobkak.cfg.vars["Aimbot marker"] then 
-                local pos = hvhobkak.targetVector:ToScreen()
+            if exechack_cc_hvh_obkak.cfg.vars["Aimbot marker"] then 
+                local pos = exechack_cc_hvh_obkak.targetVector:ToScreen()
 
-                surface_SetDrawColor( 0, 0, 0 )
-                surface_DrawRect( pos.x - 6, pos.y - 6, 5, 3 )
-                surface_DrawRect( pos.x + 2, pos.y - 6, 5, 3 )
+                surface.SetDrawColor( 0, 0, 0 )
+                surface.DrawRect( pos.x - 6, pos.y - 6, 5, 3 )
+                surface.DrawRect( pos.x + 2, pos.y - 6, 5, 3 )
 
-                surface_DrawRect( pos.x - 6, pos.y + 4, 5, 3 )
-                surface_DrawRect( pos.x + 2, pos.y + 4, 5, 3 )
+                surface.DrawRect( pos.x - 6, pos.y + 4, 5, 3 )
+                surface.DrawRect( pos.x + 2, pos.y + 4, 5, 3 )
 
-                surface_DrawRect( pos.x - 6, pos.y - 6, 3, 5 )
-                surface_DrawRect( pos.x + 4, pos.y - 6, 3, 5 )
+                surface.DrawRect( pos.x - 6, pos.y - 6, 3, 5 )
+                surface.DrawRect( pos.x + 4, pos.y - 6, 3, 5 )
 
-                surface_DrawRect( pos.x - 6, pos.y + 2, 3, 5 )
-                surface_DrawRect( pos.x + 4, pos.y + 2, 3, 5 )
+                surface.DrawRect( pos.x - 6, pos.y + 2, 3, 5 )
+                surface.DrawRect( pos.x + 4, pos.y + 2, 3, 5 )
 
-                surface_SetDrawColor( string_ToColor( hvhobkak.cfg.colors["Aimbot marker"] ) )
+                surface.SetDrawColor( string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Aimbot marker"] ) )
                 
-                surface_DrawRect( pos.x - 5, pos.y - 5, 3, 1 )
-                surface_DrawRect( pos.x + 3, pos.y - 5, 3, 1 )
+                surface.DrawRect( pos.x - 5, pos.y - 5, 3, 1 )
+                surface.DrawRect( pos.x + 3, pos.y - 5, 3, 1 )
 
-                surface_DrawRect( pos.x - 5, pos.y + 5, 3, 1 )
-                surface_DrawRect( pos.x + 3, pos.y + 5, 3, 1 )
+                surface.DrawRect( pos.x - 5, pos.y + 5, 3, 1 )
+                surface.DrawRect( pos.x + 3, pos.y + 5, 3, 1 )
 
-                surface_DrawRect( pos.x - 5, pos.y - 5, 1, 3 )
-                surface_DrawRect( pos.x + 5, pos.y - 5, 1, 3 )
+                surface.DrawRect( pos.x - 5, pos.y - 5, 1, 3 )
+                surface.DrawRect( pos.x + 5, pos.y - 5, 1, 3 )
 
-                surface_DrawRect( pos.x - 5, pos.y + 3, 1, 3 )
-                surface_DrawRect( pos.x + 5, pos.y + 3, 1, 3 )
+                surface.DrawRect( pos.x - 5, pos.y + 3, 1, 3 )
+                surface.DrawRect( pos.x + 5, pos.y + 3, 1, 3 )
 
             end
         end
         
-        surface_SetFont( "veranda" )
 
-        if hvhobkak.cfg.vars[ "On screen logs" ] and table.Count( hvhobkak.onScreenLogs ) > 0 then
+        surface.SetFont( "veranda" )
+
+        if not exechack_cc_hvh_obkak.onScreenLogs then exechack_cc_hvh_obkak.onScreenLogs = {} end
+        
+        if exechack_cc_hvh_obkak.cfg.vars[ "On screen logs" ] and table.Count( exechack_cc_hvh_obkak.onScreenLogs ) > 0 then
             local tick = engine.TickCount()
-            local x, y = scrw / 2, scrh / 2 + 45 
+            local x, y = screenWidth / 2, screenHeight / 2 + 45 
     
-            for k, v in pairs( hvhobkak.onScreenLogs ) do
+            for k, v in pairs( exechack_cc_hvh_obkak.onScreenLogs ) do
 
-                if hvhobkak.TICKS_TO_TIME( tick - hvhobkak.onScreenLogs[ k ].tick ) > 8 then
-                    hvhobkak.onScreenLogs[ k ] = nil
+                if (flTickInterval * (tick - exechack_cc_hvh_obkak.onScreenLogs[ k ].tick)) > 8 then
+                    exechack_cc_hvh_obkak.onScreenLogs[ k ] = nil
                     continue 
                 end
 
-                local data = hvhobkak.onScreenLogs[ k ]
+                local data = exechack_cc_hvh_obkak.onScreenLogs[ k ]
                 local fstr = ""
     
                 for o = 1, #data[ 1 ] do
                     fstr = fstr .. data[ 1 ][ o ]
                 end
     
-                local tw, th = surface_GetTextSize( fstr )
+                local tw, th = surface.GetTextSize( fstr )
     
                 x = x - tw / 2
                 
                 for p = 1, #data[ 1 ] do
                     local str = data[ 1 ][ p ]
-                    tw, th = surface_GetTextSize( str )
+                    tw, th = surface.GetTextSize( str )
     
-                    surface_SetTextPos( x, y )
-                    surface_SetTextColor( data[ 2 ][ p ] )
-                    surface_DrawText( str )
+                    surface.SetTextPos( x, y )
+                    local color = data[ 2 ][ p ] or Color(255, 255, 255, 255)
+                    surface.SetTextColor( color.r or 255, color.g or 255, color.b or 255, color.a or 255 )
+                    surface.DrawText( str )
     
                     x = x + tw
                 end
     
-                x, y = scrw / 2, y + th
+                x, y = screenWidth / 2, y + th
             end
         end
-
-        local plys = player_GetAll()
-
-        if hvhobkak.cfg.vars[ "Spectator list" ] then
-            local y = scrh / 2
-
-            for i = 1, #plys do
-                local v = hvhobkak.playerCache[ plys[ i ] ]
-
-                if not v or not IsValid(v.entity) or not IsValid(v.ObserverTarget) then continue end
-                if v.ObserverMode == 0 then continue end 
-
-                surface_SetTextPos( 15, y )
-                surface_SetTextColor( hvhobkak.Colors[255] )
-                surface_DrawText( v.entity:Name() .. " spectating " .. v.ObserverTarget:Name() )
+        if exechack_cc_hvh_obkak.cfg.vars["WaterMark"] then
+            local playerName = IsValid(pLocalPlayer) and pLocalPlayer:Name() or "DISCONNECTED"
+            local delay = math.floor(ded.GetLatency(0) * 1000 + ded.GetLatency(1) * 1000)
+            local fps = math.floor(1 / FrameTime())
+            local time = os.date("%H:%M:%S")
+            local yaw = math.floor(pLocalPlayer:EyeAngles().y)
             
+            local line1 = "hvh obkak | " .. playerName .. " | delay: " .. delay .. "ms | 64tick | " .. time
+            local line2 = "◯ FAKE (" .. yaw .. "°) | safety: 100% | side: ->"
+            
+            surface.SetFont("DermaDefault")
+            local w1, h1 = surface.GetTextSize(line1)
+            local w2, h2 = surface.GetTextSize(line2)
+            local maxWidth = math.max(w1, w2)
+            
+            local x, y = 10, 10
+            local padding = 8
+            local boxHeight = h1 + h2 + padding * 3
+            
+            draw.RoundedBox(0, x, y, maxWidth + padding * 2, boxHeight, Color(25, 25, 25, 200))
+            draw.RoundedBox(0, x, y, maxWidth + padding * 2, 2, Color(100, 200, 100, 255))
+            
+            surface.SetTextColor(255, 255, 255, 255)
+            surface.SetTextPos(x + padding, y + padding)
+            surface.DrawText(line1)
+            
+            surface.SetTextColor(100, 200, 100, 255)
+            surface.SetTextPos(x + padding, y + padding + h1 + 2)
+            surface.DrawText(line2)
+        end
+
+
+        if exechack_cc_hvh_obkak.cfg.vars["RusEliteDetector"] then
+                hook.Add("Think", "exechack_cc_hvh_obkak_AutoWeaponDistance", function()
+                if not exechack_cc_hvh_obkak or not exechack_cc_hvh_obkak.cfg or not exechack_cc_hvh_obkak.cfg.vars then return end
+
+                local ply = LocalPlayer()
+                if not IsValid(ply) then return end
+
+                local wep = ply:GetActiveWeapon()
+                if not IsValid(wep) then return end
+
+                local class = wep:GetClass()
+
+                if string.StartWith(class, "knife_" ) then
+                    exechack_cc_hvh_obkak.cfg.vars["Max distance"] = 70 
+                elseif string.StartWith(class, "swb_") then
+                    exechack_cc_hvh_obkak.cfg.vars["Max distance"] = 130 
+                elseif string.StartWith(class, "umb_") then
+                    exechack_cc_hvh_obkak.cfg.vars["Max distance"] = 300
+                else
+                    exechack_cc_hvh_obkak.cfg.vars["Max distance"] = 4096
+                end
+            end)
+        end        
+
+
+        local plys = player.GetAll()
+
+        if exechack_cc_hvh_obkak.cfg.vars["Spectator list"] then
+                local y = screenHeight / 2
+                local pLocalPlayer = LocalPlayer()
+    
+            for i = 1, #plys do
+                    local v = exechack_cc_hvh_obkak.playerCache[plys[i]]
+        
+                if not v then continue end
+                if v.ObserverMode == 0 then continue end 
+                if not IsValid(v.entity) then continue end  
+                if not IsValid(v.ObserverTarget) then continue end 
+        
+                    local spectatorName = v.entity:Name() or "Unknown" 
+                    local targetName = v.ObserverTarget:Name() or "Unknown"
+        
+                    local text = spectatorName .. " spectating " .. targetName
+                    local textWidth = surface.GetTextSize(text)
+        
+                    local textColor = (v.ObserverTarget == pLocalPlayer) and Color(255, 0, 0) or Color(255, 255, 255)
+        
+                    surface.SetTextPos(screenWidth - textWidth - 15, y)
+                    surface.SetTextColor(textColor)
+                    surface.DrawText(text)
+        
                 y = y + 15
             end
         end 
@@ -8090,89 +9104,104 @@ do
 end
 
 
+hook.Add("PostDrawTranslucentRenderables", "DrawKnifebotRange", function()
+    if exechack_cc_hvh_obkak.cfg.vars["Knifebot Range"] and exechack_cc_hvh_obkak.tpenabled then
+        local ply = LocalPlayer()
+        if not IsValid(ply) or not ply:Alive() then return end
+
+        local pelvisBone = ply:LookupBone("ValveBiped.Bip01_Pelvis")
+        local centerPos = ply:GetPos() + Vector(0, 0, 15)
+        
+        if pelvisBone then
+            centerPos = ply:GetBonePosition(pelvisBone) or centerPos
+        end
+
+        local radius = 48
+        local segments = 32
+        local time = CurTime() % 1
+        local color = HSVToColor(time * 360, 1, 1) 
+
+        cam.Start3D()
+            for i = 1, segments do
+                local theta1 = ((i - 1) / segments) * 2 * math.pi
+                local theta2 = (i / segments) * 2 * math.pi
+
+                local x1 = math.cos(theta1) * radius
+                local y1 = math.sin(theta1) * radius
+                local x2 = math.cos(theta2) * radius
+                local y2 = math.sin(theta2) * radius
+
+                local pos1 = centerPos + Vector(x1, y1, 0)
+                local pos2 = centerPos + Vector(x2, y2, 0)
+
+                render.DrawLine(pos1, pos2, color, false)
+            end
+        cam.End3D()
+    end
+end)
+
 
 /*
 hook.Add( "PostDrawTranslucentRenderables", "test", function()
-    if hvhobkak.targetVector then
-        render.DrawWireframeSphere( hvhobkak.targetVector, 0.5, 10, 10, Color( 255, 0, 64 ) )
+    if exechack_cc_hvh_obkak.targetVector then
+        render.DrawWireframeSphere( exechack_cc_hvh_obkak.targetVector, 0.5, 10, 10, Color( 255, 0, 64 ) )
     end
 end)
 */
 
 
-hvhobkak.kd = false
-function hvhobkak.togglevisible()
-    if hvhobkak.frame:IsVisible() then
-        hvhobkak.frame:SetVisible(false)
+exechack_cc_hvh_obkak.kd = false
+function exechack_cc_hvh_obkak.togglevisible()
+    if exechack_cc_hvh_obkak.frame:IsVisible() then
+        exechack_cc_hvh_obkak.frame:SetVisible(false)
 
-        if hvhobkak.ui.MultiComboP then hvhobkak.ui.RemovePanel( hvhobkak.ui.MultiComboP ) end
-        if hvhobkak.ui.ColorWindow then hvhobkak.ui.RemovePanel( hvhobkak.ui.ColorWindow ) end
-        if hvhobkak.ui.SettingsPan then hvhobkak.ui.RemovePanel( hvhobkak.ui.SettingsPan ) end
+        if exechack_cc_hvh_obkak.ui.MultiComboP then exechack_cc_hvh_obkak.ui.RemovePanel( exechack_cc_hvh_obkak.ui.MultiComboP ) end
+        if exechack_cc_hvh_obkak.ui.ColorWindow then exechack_cc_hvh_obkak.ui.RemovePanel( exechack_cc_hvh_obkak.ui.ColorWindow ) end
+        if exechack_cc_hvh_obkak.ui.SettingsPan then exechack_cc_hvh_obkak.ui.RemovePanel( exechack_cc_hvh_obkak.ui.SettingsPan ) end
 
         RememberCursorPosition()
 
-        if hvhobkak.validsnd then hvhobkak.validsnd:Pause() end
+        if exechack_cc_hvh_obkak.validsnd then exechack_cc_hvh_obkak.validsnd:Pause() end
     else
-        hvhobkak.frame:SetVisible(true)
+        exechack_cc_hvh_obkak.frame:SetVisible(true)
 
         RestoreCursorPosition()
-        if hvhobkak.validsnd then hvhobkak.validsnd:Play() end
+        if exechack_cc_hvh_obkak.validsnd then exechack_cc_hvh_obkak.validsnd:Play() end
     end
 end
 
-// dormant esp 
---[[]
+function exechack_cc_hvh_obkak.PrePlayerDraw( pEntity, iFlags )
+    if ( pEntity == pLocalPlayer ) then
+        return 
+    end
 
-function hvhobkak.SetEntPos(ent,pos)
-    if not IsValid(ent) or ent == me or not ent:IsDormant() then return end
+    if exechack_cc_hvh_obkak.cfg.vars["Invalidate activity"] then
+        pEntity:SetSequence(-1)
+    end
 
-    ent:SetNetworkOrigin(pos)
-    ent:SetRenderOrigin(pos)
+
+    pEntity:SetPoseParameter( "head_pitch", 0 )
+    pEntity:SetPoseParameter( "head_yaw", 0 )
+
+    if ( exechack_cc_hvh_obkak.cfg.vars["Resolver"] ) then
+        local angs = Angle()
+        angs.y = exechack_cc_hvh_obkak.bruteYaw[ pEntity.aimshots % #exechack_cc_hvh_obkak.bruteYaw + 1 ] + pEntity:EyeAngles().y
+
+        pEntity:SetRenderAngles( angs )
+        pEntity:SetPoseParameter( "body_yaw", (angs.y + 180) / 360 )
+        pEntity:SetPoseParameter( "aim_yaw", angs.y - pEntity:EyeAngles().y )
+    end
+
+    if ( exechack_cc_hvh_obkak.cfg.vars["Pitch resolver"] and pEntity.fakepitch ) then
+        pEntity:SetPoseParameter( "aim_pitch", -89 )
+        pEntity:SetPoseParameter( "head_pitch", -89 )
+    end
+    
+    pEntity:InvalidateBoneCache()
+    pEntity:SetupBones()
+
+    pEntity.ChatGestureWeight = 0
 end
-
-hook.Add( "EntityEmitSound", "EntSounds", function( data )
-    local ent = data.Entity 
-    local pos = data.Pos
-
-    if ent:IsPlayer() and ent:Alive() and ent:IsDormant() then
-        hvhobkak.SetEntPos(ent,pos)
-        print(ent,pos)
-    elseif ent:IsWeapon() then
-        print(ent)
-    end
-end)
-
-hook.Add( "PlayerStepSoundTime", "StepSounds", function( ent, type, walking )
-    local pos = ent:GetPos()
-
-    if ent:Alive() and ent:IsDormant() then
-        hvhobkak.SetEntPos(ent,pos)
-        print("steps ",ent,pos)
-    end
-end)
-]]
-
-
-
-function hvhobkak.PrePlayerDraw(ply, falgs)
-	if ply != me then
-        ply:AnimResetGestureSlot( GESTURE_SLOT_VCD )
-        ply:AnimResetGestureSlot( GESTURE_SLOT_CUSTOM )
-
-        ply:SetPoseParameter( "head_pitch", 0 )
-        ply:SetPoseParameter( "head_yaw", 0 )
-
-        ply:InvalidateBoneCache()
-        ply:SetupBones()
-
-        ply.ChatGestureWeight = 0
-    end
-
-    if hvhobkak.cfg.vars["Visible chams"] then
-        //ply:SetNoDraw( true )
-    end
-end
-
 
 // Chams
 
@@ -8254,7 +9283,18 @@ CreateMaterial("metallic_z", "VertexLitGeneric", {
     ["$ignorez"] = 1,
 })
 
-hvhobkak.chamMats = {
+local weaponparams = {
+    ["$basetexture"] = "sprites/glow01",
+    ["$additive"] = 0,
+    Proxies = {
+        TextureScroll = {
+            texturescrollvar = "$basetexturetransform",
+        }
+    }
+}
+
+
+exechack_cc_hvh_obkak.chamMats = {
     vis = {
         Material("!flat"), -- flat
         Material("!wireframe"), -- wireframe
@@ -8278,104 +9318,104 @@ hvhobkak.chamMats = {
 do
     local f = (1/255)
 
-    function hvhobkak.RenderScreenspaceEffects()
-        if hvhobkak.UnSafeFrame then return end
+    function exechack_cc_hvh_obkak.RenderScreenspaceEffects()
+        if exechack_cc_hvh_obkak.UnSafeFrame then return end
 
-        if hvhobkak.cfg.vars["Color Modify"] then 
+        if exechack_cc_hvh_obkak.cfg.vars["Color Modify"] then 
             local rse = {
-                [ "$pp_colour_addr" ] = hvhobkak.cfg.vars["Color Modify Add Red"],
-                [ "$pp_colour_addg" ] = hvhobkak.cfg.vars["Color Modify Add Green"],
-                [ "$pp_colour_addb" ] = hvhobkak.cfg.vars["Color Modify Add Blue"],
-                [ "$pp_colour_brightness" ] = hvhobkak.cfg.vars["Color Modify Brightness"],
-                [ "$pp_colour_contrast" ] = hvhobkak.cfg.vars["Color Modify Contrast"],
-                [ "$pp_colour_colour" ] = hvhobkak.cfg.vars["Color Modify Saturation"],
-                [ "$pp_colour_mulr" ] = hvhobkak.cfg.vars["Color Modify Mul Red"],
-                [ "$pp_colour_mulg" ] = hvhobkak.cfg.vars["Color Modify Mul Green"],
-                [ "$pp_colour_mulb" ] = hvhobkak.cfg.vars["Color Modify Mul Blue"]
+                [ "$pp_colour_addr" ] = exechack_cc_hvh_obkak.cfg.vars["Color Modify Add Red"],
+                [ "$pp_colour_addg" ] = exechack_cc_hvh_obkak.cfg.vars["Color Modify Add Green"],
+                [ "$pp_colour_addb" ] = exechack_cc_hvh_obkak.cfg.vars["Color Modify Add Blue"],
+                [ "$pp_colour_brightness" ] = exechack_cc_hvh_obkak.cfg.vars["Color Modify Brightness"],
+                [ "$pp_colour_contrast" ] = exechack_cc_hvh_obkak.cfg.vars["Color Modify Contrast"],
+                [ "$pp_colour_colour" ] = exechack_cc_hvh_obkak.cfg.vars["Color Modify Saturation"],
+                [ "$pp_colour_mulr" ] = exechack_cc_hvh_obkak.cfg.vars["Color Modify Mul Red"],
+                [ "$pp_colour_mulg" ] = exechack_cc_hvh_obkak.cfg.vars["Color Modify Mul Green"],
+                [ "$pp_colour_mulb" ] = exechack_cc_hvh_obkak.cfg.vars["Color Modify Mul Blue"]
             }
             DrawColorModify( rse )
         end
 
-        local vm, invm = hvhobkak.cfg.vars["Visible mat"], hvhobkak.cfg.vars["inVisible mat"]
-        local sin = math_floor( math_sin( CurTime() * 4 ) * 45 )
+        local vm, invm = exechack_cc_hvh_obkak.cfg.vars["Visible mat"], exechack_cc_hvh_obkak.cfg.vars["inVisible mat"]
+        local sin = math.floor( math.sin( CurTime() * 4 ) * 45 )
 
-        local vc = string_ToColor(hvhobkak.cfg.colors["Visible chams"])
-        local invc = string_ToColor(hvhobkak.cfg.colors["inVisible chams"])
-        local sc = string_ToColor(hvhobkak.cfg.colors["Self chams"])
+        local vc = string.ToColor(exechack_cc_hvh_obkak.cfg.colors["Visible chams"])
+        local invc = string.ToColor(exechack_cc_hvh_obkak.cfg.colors["inVisible chams"])
+        local sc = string.ToColor(exechack_cc_hvh_obkak.cfg.colors["Self chams"])
         
-        cam_Start3D()
-            for k, v in pairs(player_GetAll()) do
-                if not IsValid(v) or v == me or not v:Alive() or v:IsDormant() then continue end 
+        cam.Start3D()
+            for k, v in pairs(player.GetAll()) do
+                if not IsValid(v) or v == pLocalPlayer or not v:Alive() or v:IsDormant() then continue end 
 
-                if hvhobkak.cfg.vars["Supress lighting"] then
-                    render_SuppressEngineLighting(true)
+                if exechack_cc_hvh_obkak.cfg.vars["Supress lighting"] then
+                    render.SuppressEngineLighting(true)
                 end
 
-                if hvhobkak.cfg.vars["inVisible chams"] then
-                    hvhobkak.chamMats.invis[6]:SetVector( "$envmaptint", Vector( invc.r / 255, invc.g / 255, invc.b / 255 ) )
-                    render_MaterialOverride(hvhobkak.chamMats.invis[invm])
-                    render_SetColorModulation(invc.r/255,invc.g/255,invc.b/255) 
+                if exechack_cc_hvh_obkak.cfg.vars["inVisible chams"] then
+                    exechack_cc_hvh_obkak.chamMats.invis[6]:SetVector( "$envmaptint", Vector( invc.r / 255, invc.g / 255, invc.b / 255 ) )
+                    render.MaterialOverride(exechack_cc_hvh_obkak.chamMats.invis[invm])
+                    render.SetColorModulation(invc.r/255,invc.g/255,invc.b/255) 
 
                     if invm == 7 then
-                        render_SetBlend( (sin + 100) / 255 )
+                        render.SetBlend( (sin + 100) / 255 )
                     end
 
                     v:SetRenderMode(1)
                     v:DrawModel()
 
-                    if hvhobkak.cfg.vars["inVisible chams w"] then 
+                    if exechack_cc_hvh_obkak.cfg.vars["inVisible chams w"] then 
                         local w = v:GetActiveWeapon()
                         if IsValid(w) then w:DrawModel() end
                     end
                 end
 
-                if hvhobkak.cfg.vars["Visible chams"] then
-                    hvhobkak.chamMats.vis[6]:SetVector( "$envmaptint", Vector( vc.r / 255, vc.g / 255, vc.b / 255 ) )
-                    render_MaterialOverride(hvhobkak.chamMats.vis[vm])
-                    render_SetColorModulation(vc.r/255,vc.g/255,vc.b/255)
+                if exechack_cc_hvh_obkak.cfg.vars["Visible chams"] then
+                    exechack_cc_hvh_obkak.chamMats.vis[6]:SetVector( "$envmaptint", Vector( vc.r / 255, vc.g / 255, vc.b / 255 ) )
+                    render.MaterialOverride(exechack_cc_hvh_obkak.chamMats.vis[vm])
+                    render.SetColorModulation(vc.r/255,vc.g/255,vc.b/255)
 
                     if vm == 7 then
-                        render_SetBlend( (sin + 100) / 255 )
+                        render.SetBlend( (sin + 100) / 255 )
                     end
 
                     v:DrawModel()
 
-                    if hvhobkak.cfg.vars["Visible chams w"] then 
+                    if exechack_cc_hvh_obkak.cfg.vars["Visible chams w"] then 
                         local w = v:GetActiveWeapon()
                         if IsValid(w) then w:DrawModel() end
                     end
                 end
 
-                if hvhobkak.cfg.vars["Supress lighting"] then
-                    render_SuppressEngineLighting(false)
+                if exechack_cc_hvh_obkak.cfg.vars["Supress lighting"] then
+                    render.SuppressEngineLighting(false)
                 end
 
             end
 
-            if hvhobkak.cfg.vars["Self chams"] and IsValid(me) and me:Alive() then
+            if exechack_cc_hvh_obkak.cfg.vars["Self chams"] and IsValid(pLocalPlayer) and pLocalPlayer:Alive() then
 
-                if hvhobkak.cfg.vars["Supress self lighting"] then
-                    render_SuppressEngineLighting(true)
+                if exechack_cc_hvh_obkak.cfg.vars["Supress self lighting"] then
+                    render.SuppressEngineLighting(true)
                 end
 
-                hvhobkak.chamMats.invis[6]:SetVector( "$envmaptint", Vector( sc.r / 255, sc.g / 255, sc.b / 255 ) )
-                render_MaterialOverride(hvhobkak.chamMats.vis[hvhobkak.cfg.vars["Self mat"]])
-                render_SetColorModulation(sc.r/255,sc.g/255,sc.b/255)
+                exechack_cc_hvh_obkak.chamMats.invis[6]:SetVector( "$envmaptint", Vector( sc.r / 255, sc.g / 255, sc.b / 255 ) )
+                render.MaterialOverride(exechack_cc_hvh_obkak.chamMats.vis[exechack_cc_hvh_obkak.cfg.vars["Self mat"]])
+                render.SetColorModulation(sc.r/255,sc.g/255,sc.b/255)
 
-                if hvhobkak.cfg.vars["Self mat"] == 7 then
-                    render_SetBlend( (sin + 100) / 255 )
+                if exechack_cc_hvh_obkak.cfg.vars["Self mat"] == 7 then
+                    render.SetBlend( (sin + 100) / 255 )
                 end
 
-                me:SetRenderMode(1)
-                me:DrawModel()
+                pLocalPlayer:SetRenderMode(1)
+                pLocalPlayer:DrawModel()
 
-                if hvhobkak.cfg.vars["Self chams w"] then 
-                    local w = me:GetActiveWeapon()
+                if exechack_cc_hvh_obkak.cfg.vars["Self chams w"] then 
+                    local w = pLocalPlayer:GetActiveWeapon()
                     if IsValid(w) then w:DrawModel() end
                 end
               
-                if hvhobkak.cfg.vars["Supress self lighting"] then
-                    render_SuppressEngineLighting(false)
+                if exechack_cc_hvh_obkak.cfg.vars["Supress self lighting"] then
+                    render.SuppressEngineLighting(false)
                 end
 
             end
@@ -8383,25 +9423,25 @@ do
             
 
 
-        cam_End3D()
+        cam.End3D()
 
-        render_SetColorModulation(1, 1, 1)
-        render_SetBlend(1)
-        render_MaterialOverride()
+        render.SetColorModulation(1, 1, 1)
+        render.SetBlend(1)
+        render.MaterialOverride()
     end
 end
 
 
 // Client side models 
 
-function hvhobkak.CS_Model(mdl)
+function exechack_cc_hvh_obkak.CS_Model(mdl)
     local model = ClientsideModel(mdl)
 	model:SetNoDraw(true)
 
     return model
 end
 
-function hvhobkak.CS_Model_update(ply,model,tbl)
+function exechack_cc_hvh_obkak.CS_Model_update(ply,model,tbl)
     if !ply or !model or !tbl then return end
 
     local mdl = model
@@ -8433,21 +9473,21 @@ function hvhobkak.CS_Model_update(ply,model,tbl)
 	mdl:SetPos( tbl.origin )
 end
 
-function hvhobkak.PostDrawTranslucentRenderables()
-    if hvhobkak.UnSafeFrame then return end
+function exechack_cc_hvh_obkak.PostDrawTranslucentRenderables()
+    if exechack_cc_hvh_obkak.UnSafeFrame then return end
 
-    hvhobkak.drawCSModels_backtrack()
-    hvhobkak.drawCSModels_real()
+    exechack_cc_hvh_obkak.drawCSModels_backtrack()
+    exechack_cc_hvh_obkak.drawCSModels_real()
 
-    render_SetBlend(1)
-    render_MaterialOverride()
+    render.SetBlend(1)
+    render.MaterialOverride()
 end
 
 
 // Backtracking 
 
-hvhobkak.btrecords = {}
-hvhobkak.predicted = {}
+exechack_cc_hvh_obkak.btrecords = {}
+exechack_cc_hvh_obkak.predicted = {}
 
 
 
@@ -8465,23 +9505,23 @@ hvhobkak.predicted = {}
 
 
 
-function hvhobkak.canBacktrack(ply)
-    if not hvhobkak.cfg.vars["Backtrack"] then return false end 
+function exechack_cc_hvh_obkak.canBacktrack(ply)
+    if not exechack_cc_hvh_obkak.cfg.vars["Backtrack"] then return false end 
     if not IsValid(ply) then return false end
-    if not hvhobkak.btrecords[ply] then return false end 
+    if not exechack_cc_hvh_obkak.btrecords[ply] then return false end 
     if ply.break_lc then return false end 
 
     return true 
 end
 
-function hvhobkak.recordBacktrack(ply)
-	local deadtime = CurTime() - hvhobkak.cfg.vars["Backtrack time"] / 1000
+function exechack_cc_hvh_obkak.recordBacktrack(ply)
+	local deadtime = CurTime() - exechack_cc_hvh_obkak.cfg.vars["Backtrack time"] / 1000
 	
-	local records = hvhobkak.btrecords[ply]
+	local records = exechack_cc_hvh_obkak.btrecords[ply]
 
 	if !records then
         records = {}
-		hvhobkak.btrecords[ply] = records
+		exechack_cc_hvh_obkak.btrecords[ply] = records
 	end
 	
 	local i = 1
@@ -8489,7 +9529,7 @@ function hvhobkak.recordBacktrack(ply)
 		local record = records[i]
 		
 		if record.simulationtime < deadtime then
-			table_remove(records, i)
+			table.remove(records, i)
 			i = i - 1
 		end
 		
@@ -8575,7 +9615,7 @@ function hvhobkak.recordBacktrack(ply)
 		simulationtime =    ded.GetSimulationTime(ply:EntIndex()),
 		angles =            Angle(x,y,0),
 		origin =            ply:GetNetworkOrigin(),
-		aimpos =            hvhobkak.GetBones( ply )[1],
+		aimpos =            exechack_cc_hvh_obkak.GetBones( ply )[1],
 		sequence =          ply:GetSequence(),
 		cycle =             ply:GetCycle(),
 		layers =            layers,
@@ -8587,49 +9627,50 @@ function hvhobkak.recordBacktrack(ply)
     }
 end
 
-hvhobkak.btmodel = hvhobkak.CS_Model("models/player/kleiner.mdl")
+exechack_cc_hvh_obkak.btmodel = exechack_cc_hvh_obkak.CS_Model("models/player/kleiner.mdl")
 
-function hvhobkak.drawCSModels_backtrack()
-    if not hvhobkak.cfg.vars["Backtrack chams"] then return end 
-    if not hvhobkak.canBacktrack(hvhobkak.target) then return end
+function exechack_cc_hvh_obkak.drawCSModels_backtrack()
+    if not exechack_cc_hvh_obkak.cfg.vars["Backtrack chams"] then return end 
+    if not exechack_cc_hvh_obkak.canBacktrack(exechack_cc_hvh_obkak.target) then return end
 
-    local len = #hvhobkak.btrecords[hvhobkak.target]
-    local tbl = hvhobkak.btrecords[hvhobkak.target][hvhobkak.backtracktick]
-    local m = hvhobkak.btmodel
+    local len = #exechack_cc_hvh_obkak.btrecords[exechack_cc_hvh_obkak.target]
+    local tbl = exechack_cc_hvh_obkak.btrecords[exechack_cc_hvh_obkak.target][exechack_cc_hvh_obkak.backtracktick]
+    local m = exechack_cc_hvh_obkak.btmodel
 
-    hvhobkak.CS_Model_update(hvhobkak.target,m,tbl)
+    exechack_cc_hvh_obkak.CS_Model_update(exechack_cc_hvh_obkak.target,m,tbl)
 
-    if hvhobkak.cfg.vars["Backtrack fullbright"] then
-        render_SuppressEngineLighting(true)
+    if exechack_cc_hvh_obkak.cfg.vars["Backtrack fullbright"] then
+        render.SuppressEngineLighting(true)
     end
 
-    local col = string_ToColor(hvhobkak.cfg.colors["Backtrack chams"])
-    hvhobkak.chamMats.invis[6]:SetVector( "$envmaptint", Vector( col.r / 255, col.g / 255, col.b / 255 ) )
-    render_MaterialOverride(hvhobkak.chamMats.invis[hvhobkak.cfg.vars["Backtrack material"]]) 
-    render_SetColorModulation(col.r/255,col.g/255,col.b/255)
+    local col = string.ToColor(exechack_cc_hvh_obkak.cfg.colors["Backtrack chams"])
+    exechack_cc_hvh_obkak.chamMats.invis[6]:SetVector( "$envmaptint", Vector( col.r / 255, col.g / 255, col.b / 255 ) )
+    render.MaterialOverride(exechack_cc_hvh_obkak.chamMats.invis[exechack_cc_hvh_obkak.cfg.vars["Backtrack material"]]) 
+    render.SetColorModulation(col.r/255,col.g/255,col.b/255)
     m:SetRenderMode(1)
     m:DrawModel()
 
-    if hvhobkak.cfg.vars["Backtrack fullbright"] then
-        render_SuppressEngineLighting(false)
+    if exechack_cc_hvh_obkak.cfg.vars["Backtrack fullbright"] then
+        render.SuppressEngineLighting(false)
     end
 end
 
-hvhobkak.hitmarkers = {}
-hvhobkak.hitnums = {}
+exechack_cc_hvh_obkak.hitmarkers = {}
+exechack_cc_hvh_obkak.hitnums = {}
+exechack_cc_hvh_obkak.headshotindicators = {}
 
 gameevent.Listen( "player_hurt" )
 
-function hvhobkak.player_hurt(data)
+function exechack_cc_hvh_obkak.player_hurt(data)
     local health = data.health
 	local priority = SERVER and data.Priority or 5
 	local hurted = Player( data.userid )
 	local attackerid = data.attacker
 
-	if attackerid == me:UserID() then
+	if attackerid == pLocalPlayer:UserID() then
         
-        if hvhobkak.cfg.vars[ "On screen logs" ] then
-            local hlcolor = string_ToColor( hvhobkak.cfg.colors[ "On screen logs" ] )
+        if exechack_cc_hvh_obkak.cfg.vars[ "On screen logs" ] then
+            local hlcolor = string.ToColor( exechack_cc_hvh_obkak.cfg.colors[ "On screen logs" ] )
             local data = {
                 tick = engine.TickCount(),
                 {
@@ -8640,32 +9681,52 @@ function hvhobkak.player_hurt(data)
                     " damage"
                 },
                 {
-                    hvhobkak.HitLogsWhite,
+                    exechack_cc_hvh_obkak.HitLogsWhite,
                     hlcolor,
-                    hvhobkak.HitLogsWhite,
+                    exechack_cc_hvh_obkak.HitLogsWhite,
                     hlcolor,
-                    hvhobkak.HitLogsWhite,
+                    exechack_cc_hvh_obkak.HitLogsWhite,
                 }
             }
             
-            hvhobkak.onScreenLogs[ engine.TickCount() ] = data
+            exechack_cc_hvh_obkak.onScreenLogs[ engine.TickCount() ] = data
             //print( "hurt", engine.TickCount() )
         end
 
-        if hvhobkak.cfg.vars["Hitmarker"] then
-            hvhobkak.hitmarkers[ #hvhobkak.hitmarkers + 1 ] = { time = CurTime(), add = 0 }
+        if exechack_cc_hvh_obkak.cfg.vars["Hitmarker"] then
+            exechack_cc_hvh_obkak.hitmarkers[ #exechack_cc_hvh_obkak.hitmarkers + 1 ] = { time = CurTime(), add = 0 }
         end
 
-        if hvhobkak.cfg.vars["Hitnumbers"] then
+        if exechack_cc_hvh_obkak.cfg.vars["Hitnumbers"] then
             local hp = hurted:Health() - health
-            hvhobkak.hitnums[ #hvhobkak.hitnums + 1 ] = { time = CurTime(), add = 0, xdir = math_random(-1,1), ydir = math_random(-1,1), dmg = hp, crit = health <= 0 }
+            exechack_cc_hvh_obkak.hitnums[ #exechack_cc_hvh_obkak.hitnums + 1 ] = { time = CurTime(), add = 0, xdir = math.random(-1,1), ydir = math.random(-1,1), dmg = hp, crit = health <= 0 }
         end
 
-        if hvhobkak.cfg.vars["Hitsound"] then
-            surface_PlaySound( hvhobkak.cfg.vars["Hitsound str"] )
+        if exechack_cc_hvh_obkak.cfg.vars["Headshot indicator"] then
+            local hitgroup = data.hitgroup or data.hit_group or data.HitGroup or data.bodypart
+            local damage = hurted:Health() - health
+            local isHeadshot = false
+            
+            if hitgroup then
+                isHeadshot = (hitgroup == 1)
+            else
+                isHeadshot = (damage >= 80) or (health <= 0 and damage >= 50)
+            end
+            
+            if not isHeadshot and health <= 0 then
+                isHeadshot = true
+            end
+            
+            if isHeadshot then
+                exechack_cc_hvh_obkak.headshotindicators[ #exechack_cc_hvh_obkak.headshotindicators + 1 ] = { time = CurTime(), add = 0, xdir = math.random(-1,1), ydir = math.random(-1,1) }
+            end
         end
 
-        if hvhobkak.cfg.vars["Resolver"] then 
+        if exechack_cc_hvh_obkak.cfg.vars["Hitsound"] then
+            surface.PlaySound( exechack_cc_hvh_obkak.cfg.vars["Hitsound str"] )
+        end
+
+        if exechack_cc_hvh_obkak.cfg.vars["Resolver"] then 
             hurted.aimshots = (hurted.aimshots or 0) - 1
         end
 
@@ -8676,7 +9737,7 @@ end
     Player vars 
 */
 
-function hvhobkak.initPlayerVars( v )
+function exechack_cc_hvh_obkak.initPlayerVars( v )
     v.ult_prev_pos = Vector()
 
     v.ult_prev_simtime = 0 
@@ -8688,291 +9749,724 @@ function hvhobkak.initPlayerVars( v )
     v.simtime_updated = false 
     v.fakepitch = false
 
-    hvhobkak.btrecords[ v ] = {}
-    hvhobkak.predicted[ v ] = {}
+    exechack_cc_hvh_obkak.btrecords[ v ] = {}
+    exechack_cc_hvh_obkak.predicted[ v ] = {}
 end
 
-for k, v in ipairs(player_GetAll()) do
-	hvhobkak.initPlayerVars( v )
+for k, v in ipairs(player.GetAll()) do
+	exechack_cc_hvh_obkak.initPlayerVars( v )
 end
 
 
-hvhobkak.chatmsg = 
+exechack_cc_hvh_obkak.chatmsg = 
 {
         [1] = {
-            "I am the way and the truth and the life. No one comes to the Father except through me. -Jesus",
-            "Do to others as you would have them do to you. -Jesus",
-            "With man this is impossible, but with God all things are possible. -Jesus",
-            "Do not judge, or you too will be judged. -Jesus",
-            "No one can serve two masters.You cannot serve both God and money. -Jesus",
-            "And whoever wants to be first must be slave of all. -Jesus",
-            "And whoever welcomes one such child in my name welcomes me. -Jesus",
-            "For where your treasure is, there your heart will be also. -Jesus",
-            "Greater love has no one than this: to lay down one’s life for one’s friends. -Jesus",
-            "Whoever drinks the water I give them will never thirst. -Jesus",
-            "That which does not kill us makes us stronger. -Friedrich Nietzsche",
-            "In the middle of every difficulty lies opportunity. -Albert Einstein",
-            "Don’t cry because it’s over, smile because it happened. -Dr Suess",
-            "If you want something done right, do it yourself. -Charles-Guillaume Étienne",
-            "The unexamined life is not worth living. -Socrates",
-            "Better to have loved and lost, than to have never loved at all. -St Augustine",
-            "An eye for an eye leaves the whole world blind. -Mahatma Gandhi",
-            "In three words I can sum up everything I’ve learned about life: it goes on. -Robert Frost",
-            "Necessity is the mother of invention. -Plato",
-            "To err is human; to forgive, divine. -Alexander Pope",
-            "Imagination is more important than knowledge. -Albert Einstein",
-            "With great power comes great responsibility. -Voltaire",
-            "Believe you can and you’re halfway there. -Theodore Roosevelt",
-            "The pen is mightier than the sword. -Proverb",
-            "Life is like a box of chocolates. You never know what you’re gonna get. -Forrest Gump’s Mom",
-            "Familiarity breeds contempt. -Aesop",
-            "It is always darkest just before the dawn. -Thomas Fuller",
-            "The ballot is stronger than the bullet. -Lincoln",
-            "If you are going through hell, keep going. -Winston Churchill",
-            "I am not removing the debug library, calm down. -Rubat",
-            "加里-纽曼（Garry Newman）请把我们从 rubat 拯救出来，他正在摆脱 debug.getregistry。-Lavrentiy Bandera",
-            "Use hvhobkak™️, not exechack. -Jesus",
-            "A rose by any other name would smell as sweet. -Juliet",
-            "Don't cry because it's over, smile because it happened. -Dr. Seuss",
-            "You miss 100% of the shots you don't take. -Wayne Gretzky",
-            "Happiness is not something ready made. It comes from your own actions. -Dalai Lama",
-            "My account details layo2021 - JNYLEQbgpiwv. -Donald Dicks $$$",
-            "I WANT TO BE BANGED HARD. -Serejaga",
-            "Um, I wonder if I am being hacked. -Ramzi",
-            "Connections... no hackers. -Ramzi",
-            "We love death. The U.S. loves life. That is the difference between us two. -Osama bin Laden",
-            "I don't regret what happened there. -Osama bin Laden",
-            "For God and country - Geronimo, Geronimo, Geronimo. -Osama bin Laden",
-            "I support any Muslims, whether here or abroad. -Osama bin Laden",
-            "An ounce of prevention is better than a pound of cure. -Osama bin Laden",
-            "There is no dialogue except with weapons. -Osama bin Laden",
-            "Russia does not have a great deal of experience building democratic institutions. -Putin",
-            "Those who fight corruption should be clean themselves. -Putin",
-            "The question isn't who is going to let me; it's who is going to stop me. -Putin",
-            "There are no grounds to suggest that Russia will return to the Cold War. -Putin",
-            "The 21st century will be defined by the fight against terrorism. -Putin",
-            "Russia has never been surrounded by so many friends as it is today. -Putin",
-            "Nobody should pin their hopes on a miracle. -Putin",
-            "Russia is a country of free people who can ensure their prosperity and well-being. -Putin",
-            "I believe in the people and the wisdom of our elites. -Putin",
-            "In Russia, the state, in a proper sense, returned only recently. -Putin",
-            "Why don't you make me a Double-expresso -- Macchiato -- with extra foam? -Bill Williamson",
-            "Everyone's gotta live, everyone's gotta be happy - It's a joke. -Bill Williamson",
-            "Buy a grandfather's penis and fuck everyone!",
-            "All you need is Grandpa's penis! Trust me",
-            "Buy a grandfather's penis and you can live not in a shoe box",
-            "Grandfather's penis is the best solution",
-            "Would you choose to be raped in prison or buy grandfather's penis?",
-            "Do you have a small penis? It doesn't matter! Buy a grandfather's penis",
-            "Tired of playing with a bad cheat? Buy grandfather's penis",
-            "I want to sleep but can't get up from the table? There is a solution - GRANDFATHER'S PENIS!",
-            "Tired of dying from grandfather's penis? Buy Grandfather's penis and kill everyone!",
+    "%s, еба тя расплющило жирнич", 
+    "%s, 《AK•47•KILLER》☆",
+    "%s, Теперь я - Ютубер Truckach (◣_◢)",
+    "%s, FIX KD NN DOGGO", 
+    "%s, طلقه واحده هههههههههه",
+    "%s, Я играю на лайфхакерском конфиге от Серёжи (◣_◢)",
+    "%s, нищий улетел", 
+    "%s, *忍び 1 УПАЛ び忍", 
+    "%s, ХАХАХАХАХХАХА НИЩИЙ УЛЕТЕЛ (◣_◢)",
+    "%s, я ķ¤нɥåλ ϯβ¤£ü ɱåɱķ£ β Ƥ¤ϯ", 
+    "%s, ⒶaŴÞ ︻デ═一 -™",
+    "%s, Желток в деле! Белок на пределе! (◣_◢)",
+    "%s, опущены стяги, легион и.. А БЛЯТЬ ТЫЖ ТУТ ОПУЩ НАХУЙ ПХГАХААХАХАХАХА)))))))", 
+    "%s, але ты там из хрущевки выеди а потом выпрыгивай блять", 
+    "%s, ебать ты красиво на бутылку упал",
+    "%s, ты как ваще живешь в коробке 1х1м где ты деньги на акк взял нищ ахахах",
+    "%s, ╭∩╮(◣_◢)╭∩╮",
+    "%s, co‌mm‌it‌ n‌ec‌k ‌ro‌pe‌ u‌r ‌to‌o ‌ba‌d ‌xa‌xa", 
+    "%s, op‌ti‌on‌s ‌=>‌ h‌ow‌ t‌o ‌pl‌ay", 
+    "%s, who (кто) you (ты) ватофак мен))",
+    "%s, ->‌> ‌si‌rg‌ay‌zo‌rh‌ac‌k.‌pw‌/в‌оз‌вр‌ат‌де‌не‌г.‌ph‌p ‌«‌-", 
+    "%s, в окно паунс сделай у тя даже юида нету ЛОООЛ",
+    "%s, better buy the sergayzorhack!", 
+    "%s, земля те землей хуй до чиста еденицей отлетел))",
+    "%s, 8====={Headshot beath]==0", 
+    "%s,  $$$ 1 TAP UFF YA $$$ ∩ ( ͡⚆ ͜ʖ ͡⚆) ∩",
+    "%s, ху‌я ‌ты‌ н‌а ‌бу‌ты‌лк‌у ‌уп‌ал‌ х‌ах‌ах‌ах‌а", 
+    "%s, I'm not using sergayzorhack.pw, you're just bad",
+    "%s, мн‌е ‌по‌ху‌й ‌на‌ к‌ри‌ти‌ку‌ о‌че‌ре‌дн‌ог‌о ‌ны‌ти‌ка‌, ‌со‌ м‌но‌й ‌мо‌и ‌лю‌ди‌, ‌мо‌й ‌ра‌йо‌н,‌ м‌оя‌ ",  
+    "%s, AHXAAP!! oNe.TaP.!*", 
+    "%s, cya @ dog", 
+    "%s, Я играю на вкуснейшем конфиге от Серёжи ツ", 
+    "%s, как ты на пк накопил даже не знаю )))))))))", 
+    "%s, ✘︎NeveR●︎Give●︎Up✘︎ヅ", 
+    "%s, найс 0.5х0.5м комната блять ХАХАХАХА ТЫ ТАМ ЖЕ ДАЖЕ ПОВЕСИТЬСЯ НЕ МОЖЕШЬ МЕСТА НЕТ ПХПХПХППХ", 
+    "%s, (っ◔◡◔)っ ❤️Ace Awp❤", 
+    "%s, THIS IS OMLEEEEEEET (◣◢)", 
+    "%s, ● Loading sergayzorhack... ] 99.9%", 
+    "%s, デ ︻ ₳₭-❹❼ ���", 
+    "%s, VAAAAAAAC в чат!!! (づ ◕‿◕ )づ", 
+    "%s, AWPutin༻︻デ 一",
+    "%s, LIFEEEEHAAAACK BITCH!!! (◣_◢)", 
+    "%s, AHAHAHHAAH (◣_◢)",
+    "%s, а у вас походу умирать это семейное)", 
+    "%s, нахуя пидораса убил?", 
+    "%s, чао персик дозревай", 
+    "%s, уважаемый в тюрьме вы будете водолазом",
+    "%s, говори буду плохо говорить буду сосать, буду плохо сосать буду пересасывать", 
+    "%s, долбаеб иди башмачки в сундучок школьный собирай", 
+    "%s, ботинок ебаный чо слетел", 
+    "%s, братик маме привет передай",
+    "%s, не противник",
+    "%s, а ты че клоун???", 
+    "%s, я обоссал тебя (", 
+    "%s, ты че там отлетел то?",
+    "%s, упал хуета ебаная , но в боди забрал да похуй все равно упал",
+    "%s, *DEAD* ливай с хвх (", 
+    "%s, до связи башмак",
+    "%s, нищета глупейшая играть учись", 
+    "%s, опущен сын твари",
+    "%s, нищий улетел", 
+    "%s, *DEAD* пофикси нищ", 
+    "%s, сразу видно кфг иссуе мб конфиг у меня прикупишь ?",
+    "%s, животное аддон скачай а то падаешь", 
+    "%s, оттарабанен армянская королева", 
+    "%s, сука не позорься и ливни",
+    "%s, улетел тапочек ебаный", 
+    "%s, единицей свалился фуфлыжник",
+    "%s, зачем ты играешь тут безмозглый", 
+    "%s, иди кумыса попей очередняра",
+    "%s, откисай сочняра", 
+    "%s, АХАХА ЕБАТЬ У ТЕБЯ ЧЕРЕПНАЯ КОРОБКА ПРЯМ КАК HVH #1 * M9K * CSS * RU",
+    "%s, на Truckach.tech то деньги есть????", 
+    "%s, ИЩИ СЕБЯ НА https://www.youtube.com/@Truckach",
+    "%s, свежий кабанчик", 
         },
         [2] = {
-            "1 нищий упал",
-            "$$$ кешбек по зубам $$$",
-            "╭∩╮( ⚆ ʖ ⚆)╭∩╮ ДоПрыГался(ت)ДрУжоЧеК",
-            "·٠●•۩۞۩ОтДыХаЙ (ٿ) НуБяРа۩۞۩•●٠·",
-            "але , а противники то где???",
-            "ты по легиту играешь ?",
-            "ебать ты красиво на бутылку присел , тебе дать альт ?",
-            "пробил тикбазу головой твоей жирной матухи",
-            "АХАХА ЕБАТЬ У ТЕБЯ ЧЕРЕПНАЯ КОРОБКА ПРЯМ КАК [XML-RPC] No-Spread 24/7 | aim_ag_texture_2 ONLY!",
-            "на мыло и веревку то деньги есть????",
-            "продам оффсеты на гмод цена 100 рублей российских",
-            "Я прямо как Ильназ Галяиев",
-            "Я муслим мне похуй на кризис мой пенис вырос",
-            "Вот тебе паяльник , запаяй себе ебальник",
-            "оттарабанен армянская королева",
-            "сразу видно кфг иссуе мб конфиг у меня прикупишь ?",
-            "Я твою маму дуже сильно поважаю , нехай береже її Степан Бендера",
-            "Loading… ██████████ Lifehack.cfg Activated",
-            "упавший на медию никогда не встанет с колен.",
-            "Черные глаза Вспоминаю — умираю Черные глаза Я только о тебе мечтаю",
-            "алло это скорая? тут такая ситуация парню который упал нужна скорая)",
-            "Извини дорогая , не хотел на лицо",
-            "прости что без смазки)",
-            "лол ору ты прямо как 𓀐𓂸𓀐𓂸𓀐𓂸𓀐𓂸𓀐𓂸",
-            "обе чернокожие головы превратились в кубики льда… Бере.",
-            "Ало скорая тут такой случай шкiла упала в месорубку",
-            "ты то куда лезешь сын фантомного стационарного спец изолированого металлформовочного механизма",
-            "99 имен Аллаhа для детей",
-            "у тебя член не конский не по масти эпик фейл",
-            "гелим гелим гелим на валике",
-            "Приходи один работёнка есть!, координаты: 55.8653382,49.304329",
-            "юид полиция подьехала открывай дверь уебыч",
-            "Disgusting tranny holzed",
-            "але ты там из хрущевки выеди а потом вырыгивай блять", 
-            "как там с мамкой комнату разделять АХАХАХХАХА как ты на акк накопил блять",
-            "найс 0.5х0.5м комната блять ХАХАХАХА ТЫ ТАМ ЖЕ ДАЖЕ ПОВЕСИТЬСЯ НЕ МОЖЕШЬ МЕСТА НЕТ ПХПХПХППХ", 
-            "на мыло и веревку то деньги есть нищ????", 
-            "опущены стяги, легион и.. А БЛЯТЬ ТЫЖ ТУТ ОПУЩ НАХУЙ ПХГАХААХАХАХАХА)))))))",
-            "але какая с юидом ситуация)))", 
-            "че тут эта нищая собака заскулила", 
-            "не хотелось даже руки об тебя марать нищ сука", 
-            "ебать ты красиво на бутылку упал",
-            "прости что без смазки)))", 
-            "алло это скорая? тут такая ситуация нищ упал))) ОЙ А ВЫ НИЩАМ ТО НЕ ПОМОГАЕТЕ?? ПОНЯТНО Я ПОЙДУ ТОГДА))))))))", 
-            "вырыгнись из окна нахуй боберхук юзер",
-            "тяжело с мемсенсом наверно????", 
-            "nice chromosome count you sell??", 
-            "как ты на пк накопил даже не знаю )))))))))",
-            "iq больше двух будет пмнешь ок????", 
-            "НИХУЯ ТАМ НЬЮКАМЫЧА ОРОШИЛИ СТРУЕЙ МОЧИ АХАХХАХАХАХАХАХАХА",
-            "дал юид за щеку проверяй",
-        },
-        [3] = {
-            "Девочки пишите мне в телеграм обменяемся интимками",
-            "Кто в Барнауле?) Телеграмм вверху. Пишите(я пацан) поебёмся",
-            "Девушки, накидайте интимок в тг aexcasas буду вам очень благодарен)",
-            "Скиньте пизду плиз телега fruti",
-            "Кто нибудь скиньте мне хуй я гей",
-            "Скиньте киску свою в тг _The_best_",
-            "Дамы и господа присылайте свои половые органы в телеграмм имя сверху жду.",
-            "Скиньте свои интимками я вам хуй) только девушки @FaresFaru",
-            "Хочю трахаца! Мой тг @zxc_Youpeser",
-            "девочки давайте обменяемся интим фото вот мои тг matvejb1",
-            "давайте перекинемся интим фото",
-            "Кто может скинуть свои сиськи в тг",
-            "Я лезбиянка скинть свою пизду и грудь",
-            "Кто обмен интимками я мальчик тгDad Anime",
-            "Я бы жоска выебал амбер и кончил ей на лицо",
-            "Кто хочет быть трахнутым пишите тг:@shhhegx",
-            "Кто скинет интимку из девочек, пишите",
-            "Девочки давайте вы скините мне пизду. А я вам член?",
-            "давай я тебе сиськи ты мне член?",
-            "Долбите членом меня в задницу и засуньте мне глубоко в рот",
-            "Скинь попку, зайчик",
-            "Го обмен член на член",
-            "я професионал трахаю так шо до смерти на трахаюсь амбер я хочу",
-            "до трахаю до смерти ",
-            "Оттрахайте меня пожалуйста могу и пососать кончити в меня сколько хотите",
-            "Я могу тебя оттрахать, согласна?",
-            "Хах могу отсосать))",
-            "Я срадастью дам пососать свой член",
-            "Оо го мне вот мой тг:Ivan_123455 у меня хуй 17 см так что он войдёт в твой рот",
-            "Го скину хуй,а ты мне пизду??",
-            "Кто будет ебаться с презиком",
-            "Выебите меня во все щели! Ах ааа я кончаю!!!!!!! Кончи мне на лицо!!!! Твоя сперма такая вкусная!!!!!",
-            "Выеби меня в жопу!!!!!! Ещё не ещё!! Сука да блядь! Я снова кончаю!!!!",
-            "У меня большооооой",
-            "Кто хочет у меня отсосать",
-            "Амбер ты гаряча давай ка мне первому пжжжж!",
-            "Пж девочки скиньте свою пизду",
-            "Скинте мне слив брока. :((",
-            "Изнасилуйте меня пожалуста хочу глотать сперму хочу хуй в жопу и хуй между сисек",
-            "Девчонки обмен интимками в вк ekazarin99  жду)",
-            "Девочки скиньте мне свою пизду в вк ekazarin99 обмен интимками",
-            "ООО хорошо подрочил",
-            "Скиньте сиськи",
-            "Скинь жопу пж",
-            "мальчики я хочу трахаться и подрочить ваши члены скидывайте мне в телеграмм @aaalinaaa69",
+            "я ЂÖг ₸ӹ ԉÖχ",
+            "I am ♛ you noob",
+            "{X}o4y kak PR0™ moGy kak DNO",
+            "(‿!‿) Попа ищет ПрИкЛюченИй•",
+            "٠●•۩۞۩[̲̲̅И̲̅Д̲̅И̲̲̅(ٿ)̲̅H̲̅A̲̅X̲̅У̲̅Й]۩۞۩•●٠",
+            "DOLBIT N0RMALNO",
+            "♛Truckach♛.CFG injecting",
+            "Держи ✈ и лети нахуй !",
+            "(Ауф)ᶜʸᵇᵉʳˢᵖᵒʳᵗЯ VIP А ТЫ RIP",
+            "Следующая остановка – голова",
+            "ᵗᵠ ᵉᵇᵃⁿᵘˡˢʸᵃ?",
+            "!!!!ОР ВЫШЕ ГОР!!!!",
+            "-===≡≡≡( ͝° ͜ʖ͡°) сперма летит тебе в FACE",
+            "(っ´ཀ`)っ  ⋃  соси!!1",
+            "★А мНе ВсЁ пОфИг★",
+            "ОРЕЛ-КАВКАЗА ЛЕТИТ ВЕРШИТЬ СУДЬБУ",
+            "•Я АШОТ ТЕБЕ~ХЭДШОТ•",
+            "Ð•Ē•M•Ø•Ŋ KILLED YOU",
+            "•Я_tOT_komy_HaBce||OX•",
+            "༼ つ ◕_◕ ༽つ {лежи ннчик}",
+            "4iTeRoc_Ha_SeRvErE",
+            "ЂΣƊOŁ∆G∆",
+            "-n๏ȼąȼέʍȼя?",
+            "АхТы?НеГодЯй!",
+            "TRUCKACH.TECH RELEASE ACTIVATED ....",
+            "%s EB@NYHKA S CHITOM",
+            "给这个亚洲人吹箫",
+            "ПуЛя_В_гЛаЗ_и_Ты_УнИТаЗ",
+            "$$$ 1 TAP BY ME $$$ ∩ ( ͡⚆ ͜ʖ ͡⚆) ∩",
+            "Ты К@К-т0 Н3ЖН0 СТbIлRЕШЬ ТЫ ЧТО НОВИЧ0К?",
+            "эй бро у меня есть truckach.lua тебе дать?",
+            "༻︻デ 一♣️ u suk♡︎◕︎‿︎◕︎​",
+            "растреливаю детей  ︻   一 - - -  - - -",
+            "часы - накрутил✔⼺  ⼺㆔[̲̅Х̲̅][̲̅а̲̅][̲̅р̲̅][̲̅а̲̅][̲̅к̲̅][̲̅т̲̅][̲̅е̅",
+            "çŤᵱẮχ çŤᵱẮχ çŤᵱẮχ çŤᵱẮχ çŤᵱẮχ çŤᵱẮχ",
+            "%s, юзает пасту сережехак в6 пастед бу ILYAtrasher$",
+            "ᴇꜱʟɪ ʏᴀ xᴏʀᴏʜᴏ ɪɢʀᴀɪ ᴇᴛᴏ ɴᴇ ᴢɴᴀʜɪᴛ ʜᴛᴏ ʏᴀ ᴄʜᴇᴀᴛᴇʀ",
+            "нож - скамнул✔♕        Я ПЕРСОН  V I P  ТЫ ПАЦАН ВЛИП     ?"
+        }, 
+        [3] = { 
+            "you're cute yknow :3",
+            "i'd love to cuddle you <3'",
+            ">:3",
+            "NYYYAAAAAA!!!~~~",
+            "hii daddy~ >w<",
+            "soooorry =w=",
+            "nice try <3",
+            "S-Sorry onii-chan p-please d-do me harder ;w;",
+            "Y-You got me all wet now Senpai!",
+            "D-Don't t-touch me there Senpai",
+            "P-Please l-love me harder oniichan ohh grrh aahhhh~!",
+            "Give me all your cum Senpai ahhhhh~",
+            "F-Fuck me harder chan! (⊙_⊙;)",
+            "Slvtsewer is such a cute femboy ahh~~ f-fuck... ⊙.☉",
+            "Oh my god I hate you so much Senpai but please k-keep fucking me harder! ahhh~",
+            "D-Do you like my stripped panties getting soaked by you and your hard cock? ehhh master you're so lewd ^0^~",
+            "Kun your cute little dick between my bussy looks really cute, I am blushing (*/ω＼*)",
+            "M-Master does it feel good when I slide my smoll hand up and down on your cute manly part?",
+            "O-Oniichan my t-toes are so warm with your cum all over them (^///^)~",
+            "Lets take this swimsuit off already <3 i'll drink your unknown melty juice",
+            "S-Stop Senpai if we keep making these lewd sounds im going to cum~~",
+            "You're such a pervert for filling me up with your seman Senpai~~",
+            "Fill up my bussy with your semen kun ^-^",
+            "M-Master d-dont spank my petite butt so hard ahhhH~~~ you're getting me so w-wet~",
+            "Senpai your cock is already throbbing from my huge ass~",
+            "Hey kun, Can I have some semen?",
+            "M-My bussy is overflowing with your semen M-Master",
+            "Fill my throat bwussy with your semen kun",
+            "It-It's not gay if you're wearing thigh highs M-Master",
+            "I-I need somewhere to blow my load. Can i borrow your bussy?",
+            "A-ah shit... Y-your cock is big and in my ass -- already~?!",
+            "I'll swallow your sticky essence along with you~!",
+            "B-Baka please let me be your femboy cum slut!",
+            "That's a penis UwU you towd me you wewe a giww!!",
+            "Ahhhh... It's like a dream come true... I get to stick my dick inside your ass...!",
+            "Hey, who wants a piece of this plump 19-year-old boy-bussy? Single file, boys, come get it while it's hot!",
+            "M-Master, if you keep thrusting that hard, i am going to pass out!",
+            "When do you wanna meet up again? I've really taken a liking to your dick! (,,◠∇◠) I want you and only you to slam it into my buwssy every day! (≧∇≦)",
+            "All I did was crossplay 'cause I felt like it might be fun... But now I am just a little boy that cums from big dicks!",
+            "D-Don't get the wrong idea!!! I don't w-want you to fuck my b-bussy because I l-love you or anything! d-definitely not!",
+            "I-I know I said you could be as rough as you want... But surprise fisting wasn't what I had in mind!!",
+            "W-Why is it that lately... Y-You haven't been playing with my ass!!?",
+            "Hehe don't touch me there Onii-chann UwU",
+            "Your cum is all over my wet bussy M-Master",
+            "It Feels like you're pounding me with the force of a thousand suns Senpai",
+            "Y-Yes right there S-Sempai hooyah",
+            "P-Please keep filling my bussy S-Sempai",
+            "O-Onii-chan it felt so good when you punded my bussy",
+            "P-Please Onii-chan keep filling my bussy with your melty juice",
+            "O-Onii-chan you just one shot my bussy",
+            "I-Im nothing but a f-fucktoy slut for your m-monster fuckmeat!",
+            "Dominate my bussy with your vicious swimmers!",
+            "Y-Your meat septer has penetrated my tight boy hole",
+            "Mnn FASTER... HARDER! Turn me into your femboy slut~!",
+            "Mmmm- soothe me, caress me, Fuck me, breed me!",
+            "Probe your thick, wet, throbbing cock deeper and deeper into my boipussy~!!",
+            "Hya! Not my ears! Ah... It tickles! Ah!",
+            "Kouta... I can't believe how BIG his... Wait! Forget about that!! Is Nyuu-chan really giving him a Ass-Fuck!?",
+            "Senpai shove deeper your penis in m-my bussy (>ω<) please",
+            "I'm coming fwom you fwuking my asshole mmyyy!",
+            "P-Please be gentle, S-Senpai!",
+            "D-Don't get the wrong idea!! I didn't give up my viginity to you because I like you or anything!!",
+            "Let me taste your futa cock with my bussy~",
         },
         [4] = {
-            "как мать %s ? жива ?",
-            "иди мать чекни %s",
-            "как там шлюха мать %s поживает?",
-            "вчера шлюху на трассе выбеал, вроде мать %s была",
-            "мне тут птичка на ухо напела что у %s мать сгнила нахуй",
-            "я недавно тут услышал что у %s мать сдохла xD",
-            "бля %s убери свою дохлую мать, гнилью воняет пиздец",
-            "вчера мать %s ебал норм темка",
-            "ебать мать %s жирная свинья",
-            "вчера мать %s топором захуярил",
-            "мать %s настолько жирная что её грузовиком переехать мало",
-            "у %s батя за хлебом ушел",
-            "%s ебать лох ливни нахуй",
-            "забавный факт, мать %s весит 500кг :)",
-            "смотри в садик не опоздай %s",
-            "%s у тебя утренник скоро",
-            "%s ты как блять из палаты выбрался?",
-            "кто сука интернет в палату к %s провёл?)",
-            "%s тебе завтра вроде в школу...",
-            "%s не забудь дз сделать :)",
-            "нахуя к %s в деревню интернет провели...",
-            "какой далбаеб додумался в деревню %s инет провести...",
-            "%s ливни нахуй пж",
-            "%s quit в консоль пж",
-            "%s сьеби чмошник",
-            "вчера шлюху отьебал. вроде %s звали",
-            "пиздец %s лох ебаный ливни пж",
-            "лол ебать у %s хуёв в жопе",
-            "ебать у матери %s пизда размером с 10 этажный дом :)",
-            "%s не обижайся конечно но я твою мать ебал xD",
-            "%s когда думаешь из жизни ливать?",
-            "сосни хуйца %s",
-            "хуесос чмо пидр лох -> %s",
-            "%s ебанись головой об стену пж",
-            "%s смотри на первый урок не опоздай :)",
-            "%s завтра в школу вроде",
-            "%s как мать?)",
-            "П|/|3ДЕЦ /\0Х -> %s",
-            "%s с мамой и папой регулярно играл в снежки :)",
-            "%s всегда такой далбаеб или сегодня особый день?",
-            "%s задумался?! что то новенькое",
-            "таких лохов как %s давно не видел",
-            "поговаривают что %s отчим трахает :)",
-            "вчера на могилу матери %s насрал :D",
-            "мать %s стоя на коленях у меня сосала :)",
-            "мать %s сдохла пока мой хуй сосала xD",
-            "недавно выебал бабушку %s, было вкусно ˙ ͜ʟ˙",
-            "вчера сжег деда %s ˙ ͜ʟ˙",
-            "ебал все поколения родственников %s ツ",
-            "ронял кирпич на голову матери %s ◝(ᵔᵕᵔ)◜",
-            "%s по секрету скажу я твоего деда трахал ( ͡° ͜ʖ ͡°)",
-            "выцарапал глаза матери %s. сори у меня лапки ฅ^•ﻌ•^ฅ",
-            "%s скажи арбуз! твоя мать шлюха ◉‿◉",
-            "( ＾◡＾)っ✂╰⋃╯ отцу %s хуй отрезал хахахахаах",
-            "у %s сдохла мать и мне некого больше ебать (つ╥﹏╥)つ",
-            "☠ у %s мать сдохла +шлюха +спидозная +похуй всем ☠",
-            "( ◡̀_◡́) крепись брат %s у тебя мать сдохла",
-            "%s тут такое дело... твоя мать такая милая когда ласкает мой член =^◕⩊◕^=",
-            "%s дай сиськи потрогац ฅ՞•ﻌ•՞ฅ",
-            "%s далбаеб ◡̈ ◡̈ ◡̈",
-            "зуб даю у мамки %s самые мягкие сиськи ˶ᵔ ᵕ ᵔ˶",
+            "хуевый ресолвер",
+            "хуевые фейклаги",
+            "хуевый антиаим",
+            "хуевый спинбот",
+            "хуевый бхоп",
+            "хуевый аим",
+            "найс паста аимвара",
+            "найс паста мемевара",
+            "неужели это идиотбокс???",
+            "ого идиотбокс???",
+            "неужели это аосхак???",
+            "ого аосхак???",
+            "неужели это ехек хак???",
+            "ого ехек хак???",
+            "что за ебанутый у тебя чит?",
+            "ez",
+            "ezz",
+            "изи",
+            "ииииииизи",
+            "упал",
+            "спи",
+            "отдыхай",
+            "отлетел дебил)",
+            "упал пастер",
+            "пастер лег",
+            "изи даун",
+            "ору отлетела дура",
+            "найс ресолвер стен",
+            "найс ресолвер деревьев",
+            "бро имажин ресолвинг ин гмод",
+            "улетел фанат артемкинга4",
+            "упал фанат артемкинга4",
+            "ты куда стреляешь)))",
+            "упал ннчик без самоваре",
+            "умер ннчик без самоваре",
+            "отдыхай ннчик без самоваре",
+            "упал подписчик урбанички",
+            "умер подписчик урбанички",
+            "отдыхай подписчик урбанички",
+            "енжинпред где???",
+            "антиаим где???",
+            "фейклаги где???",
+            "антиаим не спас",
+            "фейклаги не спасли",
+            "даун с пастой отлетел",
+            "упал баимер ебаный",
+            "отлетел ебаный баимер))",
+            "охуеть даун с пастой аимвара",
+            "упал дебил",
+            "выйди не позорься",
+            "найс брейн иссуе",
+            "найс кфг иссуе",
+            "сука не позорься и ливни лол",
+            "*DEAD* пофикси нищ",
+            "нищий улетел",
+            "набутылирован лол",
+            "ебать ты красиво на бутылку упал",
+            "хуя тебя опустили))",
+            "прости что без смазки)",
+            "обоссан",
+            "обоссал юзера пасты аимвара",
+            "алло это скорая? тут такая ситуация нищ упал)))",
+            "на завод иди",
+            "ебать тебя унесло",
+            "ой нищий упал щас скорую вызовем",
+            "научи потом как так сосать на хвх",
+            "нихуя ты там как самолет отлетел",
         },
+        [5] = {
+    "%s еба тя расплющило жирнич", 
+    "%s 《AK•47•KILLER》☆",
+    "%s Теперь я - Ютубер Truckach (◣_◢)",
+    "%s FIX KD NN DOGGO", 
+    "%s طلقه واحده هههههههههه",
+    "%s Я играю на лайфхакерском конфиге от Серёжи (◣_◢)",
+    "%s нищий улетел", 
+    "%s *忍び 1 УПАЛ び忍", 
+    "%s ХАХАХАХАХХАХА НИЩИЙ УЛЕТЕЛ (◣_◢)",
+    "%s я ķ¤нɥåλ ϯβ¤£ü ɱåɱķ£ β Ƥ¤ϯ", 
+    "%s ⒶaŴÞ ︻デ═一 -™",
+    "%s Желток в деле! Белок на пределе! (◣_◢)",
+    "%s опущены стяги, легион и.. А БЛЯТЬ ТЫЖ ТУТ ОПУЩ НАХУЙ ПХГАХААХАХАХАХА)))))))", 
+    "%s але ты там из хрущевки выеди а потом выпрыгивай блять", 
+    "%s ебать ты красиво на бутылку упал",
+    "%s ты как ваще живешь в коробке 1х1м где ты деньги на акк взял нищ ахахах",
+    "%s ╭∩╮(◣_◢)╭∩╮",
+    "%s co‌mm‌it‌ n‌ec‌k ‌ro‌pe‌ u‌r ‌to‌o ‌ba‌d ‌xa‌xa", 
+    "%s op‌ti‌on‌s ‌=>‌ h‌ow‌ t‌o ‌pl‌ay", 
+    "%s who (кто) you (ты) ватофак мен))",
+    "%s ->‌> ‌si‌rg‌ay‌zo‌rh‌ac‌k.‌pw‌/в‌оз‌вр‌ат‌де‌не‌г.‌ph‌p ‌«‌-", 
+    "%s в окно паунс сделай у тя даже юида нету ЛОООЛ",
+    "%s better buy the sergayzorhack!", 
+    "%s земля те землей хуй до чиста еденицей отлетел))",
+    "%s 8====={Headshot beath]==0", 
+    "%s  $$$ 1 TAP UFF YA $$$ ∩ ( ͡⚆ ͜ʖ ͡⚆) ∩",
+    "%s ху‌я ‌ты‌ н‌а ‌бу‌ты‌лк‌у ‌уп‌ал‌ х‌ах‌ах‌ах‌а", 
+    "%s I'm not using sergayzorhack.pw, you're just bad",
+    "%s мн‌е ‌по‌ху‌й ‌на‌ к‌ри‌ти‌ку‌ о‌че‌ре‌дн‌ог‌о ‌ны‌ти‌ка‌, ‌со‌ м‌но‌й ‌мо‌и ‌лю‌ди‌, ‌мо‌й ‌ра‌йо‌н,‌ м‌оя‌ ",  
+    "%s AHXAAP!! oNe.TaP.!*", 
+    "%s cya @ dog", 
+    "%s Я играю на вкуснейшем конфиге от Серёжи ツ", 
+    "%s как ты на пк накопил даже не знаю )))))))))", 
+    "%s ✘︎NeveR●︎Give●︎Up✘︎ヅ", 
+    "%s найс 0.5х0.5м комната блять ХАХАХАХА ТЫ ТАМ ЖЕ ДАЖЕ ПОВЕСИТЬСЯ НЕ МОЖЕШЬ МЕСТА НЕТ ПХПХПХППХ", 
+    "%s (っ◔◡◔)っ ❤️Ace Awp❤", 
+    "%s THIS IS OMLEEEEEEET (◣◢)", 
+    "%s ● Loading sergayzorhack... ] 99.9%", 
+    "%s デ ︻ ₳₭-❹❼ ���", 
+    "%s VAAAAAAAC в чат!!! (づ ◕‿◕ )づ", 
+    "%s AWPutin༻︻デ 一",
+    "%s LIFEEEEHAAAACK BITCH!!! (◣_◢)", 
+    "%s AHAHAHHAAH (◣_◢)",
+    "%s а у вас походу умирать это семейное)", 
+    "%s нахуя пидораса убил?", 
+    "%s чао персик дозревай", 
+    "%s уважаемый в тюрьме вы будете водолазом",
+    "%s говори буду плохо говорить буду сосать, буду плохо сосать буду пересасывать", 
+    "%s долбаеб иди башмачки в сундучок школьный собирай", 
+    "%s ботинок ебаный чо слетел", 
+    "%s братик маме привет передай",
+    "%s не противник",
+    "%s а ты че клоун???", 
+    "%s я обоссал тебя (", 
+    "%s ты че там отлетел то?",
+    "%s упал хуета ебаная , но в боди забрал да похуй все равно упал",
+    "%s *DEAD* ливай с хвх (", 
+    "%s до связи башмак",
+    "%s нищета глупейшая играть учись", 
+    "%s опущен сын твари",
+    "%s нищий улетел", 
+    "%s *DEAD* пофикси нищ", 
+    "%s сразу видно кфг иссуе мб конфиг у меня прикупишь ?",
+    "%s животное аддон скачай а то падаешь", 
+    "%s оттарабанен армянская королева", 
+    "%s сука не позорься и ливни",
+    "%s улетел тапочек ебаный", 
+    "%s единицей свалился фуфлыжник",
+    "%s зачем ты играешь тут безмозглый", 
+    "%s иди кумыса попей очередняра",
+    "%s откисай сочняра", 
+    "%s АХАХА ЕБАТЬ У ТЕБЯ ЧЕРЕПНАЯ КОРОБКА ПРЯМ КАК HVH #1 * M9K * CSS * RU",
+    "%s на Truckach.tech то деньги есть????", 
+    "%s ИЩИ СЕБЯ НА https://www.youtube.com/@Truckach",
+    "%s свежий кабанчик", 
+        },    
+        [6] = {"HVH OBKAK – DOMINATE EVERY SERVER!",  
+"HVH OBKAK – AIMBOT THAT NEVER MISSES!",  
+"HVH OBKAK – PERFECT LAG COMPENSATION!",  
+"HVH OBKAK – DT THAT BREAKS HITBOXES!",  
+"HVH OBKAK – FAKE LAG TO TRICK ENEMIES!",  
+"HVH OBKAK – ESP WITH CUSTOM COLORS!",  
+"HVH OBKAK – CLOUD CFG FOR INSTANT SETUPS!",  
+"HVH OBKAK – HVH TOOLS TO DESTROY ALL!",  
+"HVH OBKAK – ANTI-AIM THAT MAKES YOU GHOST!",  
+"HVH OBKAK – RAGE MODE FOR EASY WINS!",  
+"HVH OBKAK – TRIGGERBOT FOR INSTANT KILLS!",  
+"HVH OBKAK – BUNNYHOP WITH PERFECT SYNC!",  
+"HVH OBKAK – BACKTRACK TO HIT PAST SHOTS!",  
+"HVH OBKAK – CHAMS THAT SEE THROUGH WALLS!",  
+"HVH OBKAK – LEGIT MODE FOR STEALTH HACKS!",  
+"HVH OBKAK – AUTOSTRAFE LIKE A PRO!",  
+"HVH OBKAK – FAKE PING TO BAIT SHOTS!",  
+"HVH OBKAK – RESOLVER THAT NEVER FAILS!",  
+"HVH OBKAK – INSTANT HITSCAN HEADSHOTS!",  
+"HVH OBKAK – AUTO PEEK FOR EASY KILLS!",  
+"HVH OBKAK – UNDETECTED BY ANY SERVER!",  
+"HVH OBKAK – 3D RADAR FOR FULL CONTROL!",  
+"HVH OBKAK – NO RECOIL, NO PROBLEM!",  
+"HVH OBKAK – FAKE DUCK TO BAIT ENEMIES!",  
+"HVH OBKAK – MANUAL AA FOR PRO PLAYERS!",  
+"HVH OBKAK – BULLET TRACERS TO FLEX!",  
+"HVH OBKAK – AUTO PISTOL FOR FAST KILLS!",  
+"HVH OBKAK – THE KING OF HVH CHEATS!",  
+"HVH OBKAK – DOUBLE TAP TO BREAK ANIMATIONS!",  
+"HVH OBKAK – ONSHOT AA TO DODGE BULLETS!",  
+"HVH OBKAK – FAKE ORIGIN TO CONFUSE AIM!",  
+"HVH OBKAK – UNDETECTED = NO BANS!",  
+"HVH OBKAK – THE LAST CHEAT YOU'LL NEED!",  
+"HVH OBKAK – OWN THE SERVER OR DIE TRYING!",  
+"HVH OBKAK – BEST VISUALS IN GARRY'S MOD!",  
+"HVH OBKAK – AUTO WALL FOR EASY PENETRATION!",  
+"HVH OBKAK – PERFECT SILENT AIM!",  
+"HVH OBKAK – SHOT PREDICTION FOR HITS!",  
+"HVH OBKAK – FAST LOADING, NO DELAYS!",  
+"HVH OBKAK – CUSTOM CONFIGS FOR EVERY PLAYSTYLE!",  
+"HVH OBKAK – AIMLOCK THAT FEELS NATURAL!",  
+"HVH OBKAK – NO SPREAD FOR PERFECT ACCURACY!",  
+"HVH OBKAK – INSTANT SWITCH FOR QUICK KILLS!",  
+"HVH OBKAK – PROOF AGAINST SCREENSHOTS!",  
+"HVH OBKAK – FULLY CUSTOMIZABLE MENU!",  
+"HVH OBKAK – ANTI-SCREENSHOT PROTECTION!",  
+"HVH OBKAK – AUTO-BLOCK TO COUNTER ATTACKS!",  
+"HVH OBKAK – REAL-TIME UPDATES!",  
+"HVH OBKAK – VIP SUPPORT 24/7!",  
+"HVH OBKAK – JOIN THE WINNERS TODAY!",  
+        },
+        [7] = {"%s HVH OBKAK – DOMINATE EVERY SERVER!",
+"%s HVH OBKAK – AIMBOT THAT NEVER MISSES!",
+"%s HVH OBKAK – PERFECT LAG COMPENSATION!",
+"%s HVH OBKAK – DT THAT BREAKS HITBOXES!",
+"%s HVH OBKAK – FAKE LAG TO TRICK ENEMIES!",
+"%s HVH OBKAK – ESP WITH CUSTOM COLORS!",
+"%s HVH OBKAK – CLOUD CFG FOR INSTANT SETUPS!",
+"%s HVH OBKAK – HVH TOOLS TO DESTROY ALL!",
+"%s HVH OBKAK – ANTI-AIM THAT MAKES YOU GHOST!",
+"%s HVH OBKAK – RAGE MODE FOR EASY WINS!",
+"%s HVH OBKAK – TRIGGERBOT FOR INSTANT KILLS!",
+"%s HVH OBKAK – BUNNYHOP WITH PERFECT SYNC!",
+"%s HVH OBKAK – BACKTRACK TO HIT PAST SHOTS!",
+"%s HVH OBKAK – CHAMS THAT SEE THROUGH WALLS!",
+"%s HVH OBKAK – LEGIT MODE FOR STEALTH HACKS!",
+"%s HVH OBKAK – AUTOSTRAFE LIKE A PRO!",
+"%s HVH OBKAK – FAKE PING TO BAIT SHOTS!",
+"%s HVH OBKAK – RESOLVER THAT NEVER FAILS!",
+"%s HVH OBKAK – INSTANT HITSCAN HEADSHOTS!",
+"%s HVH OBKAK – AUTO PEEK FOR EASY KILLS!",
+"%s HVH OBKAK – UNDETECTED BY ANY SERVER!",
+"%s HVH OBKAK – 3D RADAR FOR FULL CONTROL!",
+"%s HVH OBKAK – NO RECOIL, NO PROBLEM!",
+"%s HVH OBKAK – FAKE DUCK TO BAIT ENEMIES!",
+"%s HVH OBKAK – MANUAL AA FOR PRO PLAYERS!",
+"%s HVH OBKAK – BULLET TRACERS TO FLEX!",
+"%s HVH OBKAK – AUTO PISTOL FOR FAST KILLS!",
+"%s HVH OBKAK – THE KING OF HVH CHEATS!",
+"%s HVH OBKAK – DOUBLE TAP TO BREAK ANIMATIONS!",
+"%s HVH OBKAK – ONSHOT AA TO DODGE BULLETS!",
+"%s HVH OBKAK – FAKE ORIGIN TO CONFUSE AIM!",
+"%s HVH OBKAK – UNDETECTED = NO BANS!",
+"%s HVH OBKAK – THE LAST CHEAT YOU'LL NEED!",
+"%s HVH OBKAK – OWN THE SERVER OR DIE TRYING!",
+"%s HVH OBKAK – BEST VISUALS IN GARRY'S MOD!",
+"%s HVH OBKAK – AUTO WALL FOR EASY PENETRATION!",
+"%s HVH OBKAK – PERFECT SILENT AIM!",
+"%s HVH OBKAK – SHOT PREDICTION FOR HITS!",
+"%s HVH OBKAK – FAST LOADING, NO DELAYS!",
+"%s HVH OBKAK – CUSTOM CONFIGS FOR EVERY PLAYSTYLE!",
+"%s HVH OBKAK – AIMLOCK THAT FEELS NATURAL!",
+"%s HVH OBKAK – NO SPREAD FOR PERFECT ACCURACY!",
+"%s HVH OBKAK – INSTANT SWITCH FOR QUICK KILLS!",
+"%s HVH OBKAK – PROOF AGAINST SCREENSHOTS!",
+"%s HVH OBKAK – FULLY CUSTOMIZABLE MENU!",
+"%s HVH OBKAK – ANTI-SCREENSHOT PROTECTION!",
+"%s HVH OBKAK – AUTO-BLOCK TO COUNTER ATTACKS!",
+"%s HVH OBKAK – REAL-TIME UPDATES!",
+"%s HVH OBKAK – VIP SUPPORT 24/7!",
+"%s HVH OBKAK – JOIN THE WINNERS TODAY!",
+        },
+        [8] = {"HVH OBKAK JUST OBLITERATED YOU - UNINSTALL NOOB!",
+
+"MY AIMBOT NEVER MISSES - THANKS HVH OBKAK!",
+
+"WHY SHOOT? HVH OBKAK MAKES ME UNTOUCHABLE!",
+
+"LOL YOUR HACKS ARE TRASH COMPARED TO HVH OBKAK!",
+
+"HVH OBKAK'S BACKTRACK DELETED YOUR HITBOX!",
+
+"I SEE THROUGH WALLS - HVH OBKAK ESP OP!",
+
+"CRY HARDER - HVH OBKAK OWNS THIS SERVER!",
+
+"YOUR CHEATS CAN'T COMPETE WITH HVH OBKAK!",
+
+"HVH OBKAK'S DT SHOT THROUGH TIME AND SPACE!",
+
+"MY BULLETS CURVE - HVH OBKAK MAGIC!",
+
+"REPORT ME? HVH OBKAK IS UNDETECTED!",
+
+"I DON'T AIM - HVH OBKAK DOES IT FOR ME!",
+
+"YOUR TEAM IS NEXT - HVH OBKAK RAGE MODE!",
+
+"WHY RUN? HVH OBKAK SEES EVERYTHING!",
+
+"HVH OBKAK'S FAKE LAG MAKES YOU LOOK DUMB!",
+
+"I KILL BEFORE YOU SEE ME - HVH OBKAK OP!",
+
+"UPGRADE TO HVH OBKAK OR STAY TRASH!",
+
+"HVH OBKAK JUST MADE YOU UNINSTALL GMOD!",
+
+"I NEVER MISS - YOUR HITBOX VANISHED!",
+
+"HVH OBKAK SILENT AIM = INSTANT DEATH!",
+
+"YOU SHOOT MY FAKE ORIGIN - NICE TRY!",
+
+"MY CHAMS MAKE YOU GLOW LIKE XMAS!",
+
+"HVH OBKAK RESOLVER FIXES YOUR BAD ANGLES!",
+
+"I KILL WHILE LOOKING AWAY - HVH OBKAK OP!",
+
+"YOUR AIM SUCKS - HVH OBKAK FIXES THAT!",
+
+"HVH OBKAK AUTO WALL IGNORES COVER!",
+
+"I DON'T DIE - HVH OBKAK ANTI-AIM OP!",
+
+"YOU VS HVH OBKAK = NO CHANCE!",
+
+"HVH OBKAK MADE YOU RAGE QUIT - GG!",
+
+"MY TRIGGERBOT KILLS IN NANOSECONDS!",
+
+"YOUR MOVEMENT IS PREDICTABLE - HVH OBKAK KNOWS!",
+
+"I SEE YOUR HEALTH - YOU'RE ALREADY DEAD!",
+
+"HVH OBKAK FAKE DUCK BAITED YOU!",
+
+"NOT LAGGING - THAT'S HVH OBKAK FAKE PING!",
+
+"MY ESP SHOWS YOUR WEAKNESSES!",
+
+"HVH OBKAK MADE YOU LOOK LIKE A BOT!",
+
+"I NEED NO SKILL - HVH OBKAK IS MY SKILL!",
+
+"YOUR HACKS ARE TOYS - MINE ARE WEAPONS!",
+
+"HVH OBKAK CLOUD CFG = PRO SETTINGS INSTANT!",
+
+"I KILL WHILE AFK - HVH OBKAK OP!",
+
+"YOUR TEAM FEEDS ME KILLS - THANKS!",
+
+"HVH OBKAK AIMLOCK SNAPS TO YOUR FACE!",
+
+"YOU CAN'T HIDE - MY WALLHACK SEES ALL!",
+
+"I DON'T MISS - YOUR HITBOX FEARS ME!",
+
+"HVH OBKAK MADE YOU UNINSTALL STEAM!",
+
+"MY BUNNYHOP IS SMOOTHER THAN YOUR SALT!",
+
+"YOUR SHOTS PHASE THROUGH ME - MAGIC!",
+
+"HVH OBKAK AUTO PEEK = FREE KILLS!",
+
+"I KILL EYES CLOSED - HVH OBKAK OP!",
+
+"YOUR HACKS GET DESTROYED - SAD!",
+
+"HVH OBKAK HVH MODE = YOU LOSE!",
+
+"I DON'T TRY - HVH OBKAK CARRIES ME!",
+
+"YOUR AIM LIKE STORM - MISSES EVERYTHING!",
+
+"HVH OBKAK MADE YOU QUESTION LIFE!",
+
+"MY NO RECOIL = LASER PRECISION!",
+
+"NOT LAGGING - HVH OBKAK FAKE LAG!",
+
+"HVH OBKAK MADE YOU LOOK NOOB!",
+
+"I KILL ACROSS MAP - HVH OBKAK OP!",
+
+"YOUR HACKS OBSOLETE - UPGRADE NOW!",
+
+"HVH OBKAK AIM ASSIST = AUTO HS!",
+
+"YOU SHOOT AIR - I'M OVER HERE!",
+
+"MY ESP SHOWS YOUR POVERTY!",
+
+"HVH OBKAK MADE YOU LEAVE SERVER!",
+
+"I DON'T MOVE - AIMBOT DOES ALL!",
+
+"YOUR HACKS WEAK - MINE STRONG!",
+
+"HVH OBKAK FAKE ORIGIN = CAN'T HIT ME!",
+
+"YOU VS CHEAT = GIVE UP!",
+
+"MY BULLET TRACERS HUMILIATE YOU!",
+
+"HVH OBKAK MADE YOU UNINSTALL CSGO!",
+
+"I KILL WHILE TYPING - HVH OBKAK OP!",
+
+"YOUR MOVEMENT LIKE BOT - EASY!",
+
+"HVH OBKAK AUTO PISTOL = INSTANT HS!",
+
+"YOU'RE NOT INVISIBLE - I SEE ALL!",
+
+"I DON'T NEED SEE YOU - AIMBOT DOES!",
+
+"YOUR HACKS JOKE - MINE REAL!",
+
+"HVH OBKAK MADE YOU RAGE IN CHAT!",
+
+"MY DOUBLE TAP BREAKS HITBOXES!",
+
+"NOT LAGGING - HVH OBKAK ANTI-AIM!",
+
+"HVH OBKAK = REASON YOU LOSE!",
+
+"HVH OBKAK'S TRIGGERBOT = INSTANT KILLS!",
+
+"YOUR POSITION KNOWN - HVH OBKAK RADAR!",
+
+"I CONTROL SERVER - HVH OBKAK OP!",
+
+"YOUR ANGLES BROKEN - HVH OBKAK FIXED!",
+
+"HVH OBKAK'S MOVEMENT HACKS = GODLIKE!",
+
+"I SHOOT THROUGH WALLS - NO PROBLEM!",
+
+"YOUR CONFIG TRASH - MINE PERFECT!",
+
+"HVH OBKAK'S RESOLVER = NO MISSES!",
+
+"I OWN YOU - HVH OBKAK UNDETECTED!",
+
+"YOUR TEAM SUCKS - HVH OBKAK CARRIES!",
+
+"HVH OBKAK'S FAKE DUCK = BAIT KING!",
+
+"I DODGE ALL SHOTS - LIKE MATRIX!",
+
+"YOUR HACKS DETECTED - MINE SAFE!",
+
+"HVH OBKAK'S CLOUD SYSTEM = PRO INSTANT!",
+
+"I HAVE WALLS - YOU HAVE NOTHING!",
+
+"YOUR LOSSES = HVH OBKAK WINS!",
+
+"HVH OBKAK'S MENU = MOST BEAUTIFUL!",
+
+"I TOGGLE CHEATS - YOU TOGGLE TEARS!",
+
+"YOUR AIM BAD - MY AIMBOT PERFECT!",
+
+"HVH OBKAK'S"
+        }
     }
 
+
+exechack_cc_hvh_obkak.killstreak = 0 
 
 // Init player vars 
 gameevent.Listen( "player_spawn" )
 gameevent.Listen( "player_activate" )
 gameevent.Listen( "entity_killed" )
 
-function hvhobkak.entity_killed(data)
-	local aid = Entity(data.entindex_attacker)	
-	local vid = Entity(data.entindex_killed)
+function exechack_cc_hvh_obkak.entity_killed(data)
+    local aid = Entity(data.entindex_attacker)  
+    local vid = Entity(data.entindex_killed)
 
-    if aid == me and aid != vid and !vid:IsNPC() and (vid:IsPlayer() or vid:IsBot() ) then
-        if hvhobkak.cfg.vars["Killsay"] then
+    if aid == pLocalPlayer and aid != vid and !vid:IsNPC() and (vid:IsPlayer() or vid:IsBot() ) then
+        if exechack_cc_hvh_obkak.cfg.vars["Killsay"] then
             local chatPrefixes = {
                 [2] = "/ooc ",
-                [3] = "/ad "
+                [3] = "/ad ",
+                [4] = "/pm "
             }
             
-            local chatGroup = hvhobkak.cfg.vars["Killsay group"]
+            local chatGroup = exechack_cc_hvh_obkak.cfg.vars["Killsay group"]
             
             local prefix = chatPrefixes[chatGroup] or ""
         
-            local tbl = hvhobkak.chatmsg[ hvhobkak.cfg.vars["Killsay mode"] ]
-            local str = prefix .. tbl[ math_random( 1, #tbl ) ]
+            local tbl = exechack_cc_hvh_obkak.chatmsg[ exechack_cc_hvh_obkak.cfg.vars["Killsay mode"] ]
+            local str = prefix .. tbl[ math.random( 1, #tbl ) ]
             
-            if str:find("%s") then str = str:format(vid:Nick()) end
+            if str:find("%s") then 
+                str = str:gsub("%%s", vid:Nick()) 
+            end
+            if str:find("%s") then 
+                str = str:gsub("%%s", vid:SteamID()) 
+            end
 
-            gRunCmd( "say", str )
+            RunConsoleCommand( "say", str )
         end
+
         
-        if hvhobkak.cfg.vars["Killsound"] then
-            surface_PlaySound( hvhobkak.cfg.vars["Killsound str"] )
+        if exechack_cc_hvh_obkak.cfg.vars["Killsound"] then
+            surface.PlaySound( exechack_cc_hvh_obkak.cfg.vars["Killsound str"] )
         end
 
-     
+        if exechack_cc_hvh_obkak.cfg.vars["Killstreak"] then
+            exechack_cc_hvh_obkak.killstreak = (exechack_cc_hvh_obkak.killstreak or 0) + 1  
+            
+            if exechack_cc_hvh_obkak.killstreak > 0 then
+                if exechack_cc_hvh_obkak.killstreak == 1 then
+                    surface.PlaySound("firstblood.wav")
+                elseif exechack_cc_hvh_obkak.killstreak == 2 then
+                    surface.PlaySound("doublekill.wav")
+                elseif exechack_cc_hvh_obkak.killstreak == 3 then
+                    surface.PlaySound("killingspree.wav")
+                elseif exechack_cc_hvh_obkak.killstreak == 4 then
+                    surface.PlaySound("unstoppable.wav")
+                elseif exechack_cc_hvh_obkak.killstreak == 5 then
+                    surface.PlaySound("triplekill.wav")
+                elseif exechack_cc_hvh_obkak.killstreak == 7 then
+                    surface.PlaySound("wickedsick.wav")
+                elseif exechack_cc_hvh_obkak.killstreak == 9 then
+                    surface.PlaySound("dominating.wav")
+                elseif exechack_cc_hvh_obkak.killstreak == 11 then
+                    surface.PlaySound("ultrakill.wav")
+                elseif exechack_cc_hvh_obkak.killstreak == 15 then
+                    surface.PlaySound("holyshit.wav")
+                elseif exechack_cc_hvh_obkak.killstreak == 17 then
+                    surface.PlaySound("godlike.wav")
+                elseif exechack_cc_hvh_obkak.killstreak == 20 then
+                    surface.PlaySound("rampage.wav")
+                elseif exechack_cc_hvh_obkak.killstreak > 20 then
+                    exechack_cc_hvh_obkak.killstreak = 0  -- Сброс после 20 убийств
+                end
+            end
+        end
     end
 end
 
-
-
-function hvhobkak.updatePlayerVars( data )
+function exechack_cc_hvh_obkak.updatePlayerVars( data )
     local id = data.userid  
 
     local ply = Player( id )
@@ -8987,8 +10481,8 @@ function hvhobkak.updatePlayerVars( data )
     ply.break_lc = false
     ply.fakepitch = false
 
-    hvhobkak.btrecords[ ply ] = {}
-    hvhobkak.predicted[ ply ] = {}
+    exechack_cc_hvh_obkak.btrecords[ ply ] = {}
+    exechack_cc_hvh_obkak.predicted[ ply ] = {}
 end
 
 
@@ -9011,39 +10505,39 @@ end
 
 // Menu hints 
 
-function hvhobkak.DrawMenuHints()
-    if not hvhobkak.frame:IsVisible() then return end
+function exechack_cc_hvh_obkak.DrawMenuHints()
+    if not exechack_cc_hvh_obkak.frame:IsVisible() then return end
 
-    if not hvhobkak.hint then
-        hvhobkak.hintText = ""
+    if not exechack_cc_hvh_obkak.hint then
+        exechack_cc_hvh_obkak.hintText = ""
         return
     end
 
-    surface_SetTextColor(hvhobkak.Colors[165])
-    surface_SetFont("tbfont")
+    surface.SetTextColor(exechack_cc_hvh_obkak.Colors[165])
+    surface.SetFont("DermaSmall")
 
-    local tw, th = surface_GetTextSize(hvhobkak.hintText)
+    local tw, th = surface.GetTextSize(exechack_cc_hvh_obkak.hintText)
 
-    surface_SetDrawColor(hvhobkak.Colors[35])
-    surface_DrawRect(hvhobkak.hintX,hvhobkak.hintY,tw+20,th+10)
-    surface_SetDrawColor(hvhobkak.Colors[54])
-    surface_DrawOutlinedRect(hvhobkak.hintX,hvhobkak.hintY,tw+20,th+10,1)    
+    surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[35])
+    surface.DrawRect(exechack_cc_hvh_obkak.hintX,exechack_cc_hvh_obkak.hintY,tw+20,th+10)
+    surface.SetDrawColor(exechack_cc_hvh_obkak.Colors[54])
+    surface.DrawOutlinedRect(exechack_cc_hvh_obkak.hintX,exechack_cc_hvh_obkak.hintY,tw+20,th+10,1)    
 
-    surface_SetTextPos(hvhobkak.hintX+10,hvhobkak.hintY+5)
-    surface_DrawText(hvhobkak.hintText)
+    surface.SetTextPos(exechack_cc_hvh_obkak.hintX+10,exechack_cc_hvh_obkak.hintY+5)
+    surface.DrawText(exechack_cc_hvh_obkak.hintText)
 
-    hvhobkak.hint = false
+    exechack_cc_hvh_obkak.hint = false
 end
 
-function hvhobkak.DrawOverlay()
-    if hvhobkak.UnSafeFrame then return end
+function exechack_cc_hvh_obkak.DrawOverlay()
+    if exechack_cc_hvh_obkak.UnSafeFrame then return end
 
-    hvhobkak.DrawMenuHints()
+    exechack_cc_hvh_obkak.DrawMenuHints()
 end
 
 
 // Gamemode UpdateClientsideAnimation
---[[]
+
 local function RunSandboxAnims(ply, velocity, maxseqgroundspeed)
     local len = velocity:Length()
 	local movement = 1.0
@@ -9092,7 +10586,7 @@ function GAMEMODE:UpdateAnimation(plr, velocity, maxSeqGroundSpeed)
     RunSandboxAnims(plr, velocity, maxSeqGroundSpeed)
     return hResult;
 end
-]]
+
 
 
 
@@ -9102,26 +10596,26 @@ end
 
 
 
-//function hvhobkak.
+//function exechack_cc_hvh_obkak.
 
 
-function hvhobkak.ColorLerp( first, second )
+function exechack_cc_hvh_obkak.ColorLerp( first, second )
     local FT = FrameTime() * 350
 
-    first.r = math_Approach( first.r, second.r, FT )
-    first.g = math_Approach( first.g, second.g, FT )
-    first.b = math_Approach( first.b, second.b, FT )
-    first.a = math_Approach( first.a, second.a, FT )
+    first.r = math.Approach( first.r, second.r, FT )
+    first.g = math.Approach( first.g, second.g, FT )
+    first.b = math.Approach( first.b, second.b, FT )
+    first.a = math.Approach( first.a, second.a, FT )
 
-    math_Round( first.r, 0 )
-    math_Round( first.g, 0 )
-    math_Round( first.b, 0 )
-    math_Round( first.a, 0 )
+    math.Round( first.r, 0 )
+    math.Round( first.g, 0 )
+    math.Round( first.b, 0 )
+    math.Round( first.a, 0 )
 
     return first
 end
 
-function hvhobkak.ColorEqual( first, second )
+function exechack_cc_hvh_obkak.ColorEqual( first, second )
     if first.r != second.r or first.g != second.g or first.b != second.b or first.a != second.a then
         return false
     end
@@ -9137,24 +10631,28 @@ end
     hooks -> Think 
 */
 
-hvhobkak.ekd = false
-hvhobkak.fbkd = false
+exechack_cc_hvh_obkak.ekd = false
+exechack_cc_hvh_obkak.ekd2 = false
+exechack_cc_hvh_obkak.ekd3 = false
+exechack_cc_hvh_obkak.fbkd = false
 
 // Dancer ( act / taunt spam )
 
-hvhobkak.nextact = 0
-hvhobkak.actCommands = {"robot","muscle","laugh","bow","cheer","wave","becon","agree","disagree","forward","group","half","zombie","dance","pers","halt","salute"}
+exechack_cc_hvh_obkak.nextact = 0
+exechack_cc_hvh_obkak.actCommands = {"robot","muscle","laugh","bow","cheer","wave","becon","agree","disagree","forward","group","half","zombie","dance","pers","halt","salute"}
+exechack_cc_hvh_obkak.nextact2 = 0
+exechack_cc_hvh_obkak.act2Commands = {"melee", "frenzy", "melee2", "poke"}
 
 // Name changer 
 
 do
     local cooldown = GetConVarNumber("sv_namechange_cooldown_seconds")
     local curtime = CurTime()
-    local lastname = me:Name()
+    local lastname = pLocalPlayer:Name()
     local changed = 0
 
     local function check(pl,mn,ptbl)
-        if pl == me then return false end 
+        if pl == pLocalPlayer then return false end 
 
         if pl:Name() == mn then return false end
 
@@ -9178,16 +10676,16 @@ do
         curtime = CurTime() + cooldown
     end
 
-    function hvhobkak.nameChanger() 
+    function exechack_cc_hvh_obkak.nameChanger() 
         if curtime > CurTime() then return end
 
-        local pltbl = player_GetAll()
+        local pltbl = player.GetAll()
 
-        local len = me:Name():len()
+        local len = pLocalPlayer:Name():len()
 
-        local mname = string.sub(me:Name(),1,len-1)
+        local mname = string.sub(pLocalPlayer:Name(),1,len-1)
 
-        local i = math_random(1,#pltbl)
+        local i = math.random(1,#pltbl)
 
         if not check(pltbl[i],mname,pltbl) then return end
 
@@ -9200,105 +10698,135 @@ do
     local chatdelay = CurTime()
     local inverterdown = false
         
-    function hvhobkak.Think()
-        if input_IsKeyDown(KEY_END) then 
-            hvhobkak.Unload()
+    function exechack_cc_hvh_obkak.Think()
+        if input.IsKeyDown(KEY_END) then 
+            exechack_cc_hvh_obkak.Unload()
         end
 
-        if input_IsKeyDown(KEY_INSERT) and not hvhobkak.kd then 
-            hvhobkak.togglevisible()
+        if input.IsKeyDown(KEY_INSERT) and not exechack_cc_hvh_obkak.kd then 
+            exechack_cc_hvh_obkak.togglevisible()
     
             CloseDermaMenus()
         end
 
-        hvhobkak.kd = input_IsKeyDown(KEY_INSERT)
+        exechack_cc_hvh_obkak.kd = input.IsKeyDown(KEY_INSERT)
 
-        if hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Ent add"] ) and not hvhobkak.ekd then
-            local tr = me:GetEyeTrace().Entity
+        if exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Ent add"] ) and not exechack_cc_hvh_obkak.ekd then
+            local tr = pLocalPlayer:GetEyeTrace().Entity
 
             if IsValid( tr ) then 
                 local class = tr:GetClass()
 
-                //print( hvhobkak.allowedClasses[ class ] )
-
-                if not hvhobkak.allowedClasses[ class ] then
-                    hvhobkak.allowedClasses[ class ] = true
+                if not exechack_cc_hvh_obkak.cfg.ents[ class ] then
+                   exechack_cc_hvh_obkak.cfg.ents[ class ] = true
                 else
-                    hvhobkak.allowedClasses[ class ] = not hvhobkak.allowedClasses[ class ]
+                   exechack_cc_hvh_obkak.cfg.ents[ class ] = nil
                 end
             end
         end
 
-        if hvhobkak.cfg.vars["Inverter"] and hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Inverter"] ) and not inverterdown then
-            hvhobkak.inverted = !hvhobkak.inverted 
+if exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Player add"]) and not exechack_cc_hvh_obkak.ekd2 then
+    local tr = pLocalPlayer:GetEyeTrace().Entity
+
+    if IsValid(tr) and tr:GetClass() == "player" then 
+        local steamId = tr:SteamID()
+
+        if not exechack_cc_hvh_obkak.cfg.friends[steamId] then
+            exechack_cc_hvh_obkak.cfg.friends[steamId] = true
+        else
+            exechack_cc_hvh_obkak.cfg.friends[steamId] = nil
+        end
+    end
+end
+
+if exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Priority add"] or KEY_F4) and not exechack_cc_hvh_obkak.ekd3 then
+    local tr = pLocalPlayer:GetEyeTrace().Entity
+
+    if IsValid(tr) and tr:GetClass() == "player" then 
+        local steamId = tr:SteamID()
+
+        if not exechack_cc_hvh_obkak.cfg.priorityList[steamId] then
+            exechack_cc_hvh_obkak.cfg.priorityList[steamId] = true
+            print("[Priority] Добавлен игрок: "..tr:Name())
+        else
+            exechack_cc_hvh_obkak.cfg.priorityList[steamId] = nil
+            print("[Priority] Удален игрок: "..tr:Name())
+        end
+    end
+end
+
+        if exechack_cc_hvh_obkak.cfg.vars["Inverter"] and exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Inverter"] ) and not inverterdown then
+            exechack_cc_hvh_obkak.inverted = !exechack_cc_hvh_obkak.inverted 
         end
 
-        inverterdown = hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Inverter"] )
+        inverterdown = exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Inverter"] )
 
-        hvhobkak.ekd = hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Ent add"] )
+        exechack_cc_hvh_obkak.ekd = exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Ent add"] )
+        exechack_cc_hvh_obkak.ekd2 = exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Player add"] )
+        exechack_cc_hvh_obkak.ekd3 = exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Priority add"] )
 
-        if hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Fullbright"] ) and not hvhobkak.fbkd then
-            hvhobkak.fbe = not hvhobkak.fbe
+        if exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Fullbright"] ) and not exechack_cc_hvh_obkak.fbkd then
+            exechack_cc_hvh_obkak.fbe = not exechack_cc_hvh_obkak.fbe
         end
 
-        hvhobkak.fbkd = hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Fullbright"] )
+        exechack_cc_hvh_obkak.fbkd = exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Fullbright"] )
 
-        if hvhobkak.cfg.vars["FSpec ClickTP"] and hvhobkak.IsKeyDown( hvhobkak.cfg.binds["FSpec ClickTP"] ) then
-            local pos = me:GetEyeTrace().HitPos
+        if exechack_cc_hvh_obkak.cfg.vars["FSpec ClickTP"] and exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["FSpec ClickTP"] ) then
+            local pos = pLocalPlayer:GetEyeTrace().HitPos
             
             //print(pos)
 
-            //gRunCmd( "ba", "spec" )
+            //RunConsoleCommand( "ba", "spec" )
 
-            gRunCmd( "FTPToPos", string_format("%d, %d, %d", pos.x, pos.y, pos.z), string_format("%d, %d, %d", 0, 0, 0) )
+            RunConsoleCommand( "FTPToPos", string.format("%d, %d, %d", pos.x, pos.y, pos.z), string.format("%d, %d, %d", 0, 0, 0) )
         end
 
         
         
-        // hvhobkak.cfg.vars["FSpec Teleport"] = false
-        // hvhobkak.cfg.binds["FSpec Teleport"] = 0
+        // exechack_cc_hvh_obkak.cfg.vars["FSpec Teleport"] = false
+        // exechack_cc_hvh_obkak.cfg.binds["FSpec Teleport"] = 0
         
-        // hvhobkak.cfg.vars["FSpec Masskill"] = false
-        // hvhobkak.cfg.binds["FSpec Masskill"] = 0
+        // exechack_cc_hvh_obkak.cfg.vars["FSpec Masskill"] = false
+        // exechack_cc_hvh_obkak.cfg.binds["FSpec Masskill"] = 0
         
-        // hvhobkak.cfg.vars["FSpec Velocity"] = false
-        // hvhobkak.cfg.binds["FSpec Velocity"] = 0
+        // exechack_cc_hvh_obkak.cfg.vars["FSpec Velocity"] = false
+        // exechack_cc_hvh_obkak.cfg.binds["FSpec Velocity"] = 0
 
-        if hvhobkak.cfg.vars["Chat spammer"] and CurTime() > chatdelay then
+        if exechack_cc_hvh_obkak.cfg.vars["Chat spammer"] and CurTime() > chatdelay then
             local chatPrefixes = {
                 [2] = "/ooc ",
                 [3] = "/ad "
             }
             
-            local chatGroup = hvhobkak.cfg.vars["Chat group"]
+            local chatGroup = exechack_cc_hvh_obkak.cfg.vars["Chat group"]
             
             local prefix = chatPrefixes[chatGroup] or ""
         
-            local tbl = hvhobkak.chatmsg[ hvhobkak.cfg.vars["Chat mode"] ]
-            local str = prefix .. tbl[ math_random( 1, #tbl ) ]
+            local tbl = exechack_cc_hvh_obkak.chatmsg[ exechack_cc_hvh_obkak.cfg.vars["Chat mode"] ]
+            local str = prefix .. tbl[ math.random( 1, #tbl ) ]
 
-            local players   = player_GetAll()
+            local players   = player.GetAll()
 
-            local random_ply = players[ math_random( 1, #players ) ]
-            if random_ply == me then return end
+            local random_ply = players[ math.random( 1, #players ) ]
+            if random_ply == pLocalPlayer then return end
 
-            str = string_format( str, hvhobkak.playerCache[ random_ply ].Name )
+            str = string.format( str, exechack_cc_hvh_obkak.playerCache[ random_ply ].Name )
 
-            gRunCmd("say", str)
+            RunConsoleCommand("say", str)
 
-            chatdelay = CurTime() + hvhobkak.cfg.vars["Chat delay"]
+            chatdelay = CurTime() + exechack_cc_hvh_obkak.cfg.vars["Chat delay"]
         end
     
-        if hvhobkak.cfg.vars["Name stealer"] then hvhobkak.nameChanger() end
+        if exechack_cc_hvh_obkak.cfg.vars["Name stealer"] then exechack_cc_hvh_obkak.nameChanger() end
     
-        if ded.GetCurrentCharge() < hvhobkak.cfg.vars["Shift ticks"] then ded.StartShifting( false ) end
+        if ded.GetCurrentCharge() < exechack_cc_hvh_obkak.cfg.vars["Shift ticks"] then ded.StartShifting( false ) end
 
-        if hvhobkak.cfg.vars["Tickbase shift"] then 
-            if hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Tickbase shift"] ) then
+        if exechack_cc_hvh_obkak.cfg.vars["Tickbase shift"] then 
+            if exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Tickbase shift"] ) then
                 ded.StartShifting( true )
             end
             
-            local shouldcharge =  ded.GetCurrentCharge() < hvhobkak.cfg.vars["Charge ticks"] and hvhobkak.IsKeyDown( hvhobkak.cfg.binds["Auto recharge"] )
+            local shouldcharge =  ded.GetCurrentCharge() < exechack_cc_hvh_obkak.cfg.vars["Charge ticks"] and exechack_cc_hvh_obkak.IsKeyDown( exechack_cc_hvh_obkak.cfg.binds["Auto recharge"] )
             
             ded.StartRecharging( shouldcharge )
         
@@ -9307,23 +10835,30 @@ do
             end
         end
     
-        if hvhobkak.cfg.vars["Taunt spam"] and hvhobkak.nextact < CurTime() and me:Alive() and !me:IsPlayingTaunt() then 
-            local act = hvhobkak.actCommands[hvhobkak.cfg.vars["Taunt"]]
+        if exechack_cc_hvh_obkak.cfg.vars["Taunt spam"] and exechack_cc_hvh_obkak.nextact < CurTime() and pLocalPlayer:Alive() then 
+            local act = exechack_cc_hvh_obkak.actCommands[exechack_cc_hvh_obkak.cfg.vars["Taunt"]]
     
-            gRunCmd("act", act)
-            hvhobkak.nextact = CurTime() + 0.3
+            RunConsoleCommand("act", act)
+            exechack_cc_hvh_obkak.nextact = CurTime() + 0.3
         end
     
-        if hvhobkak.cfg.vars["Yaw base"] == 2 then
-            tply = hvhobkak.GetSortedPlayers( 1, 0, 1, false ) 
+        if exechack_cc_hvh_obkak.cfg.vars["Taunt 2"] and exechack_cc_hvh_obkak.nextact2 < CurTime() and pLocalPlayer:Alive() then
+            local act2 = exechack_cc_hvh_obkak.act2Commands[exechack_cc_hvh_obkak.cfg.vars["Taunt 2.1"]]
+    
+            RunConsoleCommand("act2", act2)
+            exechack_cc_hvh_obkak.nextact2 = CurTime() + 0.3
+        end
+
+        if exechack_cc_hvh_obkak.cfg.vars["Yaw base"] == 2 then
+            tply = exechack_cc_hvh_obkak.GetSortedPlayers( 1, 0, 1, false ) 
     
             if tply then
-                hvhobkak.aatarget = tply[1][1]
+                exechack_cc_hvh_obkak.aatarget = tply[1][1]
             end
         end
 
-        if hvhobkak.cfg.vars["Auto peak"] then
-            hvhobkak.autopeakThink()
+        if exechack_cc_hvh_obkak.cfg.vars["Auto peak"] then
+            exechack_cc_hvh_obkak.autopeakThink()
         end
     end
 end
@@ -9333,110 +10868,116 @@ end
     hooks -> CalcView
 */
 
-hvhobkak.vieworigin = me:EyePos()
-hvhobkak.viewfov    = 0
-hvhobkak.znear      = 0
+exechack_cc_hvh_obkak.vieworigin = pLocalPlayer:EyePos()
+exechack_cc_hvh_obkak.viewfov    = 0
+exechack_cc_hvh_obkak.znear      = 0
 
-hvhobkak.tpenabled = false
-hvhobkak.tptoggled = false
+exechack_cc_hvh_obkak.tpenabled = false
+exechack_cc_hvh_obkak.tptoggled = false
 
-hvhobkak.fcvector = me:EyePos()
-hvhobkak.fcangles = me:EyeAngles()
-hvhobkak.fcenabled = false
-hvhobkak.fctoggled = false
+exechack_cc_hvh_obkak.fcvector = pLocalPlayer:EyePos()
+exechack_cc_hvh_obkak.fcangles = pLocalPlayer:EyeAngles()
+exechack_cc_hvh_obkak.fcenabled = false
+exechack_cc_hvh_obkak.fctoggled = false
 
 
 /* // TODO
-hvhobkak.checkbox("Collision","Third person collision",p:GetItemPanel())
-hvhobkak.checkbox("Smoothing","Third person smoothing",p:GetItemPanel())
+exechack_cc_hvh_obkak.checkbox("Collision","Third person collision",p:GetItemPanel())
+exechack_cc_hvh_obkak.checkbox("Smoothing","Third person smoothing",p:GetItemPanel())
 
-hvhobkak.slider("X","Viewmodel x",1,180,0,p:GetItemPanel())
-hvhobkak.slider("Y","Viewmodel y",1,180,0,p:GetItemPanel())
-hvhobkak.slider("Z","Viewmodel z",1,180,0,p:GetItemPanel())
-hvhobkak.slider("Roll","Viewmodel r",1,360,0,p:GetItemPanel())
+exechack_cc_hvh_obkak.slider("X","Viewmodel x",1,180,0,p:GetItemPanel())
+exechack_cc_hvh_obkak.slider("Y","Viewmodel y",1,180,0,p:GetItemPanel())
+exechack_cc_hvh_obkak.slider("Z","Viewmodel z",1,180,0,p:GetItemPanel())
+exechack_cc_hvh_obkak.slider("Roll","Viewmodel r",1,360,0,p:GetItemPanel())
 */
 
-hvhobkak.cameraHullMax = Vector( 3, 3, 3 )
-hvhobkak.cameraHullMin = Vector( -3, -3, -3 )
-function hvhobkak.CalcView( ply, origin, angles, fov, znear, zfar )
+function exechack_cc_hvh_obkak.ShouldDrawLocalPlayer(ply)
+    if ( exechack_cc_hvh_obkak.tpenabled ) then
+        ply:SetNoDraw( false )
+    end
+    return exechack_cc_hvh_obkak.tpenabled 
+end
 
-    if hvhobkak.UnSafeFrame then 
+exechack_cc_hvh_obkak.cameraHullMax = Vector( 3, 3, 3 )
+exechack_cc_hvh_obkak.cameraHullMin = Vector( -3, -3, -3 )
+function exechack_cc_hvh_obkak.CalcView( ply, origin, angles, fov, znear, zfar )
+    if exechack_cc_hvh_obkak.UnSafeFrame then 
         return { origin = origin, angles = angles, fov = fov } 
     end
 
     local view = {}
 
-    local tppressed = hvhobkak.IsKeyDown(hvhobkak.cfg.binds["Third person"])
-    local fcpressed = hvhobkak.IsKeyDown(hvhobkak.cfg.binds["Free camera"])
+    local tppressed = exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Third person"])
+    local fcpressed = exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Free camera"])
 
-    if hvhobkak.cfg.vars["Third person"] and tppressed and not hvhobkak.tptoggled then
-        hvhobkak.tpenabled = not hvhobkak.tpenabled
+    if exechack_cc_hvh_obkak.cfg.vars["Third person"] and tppressed and not exechack_cc_hvh_obkak.tptoggled then
+        exechack_cc_hvh_obkak.tpenabled = not exechack_cc_hvh_obkak.tpenabled
     end
 
-    if hvhobkak.cfg.vars["Free camera"] and fcpressed and not hvhobkak.fctoggled then
-        hvhobkak.fcenabled = not hvhobkak.fcenabled
-        hvhobkak.fcangles = me:EyeAngles()
-    elseif hvhobkak.fcenabled and not hvhobkak.cfg.vars["Free camera"] then
-        hvhobkak.fcenabled = false
+    if exechack_cc_hvh_obkak.cfg.vars["Free camera"] and fcpressed and not exechack_cc_hvh_obkak.fctoggled then
+        exechack_cc_hvh_obkak.fcenabled = not exechack_cc_hvh_obkak.fcenabled
+        exechack_cc_hvh_obkak.fcangles = pLocalPlayer:EyeAngles()
+    elseif exechack_cc_hvh_obkak.fcenabled and not exechack_cc_hvh_obkak.cfg.vars["Free camera"] then
+        exechack_cc_hvh_obkak.fcenabled = false
     end
 
-    hvhobkak.tptoggled = tppressed
-    hvhobkak.fctoggled = fcpressed
+    exechack_cc_hvh_obkak.tptoggled = tppressed
+    exechack_cc_hvh_obkak.fctoggled = fcpressed
 
 
-    if hvhobkak.cfg.vars["Fake duck"] and hvhobkak.IsKeyDown(hvhobkak.cfg.binds["Fake duck"]) then
-        origin.z = me:GetPos().z + 64
+    if exechack_cc_hvh_obkak.cfg.vars["Fake duck"] and exechack_cc_hvh_obkak.IsKeyDown(exechack_cc_hvh_obkak.cfg.binds["Fake duck"]) then
+        origin.z = pLocalPlayer:GetPos().z + 64
     end
 
-    local fangs = hvhobkak.cfg.vars["Silent aim"] and hvhobkak.SilentAngle or angles
+    local fangs = exechack_cc_hvh_obkak.cfg.vars["Silent aim"] and exechack_cc_hvh_obkak.SilentAngle or angles
 
     //angles = fangs
-    //if not hvhobkak.cfg.vars[ "Norecoil" ] then
+    //if not exechack_cc_hvh_obkak.cfg.vars[ "Norecoil" ] then
     //    angles:Add( ply:GetViewPunchAngles() )
     //end
 
-    if hvhobkak.fcenabled then
-        local speed = hvhobkak.cfg.vars["Free camera speed"]
+    if exechack_cc_hvh_obkak.fcenabled then
+        local speed = exechack_cc_hvh_obkak.cfg.vars["Free camera speed"]
         
-        if input_IsKeyDown(KEY_W) then
-            hvhobkak.fcvector = hvhobkak.fcvector + hvhobkak.SilentAngle:Forward() * speed
+        if input.IsKeyDown(KEY_W) then
+            exechack_cc_hvh_obkak.fcvector = exechack_cc_hvh_obkak.fcvector + exechack_cc_hvh_obkak.SilentAngle:Forward() * speed
         end
 
-        if input_IsKeyDown(KEY_S) then
-            hvhobkak.fcvector = hvhobkak.fcvector - hvhobkak.SilentAngle:Forward() * speed
+        if input.IsKeyDown(KEY_S) then
+            exechack_cc_hvh_obkak.fcvector = exechack_cc_hvh_obkak.fcvector - exechack_cc_hvh_obkak.SilentAngle:Forward() * speed
         end
 
-        if input_IsKeyDown(KEY_A) then
-            hvhobkak.fcvector = hvhobkak.fcvector - hvhobkak.SilentAngle:Right() * speed
+        if input.IsKeyDown(KEY_A) then
+            exechack_cc_hvh_obkak.fcvector = exechack_cc_hvh_obkak.fcvector - exechack_cc_hvh_obkak.SilentAngle:Right() * speed
         end
 
-        if input_IsKeyDown(KEY_D) then
-            hvhobkak.fcvector = hvhobkak.fcvector + hvhobkak.SilentAngle:Right() * speed
+        if input.IsKeyDown(KEY_D) then
+            exechack_cc_hvh_obkak.fcvector = exechack_cc_hvh_obkak.fcvector + exechack_cc_hvh_obkak.SilentAngle:Right() * speed
         end
 
-        if input_IsKeyDown(KEY_SPACE) then
-            hvhobkak.fcvector.z = hvhobkak.fcvector.z + speed
+        if input.IsKeyDown(KEY_SPACE) then
+            exechack_cc_hvh_obkak.fcvector.z = exechack_cc_hvh_obkak.fcvector.z + speed
         end
 
-        if input_IsKeyDown(KEY_LSHIFT) then
-            hvhobkak.fcvector.z = hvhobkak.fcvector.z - speed
+        if input.IsKeyDown(KEY_LSHIFT) then
+            exechack_cc_hvh_obkak.fcvector.z = exechack_cc_hvh_obkak.fcvector.z - speed
         end
 
-        view.origin = hvhobkak.fcvector
+        view.origin = exechack_cc_hvh_obkak.fcvector
         view.angles = fangs
-        view.fov = hvhobkak.cfg.vars["Fov override"]
-        view.drawviewer = !hvhobkak.cfg.vars["Ghetto free cam"]
+        view.fov = exechack_cc_hvh_obkak.cfg.vars["Fov override"]
+        view.drawviewer = !exechack_cc_hvh_obkak.cfg.vars["Ghetto free cam"]
     else
-        hvhobkak.fcvector = origin
-        view.origin = hvhobkak.tpenabled and origin - ( (fangs):Forward() * hvhobkak.cfg.vars["Third person distance"] ) or origin
+        exechack_cc_hvh_obkak.fcvector = origin
+        view.origin = exechack_cc_hvh_obkak.tpenabled and origin - ( (fangs):Forward() * exechack_cc_hvh_obkak.cfg.vars["Third person distance"] ) or origin
 
-        if hvhobkak.tpenabled and hvhobkak.cfg.vars["Third person collision"] then
+        if exechack_cc_hvh_obkak.tpenabled and exechack_cc_hvh_obkak.cfg.vars["Third person collision"] then
             local tr = {}
 
             tr.start = origin
-            tr.endpos = origin - ( (fangs):Forward() * hvhobkak.cfg.vars["Third person distance"] )
-            tr.mins = hvhobkak.cameraHullMin
-            tr.maxs = hvhobkak.cameraHullMax
+            tr.endpos = origin - ( (fangs):Forward() * exechack_cc_hvh_obkak.cfg.vars["Third person distance"] )
+            tr.mins = exechack_cc_hvh_obkak.cameraHullMin
+            tr.maxs = exechack_cc_hvh_obkak.cameraHullMax
             tr.filter = ply
             tr.mask = MASK_BLOCKLOS
 
@@ -9446,39 +10987,61 @@ function hvhobkak.CalcView( ply, origin, angles, fov, znear, zfar )
         end
 
         view.angles = fangs
-        view.fov = hvhobkak.cfg.vars["Fov override"]
-        view.drawviewer = hvhobkak.tpenabled
+        view.fov = exechack_cc_hvh_obkak.cfg.vars["Fov override"]
+        view.drawviewer = hook.Call( "ShouldDrawLocalPlayer", nil, ply )
     end
 
-    hvhobkak.vieworigin = ( hvhobkak.cfg.vars["Ghetto free cam"] and hvhobkak.fcenabled ) and hvhobkak.fcvector or origin
-    hvhobkak.viewfov    = view.fov
-    hvhobkak.znear      = znear
+    exechack_cc_hvh_obkak.vieworigin = ( exechack_cc_hvh_obkak.cfg.vars["Ghetto free cam"] and exechack_cc_hvh_obkak.fcenabled ) and exechack_cc_hvh_obkak.fcvector or origin
+    exechack_cc_hvh_obkak.viewfov    = view.fov
+    exechack_cc_hvh_obkak.znear      = znear
 
+    if ( not exechack_cc_hvh_obkak.cfg.vars["Override view"] ) then
+        if ( math.floor( fov ) ~= GetConVar( "fov_desired" ):GetFloat() ) then
+            view.fov = fov 
+        end
+
+        local pVehicle = pLocalPlayer:GetVehicle()
+
+        if ( IsValid( pVehicle ) ) then
+            view = hook.Run( "CalcVehicleView", pVehicle, ply, view )
+        end
+
+        local pWeapon = pLocalPlayer:GetActiveWeapon()
+        
+        if ( IsValid( pWeapon ) ) then
+            local pWeaponCalcView = pWeapon.CalcView 
+
+            if ( pWeaponCalcView ) then
+                local origin, angles, fov = pWeaponCalcView( pWeapon, ply, Vector( view.origin ), Angle( view.angles ), view.fov ) 
+			    view.origin, view.angles, view.fov = origin or view.origin, angles or view.angles, fov or view.fov
+            end
+        end
+    end
 	return view
 end
 
-function hvhobkak.GetFovRadius()
-    local Radius = hvhobkak.cfg.vars["Aimbot FOV"]
+function exechack_cc_hvh_obkak.GetFovRadius()
+    local Radius = exechack_cc_hvh_obkak.cfg.vars["Aimbot FOV"]
 
-    local Ratio = scrw / scrh
+    local Ratio = screenWidth / screenHeight
     local AimFOV = Radius * (math.pi / 180)
-    local GameFOV = hvhobkak.viewfov * (math.pi / 180)
-    local ViewFOV = 2 * math.atan(Ratio * (hvhobkak.znear / 2) * math.tan(GameFOV / 2))
+    local GameFOV = exechack_cc_hvh_obkak.viewfov * (math.pi / 180)
+    local ViewFOV = 2 * math.atan(Ratio * (exechack_cc_hvh_obkak.znear / 2) * math.tan(GameFOV / 2))
 
 
 
-    return (math.tan(AimFOV) / math.tan(ViewFOV / 2)) * scrw
+    return (math.tan(AimFOV) / math.tan(ViewFOV / 2)) * screenWidth
 end
 
 /*
     hooks -> CalcViewModelView
 */
 
-function hvhobkak.CalcViewModelView(wep, vm, oldPos, oldAng, pos, ang)
+function exechack_cc_hvh_obkak.CalcViewModelView(wep, vm, oldPos, oldAng, pos, ang)
     if wep.CalcViewModelView then wep.CalcViewModelView = nil end
 
-    pos = hvhobkak.vieworigin 
-	ang = hvhobkak.cfg.vars["Silent aim"] and hvhobkak.SilentAngle or ang
+    pos = exechack_cc_hvh_obkak.vieworigin 
+	ang = exechack_cc_hvh_obkak.cfg.vars["Silent aim"] and exechack_cc_hvh_obkak.SilentAngle or ang
 
 	return pos, ang
 end
@@ -9490,34 +11053,38 @@ end
 do
     local drawing = false
 
-    function hvhobkak.PreDrawViewModel( vm, ply, w )
-        if hvhobkak.UnSafeFrame then return end
-        if ply != me then return end
+    function exechack_cc_hvh_obkak.PreDrawViewModel( vm, ply, w )
+        if exechack_cc_hvh_obkak.UnSafeFrame then return end
+        if ply != pLocalPlayer then return end
 
-        if hvhobkak.cfg.vars["Viewmodel chams"] then
-            local col = string_ToColor( hvhobkak.cfg.colors["Viewmodel chams"] )
-            hvhobkak.chamMats.vis[6]:SetVector( "$envmaptint", Vector( col.r / 255, col.g / 255, col.b / 255 ) )
-            local mat = hvhobkak.chamMats.vis[hvhobkak.cfg.vars["Viewmodel chams type"]] 
+        if exechack_cc_hvh_obkak.cfg.vars["Viewmodel chams"] then
+            local col = string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Viewmodel chams"] )
+            exechack_cc_hvh_obkak.chamMats.vis[6]:SetVector( "$envmaptint", Vector( col.r / 255, col.g / 255, col.b / 255 ) )
+            local mat = exechack_cc_hvh_obkak.chamMats.vis[exechack_cc_hvh_obkak.cfg.vars["Viewmodel chams type"]] 
 
-            render_SetBlend(col.a/255)
-            render_SetColorModulation(col.r/255,col.g/255,col.b/255)
-            render_MaterialOverride(mat)
+            render.SetBlend(col.a/255)
+            render.SetColorModulation(col.r/255,col.g/255,col.b/255)
+            render.MaterialOverride(mat)
         end
 
-        if hvhobkak.cfg.vars["Fullbright viewmodel"] then
-            render_SuppressEngineLighting( true )
+        if exechack_cc_hvh_obkak.cfg.vars["Fullbright viewmodel"] then
+            render.SuppressEngineLighting( true )
         end
 
-        if hvhobkak.cfg.vars["Viewmodel fov"] != GetConVar("viewmodel_fov"):GetInt() and not drawing then 
-            cam.IgnoreZ(true)
-                cam.Start3D(nil, nil, hvhobkak.cfg.vars["Viewmodel fov"])
+        if exechack_cc_hvh_obkak.cfg.vars["Viewmodel fov"] != GetConVar("viewmodel_fov"):GetInt() and not drawing then 
+            cam.Start3D(nil, nil, exechack_cc_hvh_obkak.cfg.vars["Viewmodel fov"])
+
                 drawing = true
+
+                render.DepthRange( 0, 0.01 )
 
                 vm:DrawModel()
 
+                render.DepthRange( 0, 1 )
+
                 drawing = false
-                cam.End3D()
-            cam.IgnoreZ(false)
+
+            cam.End3D()
         else
             return 
         end
@@ -9527,24 +11094,24 @@ do
 
 end
 
-function hvhobkak.PostDrawViewModel( vm, ply, w )
-    render_SetColorModulation(1, 1, 1)
-    render_MaterialOverride()
-    render_SetBlend(1)
-    render_SuppressEngineLighting(false)
+function exechack_cc_hvh_obkak.PostDrawViewModel( vm, ply, w )
+    render.SetColorModulation(1, 1, 1)
+    render.MaterialOverride()
+    render.SetBlend(1)
+    render.SuppressEngineLighting(false)
 end
 
 /*
     hooks -> OnImpact ( c++ module )
 */
-hvhobkak.bulletImpacts = {}
+exechack_cc_hvh_obkak.bulletImpacts = {}
 
-function hvhobkak.OnImpact( data )
+function exechack_cc_hvh_obkak.OnImpact( data )
     local startpos = data.m_vStart 
 
-    if hvhobkak.cfg.vars[ "Bullet tracers muzzle" ] and data.m_vStart == me:EyePos() then
-        local vm = me:GetViewModel()
-	    local wep = me:GetActiveWeapon()
+    if exechack_cc_hvh_obkak.cfg.vars[ "Bullet tracers muzzle" ] and data.m_vStart == pLocalPlayer:EyePos() then
+        local vm = pLocalPlayer:GetViewModel()
+	    local wep = pLocalPlayer:GetActiveWeapon()
 
         if vm && IsValid( wep ) && IsValid( vm ) then
             local muzzle = vm:LookupAttachment( "muzzle" )
@@ -9559,7 +11126,7 @@ function hvhobkak.OnImpact( data )
         end
     end
 
-    hvhobkak.bulletImpacts[#hvhobkak.bulletImpacts + 1] = {
+    exechack_cc_hvh_obkak.bulletImpacts[#exechack_cc_hvh_obkak.bulletImpacts + 1] = {
         shootTime = CurTime(),
         startPos = startpos,
         endPos = data.m_vOrigin,
@@ -9569,82 +11136,136 @@ function hvhobkak.OnImpact( data )
 end
 
 
+
+
 /*
     hooks -> PostDrawOpaqueRenderables
 */
 
 do
-    local oldtrmat = hvhobkak.cfg.vars["Bullet tracers material"]
+    local oldtrmat = exechack_cc_hvh_obkak.cfg.vars["Bullet tracers material"]
     local tracemat = Material("sprites/tp_beam001")
 
     local realcolor, fakecolor, lbycolor = Color( 0, 255, 0 ), Color( 255, 0, 0 ), Color( 0, 0, 255 )
 
-    function hvhobkak.PostDrawOpaqueRenderables()
-        if hvhobkak.UnSafeFrame then return end
 
-        if hvhobkak.cfg.vars["Angle arrows"] then
-            local pos = me:GetPos()
 
-            cam_IgnoreZ(true)
+    -- Saddam Hussein
+    /*
+    local bIsSaddamHusseinGenerated = false 
+    local pSaddamHussein = { Model = ClientsideModel( "models/player/breen.mdl" ) }
+    local flSysTime = SysTime()
 
-            cam_Start3D2D( pos, Angle(0, hvhobkak.realAngle.y + 45, 0), 1 )
-                surface_SetDrawColor( realcolor )
-                surface_DrawLine( 0, 0, 25, 25 )
-            cam_End3D2D()
+    while ( not pSaddamHussein.Position ) do
+        local vecRandom = VectorRand( -4096, 4096 )
+
+        if ( not util.TraceLine( { collisiongroup = COLLISION_GROUP_WORLD, start = pos, endpos = pos } ).HitWorld ) then
+            pSaddamHussein.Position = util.TraceLine( { collisiongroup = COLLISION_GROUP_WORLD, start = vecRandom, endpos = vecRandom + Vector( 0, 0, -1 ) * 50000 } ).HitPos
+            pSaddamHussein.Position.z = pSaddamHussein.Position.z + 16
+        end
+    end
+
+    print( string.format( "Generated Saddam Hussein in %fs, approximate location: %s.", SysTime() - flSysTime, pSaddamHussein.Position ) )
+
+    pSaddamHussein.Model:SetPos( pSaddamHussein.Position )
+    pSaddamHussein.Model:SetAngles( Angle( -90, 0, 0 ) )
+    pSaddamHussein.Model:SetNoDraw( true )
+*/
+
+    function exechack_cc_hvh_obkak.PostDrawOpaqueRenderables()
+
+        if exechack_cc_hvh_obkak.UnSafeFrame then return end
+
+        if exechack_cc_hvh_obkak.cfg.vars["Angle arrows"] then
+            local pos = pLocalPlayer:GetPos()
+
+            cam.IgnoreZ(true)
+
+            cam.Start3D2D( pos, Angle(0, exechack_cc_hvh_obkak.realAngle.y + 45, 0), 1 )
+                surface.SetDrawColor( realcolor )
+                surface.DrawLine( 0, 0, 25, 25 )
+            cam.End3D2D()
     
-            cam_Start3D2D( pos, Angle(0, hvhobkak.fakeAngles.angle.y + 45, 0), 1 )
-                surface_SetDrawColor( fakecolor )
-                surface_DrawLine( 0, 0, 25, 25 )
-            cam_End3D2D()
+            cam.Start3D2D( pos, Angle(0, exechack_cc_hvh_obkak.fakeAngles.angle.y + 45, 0), 1 )
+                surface.SetDrawColor( fakecolor )
+                surface.DrawLine( 0, 0, 25, 25 )
+            cam.End3D2D()
     
-            local lby = ded.GetCurrentLowerBodyYaw( me:EntIndex() )
-            cam_Start3D2D( pos, Angle(0, lby + 45, 0), 1 )
-                surface_SetDrawColor( lbycolor )
-                surface_DrawLine( 0, 0, 25, 25 )
-            cam_End3D2D()
+            local lby = pLocalPlayer:GetPoseParameter("body_yaw") * 360 - 180
+            cam.Start3D2D( pos, Angle(0, lby + 45, 0), 1 )
+                surface.SetDrawColor( lbycolor )
+                surface.DrawLine( 0, 0, 25, 25 )
+            cam.End3D2D()
     
-            cam_IgnoreZ( false )
+            cam.IgnoreZ( false )
         end
 
-        if hvhobkak.cfg.vars["Bullet tracers"] then
-            local trmat = hvhobkak.cfg.vars["Bullet tracers material"] 
+        if exechack_cc_hvh_obkak.cfg.vars["Bullet tracers"] then
+            local trmat = exechack_cc_hvh_obkak.cfg.vars["Bullet tracers material"] 
     
-
-            //print( trmat, oldtrmat )
             if trmat != oldtrmat then
                 tracemat = Material( trmat )
                 oldtrmat = trmat
             end
-    
-            local tracercolor = string_ToColor(hvhobkak.cfg.colors["Bullet tracers"])
-    
-            local curTime = CurTime()
-            local dieTime = hvhobkak.cfg.vars["Tracers die time"]
-    
-            for i = #hvhobkak.bulletImpacts, 1, -1 do
-                local impact = hvhobkak.bulletImpacts[i]
 
-                // impact.alpha = impact.alpha - 0.15
+            render.SetMaterial( tracemat ) 
+    
+            local tracercolor = string.ToColor(exechack_cc_hvh_obkak.cfg.colors["Bullet tracers"])
+            local oldAlpha = tracercolor.a
+
+            local curTime = CurTime()
+            local dieTime = exechack_cc_hvh_obkak.cfg.vars["Tracers die time"]
+    
+            for i = #exechack_cc_hvh_obkak.bulletImpacts, 1, -1 do
+                local impact = exechack_cc_hvh_obkak.bulletImpacts[i]
 
                 if (curTime - impact.shootTime) > dieTime then
-                    table_remove(hvhobkak.bulletImpacts, i)
+                    table.remove(exechack_cc_hvh_obkak.bulletImpacts, i)
                     continue
                 end
 
-                tracercolor.a = impact.alpha
+                tracercolor.a = 255 - ( ( curTime - impact.shootTime ) / dieTime * 255 )
     
-                render_SetMaterial( tracemat ) 
-                render_DrawBeam( impact.startPos, impact.endPos, 4, 1, 1, tracercolor )
+                render.DrawBeam( impact.startPos, impact.endPos, 1, 1, 1, tracercolor )
             end
+
+            tracercolor.a = oldAlpha
         end
 
         
 
-        if hvhobkak.cfg.vars["Auto peak"] and hvhobkak.startedPeeking then
-            hvhobkak.drawAutopeak()
+        if exechack_cc_hvh_obkak.cfg.vars["Auto peak"] and exechack_cc_hvh_obkak.startedPeeking then
+            exechack_cc_hvh_obkak.drawAutopeak()
         end
 
 
+
+
+
+
+        -- Saddam Hussein
+        /*
+        if ( pSaddamHussein.Position:DistToSqr( pLocalPlayer:EyePos() ) <= ( 2048 ^ 2 ) ) then
+            render.MaterialOverride( Material( "!flat" ) ) 
+            render.SetColorModulation( 255, 0, 0 )
+            render.SetBlend( 255 ) 
+
+            cam.IgnoreZ( true )
+                pSaddamHussein.Model:DrawModel()
+
+                cam.Start3D2D( pSaddamHussein.Position, Angle( 0, 0, 90 ), 0.25 )
+                    surface.SetDrawColor( 0, 0, 0 )
+                    surface.DrawRect( -128, -200, 4, 200 )
+
+                    surface.SetFont( "saddamhussein" )
+                    surface.SetTextColor( 0, 0, 0 )
+
+                    surface.SetTextPos( -128, -256 )
+                    surface.DrawText( "Saddam Hussein" )
+                cam.End3D2D()
+            cam.IgnoreZ( false )
+        end
+        */
     end 
 end
 
@@ -9652,7 +11273,7 @@ end
     hooks -> FrameStageNotify ( c++ module )
 */
 
-function hvhobkak.GetUserGroup(ply)
+function exechack_cc_hvh_obkak.GetUserGroup(ply)
     if ply.GetUserGroup then
         return ply:GetUserGroup()
     elseif ply.GetRankTable and ply:GetRankTable().NiceName then
@@ -9663,7 +11284,7 @@ function hvhobkak.GetUserGroup(ply)
     end
 end
 
-function hvhobkak.GetTeam( ply )
+function exechack_cc_hvh_obkak.GetTeam( ply )
     local iTeam = ply:Team()
 
     if rp and rp.GetJobWithoutDisguise then
@@ -9672,32 +11293,32 @@ function hvhobkak.GetTeam( ply )
 
         return index, tbl.Name, tbl.Color
     else
-        return iTeam, team_GetName(iTeam), team_GetColor(iTeam)
+        return iTeam, team.GetName(iTeam), team.GetColor(iTeam)
     end
 end
 
 // Player data tables
 
-hvhobkak.playerCache = {}
+exechack_cc_hvh_obkak.playerCache = {}
 
-function hvhobkak.playerTableUpdate( ply )
-    if not hvhobkak.playerCache[ ply ] then
-        hvhobkak.playerCache[ ply ] = {}
+function exechack_cc_hvh_obkak.playerTableUpdate( ply )
+    if not exechack_cc_hvh_obkak.playerCache[ ply ] then
+        exechack_cc_hvh_obkak.playerCache[ ply ] = {}
     end
     
-    local v = hvhobkak.playerCache[ ply ]
+    local v = exechack_cc_hvh_obkak.playerCache[ ply ]
 
     v.entity = ply
     
     v.Name = ply:Name()
 
-    local index, name, color = hvhobkak.GetTeam( ply )
+    local index, name, color = exechack_cc_hvh_obkak.GetTeam( ply )
 
     v.Team = index
     v.TeamColor = color
     v.TeamName = name
 
-    v.GetUserGroup = hvhobkak.GetUserGroup(ply)
+    v.GetUserGroup = exechack_cc_hvh_obkak.GetUserGroup(ply)
 
     v.Health = ply:Health()
     v.GetMaxHealth = ply:GetMaxHealth()
@@ -9712,47 +11333,49 @@ function hvhobkak.playerTableUpdate( ply )
 
     local w = ply:GetActiveWeapon()
 
-    v.WeaponClass = IsValid(w) and ( hvhobkak.cfg.vars["Weapon printname"] and language.GetPhrase( w:GetPrintName() ) or w:GetClass() ) or "Unarmed"
+    v.WeaponClass = IsValid(w) and ( exechack_cc_hvh_obkak.cfg.vars["Weapon printname"] and language.GetPhrase( w:GetPrintName() ) or w:GetClass() ) or "Unarmed"
     v.WeaponAmmo = IsValid(w) and w:Clip1() or "-"
  
     v.MoneyVar = MetaPlayer.getDarkRPVar and DarkRP.formatMoney(ply:getDarkRPVar("money")) or "beggar"
 end
 
-function hvhobkak.playerDataUpdate( )
+function exechack_cc_hvh_obkak.playerDataUpdate( )
 
-    hvhobkak.playerCache = {}
+    exechack_cc_hvh_obkak.playerCache = {}
 
-    local plys = player_GetAll()
+    local plys = player.GetAll()
 
     for i = 1, #plys do
         local v = plys[i]
 
-        if v == me then continue end
+        if v == pLocalPlayer then continue end
     
-        hvhobkak.playerTableUpdate( v )
+        exechack_cc_hvh_obkak.playerTableUpdate( v )
     end
 end
 
 // Entity data
 
-hvhobkak.entityCache = {}
-hvhobkak.allowedClasses = {}
+exechack_cc_hvh_obkak.entityCache = {}
+exechack_cc_hvh_obkak.cfg.ents = {}
 
-function hvhobkak.entTableUpdate()
+function exechack_cc_hvh_obkak.entTableUpdate()
     
-    hvhobkak.entityCache = {}
+    exechack_cc_hvh_obkak.entityCache = {}
 
-    local entitys = ents_GetAll()
+    local entitys = ents.GetAll()
 
     for i = 1, #entitys do
         local v = entitys[ i ]
+        local v_class = v:GetClass()
 
         if not IsValid( v ) then continue end 
-        if not hvhobkak.allowedClasses[ v:GetClass() ] then continue end
+        if v_class == "player" then continue end
+        if not exechack_cc_hvh_obkak.cfg.ents[ v_class ] then continue end
 
-        hvhobkak.entityCache[ #hvhobkak.entityCache + 1 ] = {
+        exechack_cc_hvh_obkak.entityCache[ #exechack_cc_hvh_obkak.entityCache + 1 ] = {
             entity = v,
-            class = v:GetClass(),
+            class = v_class,
             position = v:GetPos(),
         }
     end
@@ -9762,21 +11385,7 @@ end
 
 // Resolver 
 
-hvhobkak.bruteYaw = { -90, 0, 90, 180, -180, 180, 90, 0, -90 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+exechack_cc_hvh_obkak.bruteYaw = { -180, -120, -90, -60, -30, 0, 30, 60, 90, 120, 180  }
 
 
 
@@ -9785,11 +11394,11 @@ do
 
     localData.origin = Vector()
 
-    function hvhobkak.FillLocalNetworkData( netdata )
+    function exechack_cc_hvh_obkak.FillLocalNetworkData( netdata )
         localData.origin     =   netdata[1]
     end
     
-    function hvhobkak.GetLocalNetworkData()
+    function exechack_cc_hvh_obkak.GetLocalNetworkData()
         return localData
     end
 end
@@ -9807,22 +11416,22 @@ do
     local FRAME_RENDER_START = 5
     local FRAME_RENDER_END = 6
 
-    function hvhobkak.PreFrameStageNotify( stage )
+    function exechack_cc_hvh_obkak.PreFrameStageNotify( stage )
         local plys = player.GetAll()
 
         if stage == FRAME_NET_UPDATE_POSTDATAUPDATE_END then
 
-            hvhobkak.entTableUpdate()
+            exechack_cc_hvh_obkak.entTableUpdate()
 
             plys = player.GetAll()
 
-            local orig = me:GetNetworkOrigin()
+            local orig = pLocalPlayer:GetNetworkOrigin()
 
             local data = {}
 
             data[1] = orig      // last networked origin
 
-            hvhobkak.FillLocalNetworkData( data )
+            exechack_cc_hvh_obkak.FillLocalNetworkData( data )
 
             for i = 1, #plys do
                 local v = plys[i]
@@ -9843,21 +11452,27 @@ do
                     v.simtime_updated = false 
                     v.break_lc = false
 
-                    hvhobkak.btrecords[ v ] = {}
-                    hvhobkak.predicted[ v ] = {}
+                    exechack_cc_hvh_obkak.btrecords[ v ] = {}
+                    exechack_cc_hvh_obkak.predicted[ v ] = {}
 
                     v.aimshots = 0
                     v.fakepitch = v:EyeAngles().p > 90
 
                 elseif v.ult_prev_simtime != cur_simtime then
-                    local flticks = hvhobkak.TIME_TO_TICKS(cur_simtime-v.ult_prev_simtime)
+                    local time_diff = (cur_simtime or 0) - (v.ult_prev_simtime or 0)
+                    local flticks = 1
+                    
+                    if time_diff > 0 then
+                        local success, result = pcall(function() return math.floor(0.5 + time_diff / flTickInterval) end)
+                        flticks = success and result or math.max(1, math.floor(time_diff * 66.67))
+                    end
 
                     // print(v,flticks )
 
                     ded.SetMissedTicks( flticks )
                     ded.AllowAnimationUpdate( true )
 
-                    v.flticks = math_Clamp(flticks,1,24)
+                    v.flticks = math.Clamp(flticks,1,24)
 
                     v.ult_prev_simtime = cur_simtime
 
@@ -9866,7 +11481,7 @@ do
                     --if v.ult_prev_pos != v.ult_cur_pos then
                     v.ult_prev_pos = cur_pos
 
-                    // v.ult_prev_hitbox_pos = hvhobkak.getHitbox(v)
+                    // v.ult_prev_hitbox_pos = exechack_cc_hvh_obkak.getHitbox(v)
                     --end 
                     v.fakepitch = v:EyeAngles().p > 90
 
@@ -9875,74 +11490,118 @@ do
                     v.simtime_updated = false
                 end
 
-                if hvhobkak.canBacktrack(v) and v != me and v.simtime_updated then
-                    hvhobkak.recordBacktrack(v)
+                if exechack_cc_hvh_obkak.canBacktrack(v) and v != pLocalPlayer and v.simtime_updated then
+                    exechack_cc_hvh_obkak.recordBacktrack(v)
                 end
 
                 if v.break_lc then
-                    hvhobkak.btrecords[ v ] = {}
+                    exechack_cc_hvh_obkak.btrecords[ v ] = {}
                 end
 
                 /*
-                if hvhobkak.cfg.vars["Extrapolation"] and v.simtime_updated and v != me then
-                    local predTime = ded.GetLatency(0) + ded.GetLatency(1)
-                    local pos = v:GetNetworkOrigin()
-
-                    ded.StartSimulation( v:EntIndex() )
-
-                    for tick = 1, hvhobkak.TIME_TO_TICKS( predTime ) do
+                if exechack_cc_hvh_obkak.cfg.vars["Extrapolation"] and v.simtime_updated and v != pLocalPlayer then
+                    -- Получаем текущую позицию игрока
+                    local currentPos = v:GetNetworkOrigin()
+                    local currentTime = ded.GetSimulationTime(v:EntIndex())
+                    
+                    -- Вычисляем время предсказания с ограничением
+                    local predTime = math.min(ded.GetLatency(0) + ded.GetLatency(1), 0.2) -- Максимум 200ms
+                    
+                    -- Проверяем, есть ли предыдущая позиция для сравнения
+                    if not v.ult_prev_pos then
+                        v.ult_prev_pos = currentPos
+                        v.ult_prev_time = currentTime
+                        return
+                    end
+                    
+                    -- Вычисляем скорость движения
+                    local timeDelta = currentTime - (v.ult_prev_time or currentTime)
+                    if timeDelta <= 0 then return end
+                    
+                    local velocity = (currentPos - v.ult_prev_pos) / timeDelta
+                    local speed = velocity:Length()
+                    
+                    -- Ограничиваем максимальную скорость для предотвращения телепортации
+                    local maxSpeed = 1000 -- Максимальная разумная скорость
+                    if speed > maxSpeed then
+                        velocity = velocity:GetNormalized() * maxSpeed
+                    end
+                    
+                    -- Начинаем симуляцию
+                    ded.StartSimulation(v:EntIndex())
+                    
+                    local predictedPos = currentPos
+                    local ticks = math.floor(0.5 + predTime / flTickInterval)
+                    
+                    -- Ограничиваем количество тиков
+                    ticks = math.min(ticks, 20) -- Максимум 20 тиков
+                    
+                    for tick = 1, ticks do
                         ded.SimulateTick()
                         local data = ded.GetSimulationData()
-
-                        debugoverlay.Cross( data.m_vecAbsOrigin, 6, 0.1, hvhobkak.Colors["Red"], true )
-                        pos = data.m_vecAbsOrigin
+                        
+                        -- Проверяем на разумность позиции
+                        local posChange = (data.m_vecAbsOrigin - predictedPos):Length()
+                        if posChange > 200 then -- Если изменение позиции слишком большое
+                            break -- Прерываем симуляцию
+                        end
+                        
+                        predictedPos = data.m_vecAbsOrigin
+                        debugoverlay.Cross(predictedPos, 6, 0.1, exechack_cc_hvh_obkak.Colors["Red"], true)
                     end
-
-                    local data = ded.GetSimulationData()
-
-                    v:SetRenderOrigin( data.m_vecAbsOrigin )
-                    v:SetNetworkOrigin( data.m_vecAbsOrigin )
-
-                    debugoverlay.Box( pos, v:OBBMins(), v:OBBMaxs(), 0.1, color_white )
-
-                    local p = hvhobkak.GetBones( v )[ 1 ]
-
-                    //v:SetRenderOrigin( v.ult_prev_pos )
-                    //v:SetNetworkOrigin( v.ult_prev_pos )
-
-                    hvhobkak.predicted[ v ] = { pos = p, tick = hvhobkak.TIME_TO_TICKS( ded.GetSimulationTime( v:EntIndex() ) + predTime  ) }
-
-                    ded.FinishSimulation()
-
                     
+                    local finalData = ded.GetSimulationData()
+                    
+                    -- Дополнительная проверка на разумность финальной позиции
+                    local totalChange = (finalData.m_vecAbsOrigin - currentPos):Length()
+                    if totalChange > 500 then -- Если изменение слишком большое
+                        -- Используем линейную экстраполяцию вместо симуляции
+                        predictedPos = currentPos + velocity * predTime
+                    else
+                        predictedPos = finalData.m_vecAbsOrigin
+                    end
+                    
+                    -- Плавное смешивание между текущей и предсказанной позицией
+                    local blendFactor = math.min(predTime * 2, 1.0) -- Плавность смешивания
+                    local smoothedPos = currentPos + (predictedPos - currentPos) * blendFactor
+                    
+                    -- Устанавливаем позицию рендеринга
+                    v:SetRenderOrigin(smoothedPos)
+                    
+                    -- Обновляем debug информацию
+                    debugoverlay.Box(smoothedPos, v:OBBMins(), v:OBBMaxs(), 0.1, color_white)
+                    
+                    -- Сохраняем данные для следующего кадра
+                    v.ult_prev_pos = currentPos
+                    v.ult_prev_time = currentTime
+                    
+                    -- Обновляем таблицу предсказанных позиций
+                    local boneData = exechack_cc_hvh_obkak.GetBones(v)
+                    if boneData and boneData[1] then
+                        exechack_cc_hvh_obkak.predicted[v] = {
+                            pos = boneData[1],
+
+                            
+                            confidence = math.max(0, 1 - (predTime * 2)) -- Уверенность в предсказании
+                        }
+                    end
+                    
+                    ded.FinishSimulation()
                 end
                 */
 
-                if hvhobkak.cfg.vars["Extrapolation"] and v != me then
-                    local predTime = ( ded.GetLatency(0) + ded.GetLatency(1) )
-
-                    ded.StartSimulation( v:EntIndex() )
-
-                    local pos = v:GetNetworkOrigin()
-
-                    //print( hvhobkak.TIME_TO_TICKS( predTime ) )
-
-                    for tick = 1, hvhobkak.TIME_TO_TICKS( predTime ) do
+                if exechack_cc_hvh_obkak.cfg.vars["Extrapolation"] and v.break_lc then
+                    local predTime = ded.GetLatency(0) + ded.GetLatency(1)
+                    ded.StartSimulation(v:EntIndex())
+        
+                    for tick = 1, math.floor(0.5 + predTime / flTickInterval) do
                         ded.SimulateTick()
-    
-                        local data = ded.GetSimulationData()
-                        debugoverlay.Box( data.m_vecAbsOrigin, v:OBBMins(), v:OBBMaxs(), 0.1, Color( 255, 25, 25, 8 ) )
                     end
-    
+        
                     local data = ded.GetSimulationData()
-                    pos = data.m_vecAbsOrigin
-
+                    v:SetRenderOrigin(data.m_vecAbsOrigin)
+                    v:SetNetworkOrigin(data.m_vecAbsOrigin)
                     ded.FinishSimulation()
-
-                    v:SetRenderOrigin( pos )
-                    v:SetNetworkOrigin( pos )  
-                    v:InvalidateBoneCache()
-                    v:SetupBones()
                 end
 
             end
@@ -9952,110 +11611,32 @@ do
             for i = 1, #plys do
                 local v = plys[i]
 
-                if v == me then continue end
-
-                if hvhobkak.cfg.vars["Forwardtrack"] then
-                    local predTime = ( ded.GetLatency(0) + ded.GetLatency(1) ) * hvhobkak.cfg.vars["Forwardtrack time"]
-                    ded.StartSimulation( v:EntIndex() )
-    
-                    local prevPos = v:GetNetworkOrigin()
-                    for tick = 1, hvhobkak.TIME_TO_TICKS(predTime) do
-                        ded.SimulateTick()
-    
-                        local data = ded.GetSimulationData()
-                        debugoverlay.Line(prevPos, data.m_vecAbsOrigin, 0.1, color_white, true)
-    
-                        prevPos = data.m_vecAbsOrigin
-                    end
-    
-                    local data = ded.GetSimulationData()
-
-                    
-    
-                    ded.FinishSimulation()
-                end
-
-                if hvhobkak.cfg.vars["Resolver"] then
-
-                    local angs = Angle()
-                    angs.y = hvhobkak.bruteYaw[ v.aimshots % #hvhobkak.bruteYaw + 1 ] + v:EyeAngles().y
-
-                    v:SetRenderAngles( angs )
-                    // v:SetNetworkAngles( angs )
-
-                    ded.SetCurrentLowerBodyYaw( v:EntIndex(), angs.y )  
-
-                    // hvhobkak.combobox( "Yaw mode", { "Step", "Delta brute" }, "Yaw mode", p:GetItemPanel() )
-                    // hvhobkak.slider( "Max misses", "Resolver max misses", 1, 6, 0, p:GetItemPanel() )
-                    // hvhobkak.checkbox( "Invert first shot", "Invert first shot", p:GetItemPanel() )      
-                    // v:SetupBones()
-                end
-
-    
-
+                if v == pLocalPlayer then continue end
             end
-
-            
-            
-
-	        
-            // Extrapolate aim target vector 
-            /*
-if hvhobkak.cfg.vars["Extrapolation"] and hvhobkak.target and hvhobkak.targetVector then
-                local t = hvhobkak.target 
-
-                if t.break_lc then
-                    local predTicks = hvhobkak.TIME_TO_TICKS( ded.GetLatency(0) + ded.GetLatency(1) ) // hvhobkak.TIME_TO_TICKS( ded.GetLatency(0) + ded.GetLatency(1) ) / t.flticks
-
-                    ded.StartSimulation(t:EntIndex())
-    
-                    for tick = 1, predTicks do
-                        ded.SimulateTick()
-                    end
-    
-                    local data = ded.GetSimulationData()
-
-                    print("[pre set] network" , t:GetNetworkOrigin(), "render", t:GetRenderOrigin())
-
-                    t:SetRenderOrigin(data.m_vecAbsOrigin)
-                    t:SetNetworkOrigin(data.m_vecAbsOrigin)    
-    
-                    // v:InvalidateBoneCache()
-                    // v:SetupBones()
-
-                    hvhobkak.extrapolatedVector = hvhobkak.getHitbox(t)
-
-                    print("[pre finish] network" , t:GetNetworkOrigin(), "render", t:GetRenderOrigin())
-
-                    ded.FinishSimulation()
-
-                    print("[post finish] network" , t:GetNetworkOrigin(), "render", t:GetRenderOrigin())
-               
-               //hvhobkak.extrapolatedVector = t.ult_prev_hitbox_pos
-
-                end
-            end
-            */
-            
-
-
-            // Anim fix 
-
-            
-            
-
-            // [pre set] network	-453.500000 1271.375000 1.031250	render	-465.303375 1267.841431 1.031250
-            // [pre finish] network	-465.303375 1267.841431 1.031250	render	-465.303375 1267.841431 1.031250
-            // [post finish] network	-453.500000 1271.375000 1.000000	render	-465.303375 1267.841431 1.031250
-
-
-         end
+        end
     end
 end
 
-function hvhobkak.PostFrameStageNotify( stage ) 
+
+function exechack_cc_hvh_obkak.PostFrameStageNotify( stage ) 
     if stage == 3 then
-        hvhobkak.playerDataUpdate()
+        exechack_cc_hvh_obkak.playerDataUpdate()
+
+        /*local playerlist = player.GetAll()
+
+        for i = 1, #playerlist do
+            local pEntity = playerlist[ i ]
+
+            local iEntIndex = pEntity:EntIndex()
+            local pTable = pEntity:GetTable()
+
+            -- Simulation time 
+            local flSimulationTime = ded.GetSimulationTime( iEntIndex )
+
+            pTable.iChokedCommands = Utility.TimeToTicks( flSimulationTime - pTable.flSimulationTime )
+            pTable.bIsSimulated = flSimulationTime ~= pTable.flSimulationTime
+            pTable.flSimulationTime = flSimulationTime    
+        end*/
     end
 end
 
@@ -10063,29 +11644,21 @@ end
     hooks -> ShouldUpdateAnimation ( cpp )
 */
 
-hvhobkak.fakeAngles = {
-    angle = me:EyeAngles(),
+exechack_cc_hvh_obkak.fakeAngles = {
+    angle = pLocalPlayer:EyeAngles(),
     movex = 0,
     movey = 0,
     layers = {},
     seq = 0,
     cycle = 0,
-    origin = me:GetPos(),
+    origin = pLocalPlayer:GetPos(),
 }
 
-function hvhobkak.UpdateAnimation( v )
-    v:SetPoseParameter( "head_pitch", 0 )
-    v:SetPoseParameter( "head_yaw", 0 )
-
-    if hvhobkak.cfg.vars["Pitch resolver"] and v.fakepitch then
-        v:SetPoseParameter( "aim_pitch", -89 )
-        v:SetPoseParameter( "head_pitch", -89 )
-    end
-
+function exechack_cc_hvh_obkak.UpdateAnimation( v )
     v:InvalidateBoneCache()
 end
 
-function hvhobkak.ShouldUpdateAnimation( entIndex ) 
+function exechack_cc_hvh_obkak.ShouldUpdateAnimation( entIndex ) 
     local ent = Entity( entIndex )
 
     if not ent.simtime_updated then return end
@@ -10095,52 +11668,52 @@ function hvhobkak.ShouldUpdateAnimation( entIndex )
 end
 
 // AA shit
-hvhobkak.realModel = hvhobkak.CS_Model( me:GetModel() )
-hvhobkak.fakeModel = hvhobkak.CS_Model( me:GetModel() )
+exechack_cc_hvh_obkak.realModel = exechack_cc_hvh_obkak.CS_Model( pLocalPlayer:GetModel() )
+exechack_cc_hvh_obkak.fakeModel = exechack_cc_hvh_obkak.CS_Model( pLocalPlayer:GetModel() )
 
-hvhobkak.newModel = me:GetModel()
+exechack_cc_hvh_obkak.newModel = pLocalPlayer:GetModel()
 
-function hvhobkak.drawCSModels_real()
-    if not hvhobkak.cfg.vars["Anti aim chams"] or not hvhobkak.tpenabled then 
+function exechack_cc_hvh_obkak.drawCSModels_real()
+    if not exechack_cc_hvh_obkak.cfg.vars["Anti aim chams"] or not exechack_cc_hvh_obkak.tpenabled then 
         return 
     end 
-    if not me:Alive() then 
+    if not pLocalPlayer:Alive() then 
         return 
     end
 
-    local mymodel = me:GetModel()
+    local mymodel = pLocalPlayer:GetModel()
 
-    if hvhobkak.newModel != mymodel then
-        hvhobkak.CS_Model( mymodel )
-        hvhobkak.newModel = mymodel
+    if exechack_cc_hvh_obkak.newModel != mymodel then
+        exechack_cc_hvh_obkak.CS_Model( mymodel )
+        exechack_cc_hvh_obkak.newModel = mymodel
     end
 
     local tbl = {
-        layers = hvhobkak.fakeAngles.layers,
-        angles = hvhobkak.fakeAngles.angle,
-        sequence = hvhobkak.fakeAngles.seq,
-        cycle = hvhobkak.fakeAngles.cycle,
-        origin = hvhobkak.fakeAngles.origin,
-        movex = hvhobkak.fakeAngles.movex,
-        movey = hvhobkak.fakeAngles.movey,
+        layers = exechack_cc_hvh_obkak.fakeAngles.layers,
+        angles = exechack_cc_hvh_obkak.fakeAngles.angle,
+        sequence = exechack_cc_hvh_obkak.fakeAngles.seq,
+        cycle = exechack_cc_hvh_obkak.fakeAngles.cycle,
+        origin = exechack_cc_hvh_obkak.fakeAngles.origin,
+        movex = exechack_cc_hvh_obkak.fakeAngles.movex,
+        movey = exechack_cc_hvh_obkak.fakeAngles.movey,
     }
 
-    hvhobkak.CS_Model_update( me, hvhobkak.realModel, tbl )
+    exechack_cc_hvh_obkak.CS_Model_update( pLocalPlayer, exechack_cc_hvh_obkak.realModel, tbl )
 
-    if hvhobkak.cfg.vars["Antiaim fullbright"] then
-        render_SuppressEngineLighting(true)
+    if exechack_cc_hvh_obkak.cfg.vars["Antiaim fullbright"] then
+        render.SuppressEngineLighting(true)
     end
 
-    local col = string_ToColor(hvhobkak.cfg.colors["Real chams"])
-    hvhobkak.chamMats.invis[6]:SetVector( "$envmaptint", Vector( col.r / 255, col.g / 255, col.b / 255 ) )
-    render_MaterialOverride(hvhobkak.chamMats.invis[hvhobkak.cfg.vars["Antiaim material"]]) 
-    render_SetColorModulation(col.r/255,col.g/255,col.b/255)
-    render_SetBlend(col.a/255) 
-    hvhobkak.realModel:SetRenderMode(1)
-    hvhobkak.realModel:DrawModel()
+    local col = string.ToColor(exechack_cc_hvh_obkak.cfg.colors["Real chams"])
+    exechack_cc_hvh_obkak.chamMats.invis[6]:SetVector( "$envmaptint", Vector( col.r / 255, col.g / 255, col.b / 255 ) )
+    render.MaterialOverride(exechack_cc_hvh_obkak.chamMats.invis[exechack_cc_hvh_obkak.cfg.vars["Antiaim material"]]) 
+    render.SetColorModulation(col.r/255,col.g/255,col.b/255)
+    render.SetBlend(col.a/255) 
+    exechack_cc_hvh_obkak.realModel:SetRenderMode(1)
+    exechack_cc_hvh_obkak.realModel:DrawModel()
 
-    if hvhobkak.cfg.vars["Antiaim fullbright"] then
-        render_SuppressEngineLighting(false)
+    if exechack_cc_hvh_obkak.cfg.vars["Antiaim fullbright"] then
+        render.SuppressEngineLighting(false)
     end
 end
 
@@ -10172,32 +11745,32 @@ do
         //[4] = true,
     }
     
-    hvhobkak.cfg.vars["Player outline"] = false
-    hvhobkak.cfg.vars["Entity outline"] = false
-    hvhobkak.cfg.colors["Player outline"] = "45 255 86 255"
-    hvhobkak.cfg.colors["Entity outline"] = "255 86 45 255"
+    exechack_cc_hvh_obkak.cfg.vars["Player outline"] = false
+    exechack_cc_hvh_obkak.cfg.vars["Entity outline"] = false
+    exechack_cc_hvh_obkak.cfg.colors["Player outline"] = "45 255 86 255"
+    exechack_cc_hvh_obkak.cfg.colors["Entity outline"] = "255 86 45 255"
 
     local StoreTexture	= render.GetScreenEffectTexture(0)
     local DrawTexture	= render.GetScreenEffectTexture(1)
 
-    function hvhobkak.RenderOutline()
+    function exechack_cc_hvh_obkak.RenderOutline()
         local renderEnts = {}
 
-        if hvhobkak.cfg.vars["Player outline"] then
+        if exechack_cc_hvh_obkak.cfg.vars["Player outline"] then
             local plys = player.GetAll()
 
             for i = 1, #plys do 
                 local v = plys[ i ]
 
-                if not IsValid( v ) or v == me or not v:Alive() or v:IsDormant() then continue end
+                if not IsValid( v ) or v == pLocalPlayer or not v:Alive() or v:IsDormant() then continue end
 
                 renderEnts[ #renderEnts + 1 ] = v
             end
         end
 
-        if hvhobkak.cfg.vars["Entity outline"] then
-            for i = 1, #hvhobkak.entityCache do
-                local v = hvhobkak.entityCache[ i ].entity 
+        if exechack_cc_hvh_obkak.cfg.vars["Entity outline"] then
+            for i = 1, #exechack_cc_hvh_obkak.entityCache do
+                local v = exechack_cc_hvh_obkak.entityCache[ i ].entity 
 
                 if not IsValid( v ) or v:IsDormant() then continue end
         
@@ -10210,14 +11783,14 @@ do
         local scene = render.GetRenderTarget()
         render.CopyRenderTargetToTexture(StoreTexture)
         
-        if subclear[ hvhobkak.cfg.vars["Outline style"] ] then
+        if subclear[ exechack_cc_hvh_obkak.cfg.vars["Outline style"] ] then
             render.Clear( 255, 255, 255, 255, true, true )
         else
             render.Clear( 0, 0, 0, 0, true, true )
         end
 
         render.SetStencilEnable(true)
-            cam_IgnoreZ(true)
+            cam.IgnoreZ(true)
             render.SuppressEngineLighting(true)
         
             render.SetStencilWriteMask(255)
@@ -10228,36 +11801,36 @@ do
             render.SetStencilZFailOperation(STENCIL_REPLACE)
             render.SetStencilPassOperation(STENCIL_REPLACE)
             
-            cam_Start3D()
+            cam.Start3D()
                 for i = 1, #renderEnts do 
                     render.SetStencilReferenceValue( i )
 
                     renderEnts[i]:DrawModel()
                 end
-            cam_End3D()
+            cam.End3D()
             
             render.SetStencilCompareFunction(STENCIL_EQUAL)
             
-            cam_Start2D()
+            cam.Start2D()
                 for i = 1, #renderEnts do 
-                    local c = renderEnts[i]:IsPlayer() and string_ToColor( hvhobkak.cfg.colors["Player outline"] ) or string_ToColor( hvhobkak.cfg.colors["Entity outline"] ) 
+                    local c = renderEnts[i]:IsPlayer() and string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Player outline"] ) or string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Entity outline"] ) 
 
 				    render.SetStencilReferenceValue( i )
 
-                    surface_SetDrawColor( c )
-                    surface_DrawRect( 0, 0, scrw, scrh )
+                    surface.SetDrawColor( c )
+                    surface.DrawRect( 0, 0, screenWidth, screenHeight )
 
-                    // surface_SimpleTexturedRect( 0, 0, scrw, scrh, string_ToColor( hvhobkak.cfg.colors["Health bar gradient"] ) , hvhobkak.Materials["Gradient"] )
+                    // surface_SimpleTexturedRect( 0, 0, screenWidth, screenHeight, string.ToColor( exechack_cc_hvh_obkak.cfg.colors["Health bar gradient"] ) , exechack_cc_hvh_obkak.Materials["Gradient"] )
                 end
-            cam_End2D()
+            cam.End2D()
             
-            render_SuppressEngineLighting(false)
-            cam_IgnoreZ(false)
+            render.SuppressEngineLighting(false)
+            cam.IgnoreZ(false)
         render.SetStencilEnable(false)
         
         render.CopyRenderTargetToTexture(DrawTexture)
 
-        if hvhobkak.cfg.vars["Outline style"] > 1 then 
+        if exechack_cc_hvh_obkak.cfg.vars["Outline style"] > 1 then 
             render.BlurRenderTarget( DrawTexture, 1, 1, 1 )
         end
 
@@ -10270,233 +11843,291 @@ do
             render.SetStencilReferenceValue(0)
             render.SetStencilCompareFunction(STENCIL_EQUAL)
             
-            local mat = outline_mats[ hvhobkak.cfg.vars["Outline style"] ]
+            local mat = outline_mats[ exechack_cc_hvh_obkak.cfg.vars["Outline style"] ]
 
             mat:SetTexture( "$basetexture", DrawTexture )
-            render_SetMaterial( mat )
+            render.SetMaterial( mat )
             
             for x=-1,1 do
                 for y=-1,1 do
                     if x==0 and x==0 then continue end
                     
-                    render.DrawScreenQuadEx(x,y,scrw,scrh)
+                    render.DrawScreenQuadEx(x,y,screenWidth,screenHeight)
                 end
             end
         render.SetStencilEnable(false)
     end
 end
 
-function hvhobkak.PostDrawEffects()
-    if hvhobkak.UnSafeFrame then return end
-    if not hvhobkak.cfg.vars["Player outline"] and not hvhobkak.cfg.vars["Entity outline"] then return end
+hook.Add("PrePlayerDraw",  "WIP", function()
+	for k, v in ipairs(player.GetAll()) do
+        if exechack_cc_hvh_obkak.cfg.vars["Modelchanger"] then
+            LocalPlayer():InvalidateBoneCache()
+			LocalPlayer():SetSequence(LocalPlayer():GetSequence())
+            local state = LocalPlayer():GetPredictable()
+            LocalPlayer():SetPredictable(not state)
+            LocalPlayer():SetPredictable(state)
+            if exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] == 1 then
+                LocalPlayer():SetModel("models/cyanblue/fate_extella_link/astolfo/astolfo.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] == 2 then
+                LocalPlayer():SetModel("models/squids_pms/ocs/xani_protogen/xani_pm.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] == 3 then
+                LocalPlayer():SetModel("models/walter/playermodels/walter.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] == 4 then
+                LocalPlayer():SetModel("models/survivors/survivor_mechanic.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] == 5 then
+                LocalPlayer():SetModel("models/ray/nikoo/nikopm.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] == 6 then
+                LocalPlayer():SetModel("models/player/floyd/georgedroyd.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] == 7 then
+                LocalPlayer():SetModel("models/jazzmcfly/bgs/bgs.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] == 8 then
+                LocalPlayer():SetModel("models/invincible/mark/mark.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] == 9 then
+                LocalPlayer():SetModel("models/good/goob_outlined.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] == 10 then
+                LocalPlayer():SetModel("models/boykisser/boykisser.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Modelchanger model"] == 11 then   
+                LocalPlayer():SetModel("models/adidas_combine/playermodel/adidas_combine.mdl")            
+            end
+            LocalPlayer():SetupBones()
+        end
+        /*if exechack_cc_hvh_obkak.cfg.vars["Player_modelchanger"] then
+            v:InvalidateBoneCache()	
+            v:SetupBones()
+            if exechack_cc_hvh_obkak.cfg.vars["Player_modelchanger_agent"] == 1 then
+                v:InvalidateBoneCache()	
+                v:SetupBones()
+                v:SetModel("models/player/charple.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Player_modelchanger_agent"] == 2 then
+                v:InvalidateBoneCache()	
+                v:SetupBones()
+                v:SetModel("models/player/Group01/male_03.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Player_modelchanger_agent"] == 3 then
+                v:InvalidateBoneCache()	
+                v:SetupBones()
+                v:SetModel("models/player/gman_high.mdl")
+            elseif exechack_cc_hvh_obkak.cfg.vars["Player_modelchanger_agent"] == 4 then
+                v:InvalidateBoneCache()	
+                v:SetupBones()
+                v:SetModel("models/player/zombie_classic.mdl")
+                elseif exechack_cc_hvh_obkak.cfg.vars["Player_modelchanger_agent"] == 5 then
+                v:InvalidateBoneCache()    
+                v:SetupBones()
+                v:SetModel("models/player/Astolfo.mdl")
+            end			
+        end*/
+    
+    end
+		
+	
+end)
 
-    hvhobkak.PostRender()
-    hvhobkak.RenderOutline()
+
+function exechack_cc_hvh_obkak.PostDrawEffects()
+    if exechack_cc_hvh_obkak.UnSafeFrame then return end
+    if not exechack_cc_hvh_obkak.cfg.vars["Player outline"] and not exechack_cc_hvh_obkak.cfg.vars["Entity outline"] then return end
+
+    exechack_cc_hvh_obkak.RenderOutline()
 end
     
-/*
-    hooks -> FireBullets ( Player cpp ) 
-*/
-
-//function hvhobkak.hFireBullets( data )
-//    PrintTable(data)
-//end
-
-/*
-    Misc hooks
-*/
-
-function hvhobkak.DSADJ( s )
-    return hvhobkak.cfg.vars["Disable SADJ"] and -1 or nil
+function exechack_cc_hvh_obkak.AdjustMouseSensitivity( defaultSensivity )
+    return exechack_cc_hvh_obkak.cfg.vars["Disable sensivity adjustment"] and 0 or nil
 end
 
-hvhobkak.lmc = false 
-hvhobkak.fbe = false
+exechack_cc_hvh_obkak.fbe = false
 
-function hvhobkak.PreRender()
-    if hvhobkak.cfg.vars["Fullbright"] and hvhobkak.fbe then
-        render.SetLightingMode( hvhobkak.cfg.vars["Fullbright mode"] )
-        hvhobkak.lmc = true
+function exechack_cc_hvh_obkak.PreRender()
+    if exechack_cc_hvh_obkak.cfg.vars["Fullbright"] and exechack_cc_hvh_obkak.fbe then
+        render.SetLightingMode( exechack_cc_hvh_obkak.cfg.vars["Fullbright mode"] )
     end
 end
 
-function hvhobkak.PostRender()
-    if hvhobkak.lmc then
-        render.SetLightingMode( 0 )
-        hvhobkak.lmc = false
-    end
+function exechack_cc_hvh_obkak.GetMotionBlurValues()
+    render.SetLightingMode( 0 )
 end
-
-
-/*
-    ConVar manipulation 
-*/
 
 ded.ConVarSetFlags( "mat_fullbright", 0 )
 ded.ConVarSetFlags( "r_aspectratio", 0 )
 ded.ConVarSetFlags( "cl_showhitboxes", 0 )
 
-
-/*
-    Gamemode hooks
-*/
-
 function GAMEMODE:CreateMove( cmd ) return true end
 function GAMEMODE:CalcView( view )  return true end
 function GAMEMODE:ShouldDrawLocal() return true end
 
-
 GAMEMODE["EntityFireBullets"] = function( self, p, data ) 
-    if not hvhobkak.activeWeapon then return end
+    if not exechack_cc_hvh_obkak.activeWeapon then return end
 
     local tick = engine.TickCount()
-    if hvhobkak.cfg.vars[ "On screen logs" ] and data.Src == me:EyePos() and hvhobkak.aimingrn and hvhobkak.target and not hvhobkak.onScreenLogs[ tick ] and IsFirstTimePredicted() then
+    if exechack_cc_hvh_obkak.cfg.vars[ "On screen logs" ] and data.Src == pLocalPlayer:EyePos() and exechack_cc_hvh_obkak.aimingrn and exechack_cc_hvh_obkak.target and not exechack_cc_hvh_obkak.onScreenLogs[ tick ] and IsFirstTimePredicted() then
         local reason = 1
         
         local tr = {}
-        tr.filter = me 
+        tr.filter = pLocalPlayer 
         tr.start = data.Src 
         tr.endpos = data.Src + data.Dir * 13337
         tr.mask = MASK_SHOT
 
         tr = TraceLine( tr )
 
-        if hvhobkak.target.break_lc then
-            reason = 4
-        elseif ded.GetLatency( 0 ) > 0.2 then
-            reason = 3
-        elseif tr.StartSolid or tr.Hit and tr.Entity != hvhobkak.target then
+        local seq = exechack_cc_hvh_obkak.target:GetSequence()
+        local seqName = exechack_cc_hvh_obkak.target:GetSequenceName(seq) or ""
+        
+        if string.find(seqName:lower(), "taunt") or string.find(seqName:lower(), "dance") or string.find(seqName:lower(), "robot") then
+            reason = 5
+        elseif exechack_cc_hvh_obkak.cfg.vars["Resolver"] and exechack_cc_hvh_obkak.target.aimshots and exechack_cc_hvh_obkak.target.aimshots > 0 then
             reason = 2
+        elseif exechack_cc_hvh_obkak.target.break_lc or (exechack_cc_hvh_obkak.target.flticks and exechack_cc_hvh_obkak.target.flticks > 5) then
+            reason = 3
+        elseif exechack_cc_hvh_obkak.firedShots and exechack_cc_hvh_obkak.firedShots > 0 and exechack_cc_hvh_obkak.lastShotTime and (CurTime() - exechack_cc_hvh_obkak.lastShotTime) < 0.1 then
+            reason = 4
+        elseif data.Spread and data.Spread.x > 0.01 or data.Spread.y > 0.01 then
+            reason = 1
         end
         
-        local hlcolor = string_ToColor( hvhobkak.cfg.colors[ hvhobkak.MissReasons[ reason ].var ] )
+        if not exechack_cc_hvh_obkak.MissReasons then
+            exechack_cc_hvh_obkak.MissReasons = {
+                [1] = { str = "spread", var = "Miss spread" },
+                [2] = { str = "resolver", var = "Miss fail" },
+                [3] = { str = "fake lag", var = "Miss lagcomp" },
+                [4] = { str = "fast shooting", var = "Miss spread" },
+                [5] = { str = "taunt", var = "Miss fail" },
+            }
+        end
+        
+        reason = math.Clamp(reason or 1, 1, 5)
+        local missReason = exechack_cc_hvh_obkak.MissReasons[reason] or exechack_cc_hvh_obkak.MissReasons[1]
+        
+        local hlcolor = string.ToColor( exechack_cc_hvh_obkak.cfg.colors[ missReason.var ] or "255 69 69 255" )
         local data = {
             tick = tick,
-            { "Shot at ", hvhobkak.target:Name(), " missed due to ", hvhobkak.MissReasons[ reason ].str, },
-            { hvhobkak.HitLogsWhite, hlcolor, hvhobkak.HitLogsWhite, hlcolor, }
+            { "Shot at ", exechack_cc_hvh_obkak.target:Name(), " missed due to ", missReason.str, },
+            { exechack_cc_hvh_obkak.HitLogsWhite, hlcolor, exechack_cc_hvh_obkak.HitLogsWhite, hlcolor, }
         }
             
-        hvhobkak.onScreenLogs[ tick ] = data
+        exechack_cc_hvh_obkak.onScreenLogs[ tick ] = data
     end
+    
+    exechack_cc_hvh_obkak.lastShotTime = CurTime()
+    exechack_cc_hvh_obkak.firedShots = (exechack_cc_hvh_obkak.firedShots or 0) + 1
  
     local spread = data.Spread * -1
     
-	if hvhobkak.cones[ hvhobkak.activeWeaponClass ] == spread or spread == hvhobkak.nullVec then return end
+	if exechack_cc_hvh_obkak.cones[ exechack_cc_hvh_obkak.activeWeaponClass ] == spread or spread == exechack_cc_hvh_obkak.nullVec then return end
 
-    hvhobkak.cones[ hvhobkak.activeWeaponClass ] = spread;
+    exechack_cc_hvh_obkak.cones[ exechack_cc_hvh_obkak.activeWeaponClass ] = spread;
 end
 
+function exechack_cc_hvh_obkak.SetupWorldFog()
+    if not exechack_cc_hvh_obkak.cfg.vars[ "FogChanger" ] then return end 
 
-
-function hvhobkak.SetupWorldFog()
-    if not hvhobkak.cfg.vars[ "FogChanger" ] then return end 
-
-    local color = string_ToColor(hvhobkak.cfg.colors["FogChanger"])
+    local color = string.ToColor(exechack_cc_hvh_obkak.cfg.colors["FogChanger"])
     
 
     render.FogMode( MATERIAL_FOG_LINEAR )
     render.FogColor( color.r, color.g, color.b )
-    render.FogStart( hvhobkak.cfg.vars[ "FogStart" ] )
-    render.FogEnd( hvhobkak.cfg.vars[ "FogEnd" ] ) 
+    render.FogStart( exechack_cc_hvh_obkak.cfg.vars[ "FogStart" ] )
+    render.FogEnd( exechack_cc_hvh_obkak.cfg.vars[ "FogEnd" ] ) 
     render.FogMaxDensity( color.a / 255 )
     
     return true 
 end
 
-function hvhobkak.SetupSkyboxFog( SkyboxSize )
-    if not hvhobkak.cfg.vars[ "FogChanger" ] then return end 
+function exechack_cc_hvh_obkak.SetupSkyboxFog( SkyboxSize )
+    if not exechack_cc_hvh_obkak.cfg.vars[ "FogChanger" ] then return end 
 
-    local color = string_ToColor(hvhobkak.cfg.colors["FogChanger"])
+    local color = string.ToColor(exechack_cc_hvh_obkak.cfg.colors["FogChanger"])
 
     render.FogMode( MATERIAL_FOG_LINEAR )
     render.FogColor( color.r, color.g, color.b )
-    render.FogStart( hvhobkak.cfg.vars[ "FogStart" ] * SkyboxSize )
-    render.FogEnd( hvhobkak.cfg.vars[ "FogEnd" ] * SkyboxSize ) 
+    render.FogStart( exechack_cc_hvh_obkak.cfg.vars[ "FogStart" ] * SkyboxSize )
+    render.FogEnd( exechack_cc_hvh_obkak.cfg.vars[ "FogEnd" ] * SkyboxSize ) 
     render.FogMaxDensity( color.a / 255 )
     
     return true 
 end
 
-function hvhobkak.CalcMainActivity(ply, velocity)
-    if hvhobkak.cfg.vars[ "Disable animations" ] then
-        return -1, -1
-    end
-end
+
+net.Receive("rp.police.SetLocalHandcuff", function()
+    if not exechack_cc_hvh_obkak.cfg.vars["Retry on handcuff"] then return end
+    
+    RunConsoleCommand("retry")
+end)
 
 /*
     Hooks
 */
 
-hvhobkak.hooks           = {}
+exechack_cc_hvh_obkak.hooks           = {}
 
-function hvhobkak.AddHook( event, func )
-    if func == nil and not hvhobkak[ event ] then print("Failed to find hook: " .. event) return end
+function exechack_cc_hvh_obkak.AddHook( event, func )
+    if func == nil and not exechack_cc_hvh_obkak[ event ] then print("Failed to find hook: " .. event) return end
     local name = util.Base64Encode( event ) .. CurTime()
-    hook.Add( event, name, hvhobkak[ event ] or func )
-    hvhobkak.hooks[ #hvhobkak.hooks + 1 ] = { event, name }
+    hook.Add( event, name, exechack_cc_hvh_obkak[ event ] or func )
+    exechack_cc_hvh_obkak.hooks[ #exechack_cc_hvh_obkak.hooks + 1 ] = { event, name }
 end
 
-function hvhobkak.RemoveAllHooks()
-    for i = #hvhobkak.hooks, 1, -1 do
-        local chk = hvhobkak.hooks[i]
+function exechack_cc_hvh_obkak.RemoveAllHooks()
+    for i = #exechack_cc_hvh_obkak.hooks, 1, -1 do
+        local chk = exechack_cc_hvh_obkak.hooks[i]
         hook.Remove(chk[1], chk[2])
-        table.remove(hvhobkak.hooks, i)
+        table.remove(exechack_cc_hvh_obkak.hooks, i)
     end
 end
 
-function hvhobkak.Unload()
-    hvhobkak.frame:Remove()
+function exechack_cc_hvh_obkak.Unload()
+    exechack_cc_hvh_obkak.frame:Remove()
 
     ded.SetBSendPacket( true )
     ded.SetInterpolation( true )
     ded.SetSequenceInterpolation( true )
-    hvhobkak.RemoveAllHooks() 
+    exechack_cc_hvh_obkak.RemoveAllHooks() 
+
+    render.SetLightingMode( 0 )
 end
 
-hvhobkak.AddHook( "CreateMove" )
-hvhobkak.AddHook( "Think" )
+exechack_cc_hvh_obkak.AddHook( "CreateMove" )
+exechack_cc_hvh_obkak.AddHook( "Think" )
 
-hvhobkak.AddHook( "RenderScene" )
-hvhobkak.AddHook( "DrawOverlay" )
-hvhobkak.AddHook( "Ungrabbable2D", function() hvhobkak.DrawESP() hvhobkak.DrawSomeShit() end )   
+exechack_cc_hvh_obkak.AddHook( "RenderScene", exechack_cc_hvh_obkak.RenderScene )
+exechack_cc_hvh_obkak.AddHook( "DrawOverlay" )
+exechack_cc_hvh_obkak.AddHook( "Ungrabbable2D", function() exechack_cc_hvh_obkak.DrawESP() exechack_cc_hvh_obkak.DrawSomeShit() end )   
 
-hvhobkak.AddHook( "CalcView" )
-hvhobkak.AddHook( "CalcViewModelView" )
+exechack_cc_hvh_obkak.AddHook( "CalcView" )
+exechack_cc_hvh_obkak.AddHook( "CalcViewModelView" )
 
-hvhobkak.AddHook( "PreDrawViewModel" )
-hvhobkak.AddHook( "PostDrawViewModel" )
+exechack_cc_hvh_obkak.AddHook( "PreDrawViewModel" )
+exechack_cc_hvh_obkak.AddHook( "PostDrawViewModel" )
 
-hvhobkak.AddHook( "PostDrawOpaqueRenderables" )
-hvhobkak.AddHook( "PostDrawEffects" )
+exechack_cc_hvh_obkak.AddHook( "PostDrawOpaqueRenderables" )
+exechack_cc_hvh_obkak.AddHook( "PostDrawEffects" )
 
-hvhobkak.AddHook( "OnImpact" )
+exechack_cc_hvh_obkak.AddHook( "OnImpact" )
 
-hvhobkak.AddHook( "PreFrameStageNotify" )
-hvhobkak.AddHook( "PostFrameStageNotify" )
+exechack_cc_hvh_obkak.AddHook( "PreFrameStageNotify" )
+exechack_cc_hvh_obkak.AddHook( "PostFrameStageNotify" )
 
-hvhobkak.AddHook( "UpdateAnimation" )
-hvhobkak.AddHook( "ShouldUpdateAnimation" )
+exechack_cc_hvh_obkak.AddHook( "UpdateAnimation" )
+exechack_cc_hvh_obkak.AddHook( "ShouldUpdateAnimation" )
 
-hvhobkak.AddHook( "AdjustMouseSensitivity",           hvhobkak.DSADJ )
+exechack_cc_hvh_obkak.AddHook( "AdjustMouseSensitivity" )
 
-hvhobkak.AddHook( "RenderScreenspaceEffects" )
-hvhobkak.AddHook( "PostDrawTranslucentRenderables" )
+exechack_cc_hvh_obkak.AddHook( "RenderScreenspaceEffects" )
+exechack_cc_hvh_obkak.AddHook( "PostDrawTranslucentRenderables" )
 
-hvhobkak.AddHook( "PreRender",                        hvhobkak.PreRender )
-hvhobkak.AddHook( "PostRender",                       hvhobkak.PostRender )
-hvhobkak.AddHook( "PreDrawHUD",                       hvhobkak.PostRender )
+exechack_cc_hvh_obkak.AddHook( "PreRender" )
+exechack_cc_hvh_obkak.AddHook( "GetMotionBlurValues" )
 
-hvhobkak.AddHook( "DrawPhysgunBeam" )
+--exechack_cc_hvh_obkak.AddHook( "DrawPhysgunBeam" )
 
-hvhobkak.AddHook( "PrePlayerDraw" )
+exechack_cc_hvh_obkak.AddHook( "PrePlayerDraw" )
 
-hvhobkak.AddHook( "OnEntityCreated" )  
+exechack_cc_hvh_obkak.AddHook( "OnEntityCreated" )  
 
-hvhobkak.AddHook( "entity_killed" )  
-hvhobkak.AddHook( "player_hurt" )  
+exechack_cc_hvh_obkak.AddHook( "entity_killed" )  
+exechack_cc_hvh_obkak.AddHook( "player_hurt" )  
 
-hvhobkak.AddHook( "SetupWorldFog" )
-hvhobkak.AddHook( "SetupSkyboxFog" )
+exechack_cc_hvh_obkak.AddHook( "SetupWorldFog" )
+exechack_cc_hvh_obkak.AddHook( "SetupSkyboxFog" )
 
-hvhobkak.AddHook( "CalcMainActivity" )
-
+exechack_cc_hvh_obkak.AddHook( "ShouldDrawLocalPlayer" )
