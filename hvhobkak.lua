@@ -1,9 +1,14 @@
 xpcall(function()
 	require("zxcmodule")
 end,function()
-	Derma_Message("need gmod x64 chromium brench, and gmod bin module gmcl_zxcmodule_win64.dll in Steam/steamapps/common/GarrysMod/garrysmod/lua/bin","hvh obkak","ok")
+	Derma_Message("need gmod x64 chromium brench, need module gmcl_zxcmodule_win64.dll drop to Steam/steamapps/common/GarrysMod/garrysmod/lua/bin","hvh obkak","ok")
 end)
 require("zxcmodule")
+--not fixed
+ded.GetCurrentCharge = function()return 0 end
+ded.GetSimulationTime = function()return 0 end
+ded.StartShifting = function()end
+
 ded.Write = nil
 ded.Read = nil
 local exechack_cc_hvh_obkak                          = {}
@@ -4511,8 +4516,7 @@ end
 
 function exechack_cc_hvh_obkak.Spread( cmd, ang, spread )
 	if not exechack_cc_hvh_obkak.activeWeapon or not exechack_cc_hvh_obkak.cones[ exechack_cc_hvh_obkak.activeWeaponClass ] then return ang end
-
-	local dir = ded.PredictSpread( cmd, ang, spread )
+	local dir = ded.PredictSpread( cmd, spread )
 
 	local newangle = ang + dir:Angle()
 	newangle:Normalize()
@@ -4597,66 +4601,60 @@ function exechack_cc_hvh_obkak.CustomSpread.fas2( cmd, ang )
 end
 
 function exechack_cc_hvh_obkak.CustomSpread.tfa( cmd, ang )
+	if not exechack_cc_hvh_obkak.activeWeapon then return ang end
 
-    
-    return ang
+	local wep = exechack_cc_hvh_obkak.activeWeapon
+	if not (wep.CalculateConeRecoil and wep.ComputeBulletDeviation) then
+		return ang
+	end
+
+	wep:CalculateRatios()
+	local cone, rec = wep:CalculateConeRecoil()
+	if not cone or not wep:CanPrimaryAttack() then return ang end
+
+	local dYaw, dPitch = wep:ComputeBulletDeviation(1, 1, cone)
+	local aimAng = Angle(ang)
+
+	aimAng:RotateAroundAxis(aimAng:Up(),   -dYaw)
+	aimAng:RotateAroundAxis(aimAng:Right(),-dPitch)
+
+	return aimAng
 end
 
-function exechack_cc_hvh_obkak.CustomSpread.mg( cmd, ang )
-    /*
-    local pWeapon = exechack_cc_hvh_obkak.activeWeapon
+function exechack_cc_hvh_obkak.CustomSpread.arccw( cmd, ang )
+	local wep = exechack_cc_hvh_obkak.activeWeapon
 
-    local flCone = pWeapon:GetCone()
+	local burst     = wep.GetBurstCount and wep:GetBurstCount() or 0
+	local seed_src  = game.SinglePlayer() and CurTime() or cmd:CommandNumber()
+	local desync    = ArcCW.ConVars["desync"]:GetBool()
+	local desyncnum = (desync and math.random()) or 0
+	local seed_base = math.Round(util.SharedRandom(burst, -1337, 1337, seed_src) * (wep:EntIndex() % 30241) + desyncnum)
+	local spread    = ArcCW.MOAToAcc * wep:GetBuff("AccuracyMOA")
+	math.randomseed(seed_base)
 
-    math.randomseed( pWeapon.Cone.Seed + pWeapon:Clip1() + pWeapon:Ammo1() )
+	local disp = wep:GetDispersion() * ArcCW.MOAToAcc / 10
 
-    local flSpread = math.Rand( -flCone, flCone ) * 1000
+	local dir = ang:Forward()
+	wep:ApplyRandomSpread(dir, disp)
 
-    if ( flSpread < -flCone ) then
-        flSpread = -flCone
-    elseif ( flSpread > flCone ) then
-        flSpread = flCone
-    end
+	local dirry = Vector(dir.x, dir.y, dir.z)
+	math.randomseed(math.Round(util.SharedRandom(1, -1337, 1337, !game.SinglePlayer() and cmd:CommandNumber() or CurTime()) * (wep:EntIndex() % 30241) + desyncnum))
+	if !wep:GetBuff_Override("Override_NoRandSpread", wep.NoRandSpread) then
+		wep:ApplyRandomSpread(dirry, spread)
+	end
 
-    flSpread = flSpread * 0.1
+	local correctedDir = (ang:Forward() * 2) - dirry
+	if not correctedDir then 
+		return ang
+	end
 
-    local vSpread = Vector( 1, -flSpread, flSpread )
-    local newAngle = ang + vSpread:Angle()
-    newAngle:Normalize()
+	local aimAng = correctedDir:Angle()
+	aimAng:Normalize()
 
-    return newAngle
-    */
+	return aimAng
 end
 
-/*
-local function Zc(self, bd)
-    local cd = self:GetCone()
-    Xc(self.Cone.Seed + self:Clip1() + self:Ammo1())
-    local dd = Wc(-cd, cd) * 1000
-    if (dd < -cd) then
-        dd = -cd
-    elseif (dd > cd) then
-        dd = cd
-    end
-    dd = dd * 0.1
-    Yc.x = dd
-    Yc.y = -dd
-    local ed = self.Bullet
-    self:FireBullets(
-        {
-            Attacker = bd,
-            Src = bd:EyePos(),
-            Dir = (bd:EyeAngles() + bd:GetViewPunchAngles()):Forward(),
-            Spread = Yc,
-            Num = ed.NumBullets,
-            Distance = (ed.Range * 100) / 2.54,
-            Tracer = ed.Tracer and 1 or 0,
-            Callback = function(fd, gd, hd)
-            end
-        }
-    )
-end
-*/
+
 
 exechack_cc_hvh_obkak.SpreadComps = {}
 
@@ -4664,7 +4662,8 @@ exechack_cc_hvh_obkak.SpreadComps["swb"]     = exechack_cc_hvh_obkak.CustomSprea
 exechack_cc_hvh_obkak.SpreadComps["cw"]      = exechack_cc_hvh_obkak.CustomSpread.cw
 exechack_cc_hvh_obkak.SpreadComps["fas2"]    = exechack_cc_hvh_obkak.CustomSpread.fas2
 exechack_cc_hvh_obkak.SpreadComps["tfa"]     = exechack_cc_hvh_obkak.CustomSpread.tfa
-exechack_cc_hvh_obkak.SpreadComps["mg"]     = exechack_cc_hvh_obkak.CustomSpread.mg
+exechack_cc_hvh_obkak.SpreadComps["arccw"]     = exechack_cc_hvh_obkak.CustomSpread.arccw
+
 
 
 
@@ -4687,20 +4686,21 @@ function exechack_cc_hvh_obkak.NoSpread(cmd, ang)
     return ang
 end
 
-function exechack_cc_hvh_obkak.NoRecoil( ang )  
-	if exechack_cc_hvh_obkak.activeWeaponClass == "weapon_pistol" or string.StartsWith( exechack_cc_hvh_obkak.activeWeaponClass,"m9k_" ) or string.StartsWith( exechack_cc_hvh_obkak.activeWeaponClass,"bb_" ) or string.StartsWith( exechack_cc_hvh_obkak.activeWeaponClass,"unclen8_" ) then
-		return ang
-	else
-	    ang = ang - pLocalPlayer:GetViewPunchAngles()
-    end
+function exechack_cc_hvh_obkak.NoRecoil( ang )
+        local wep, class = exechack_cc_hvh_obkak.activeWeapon, exechack_cc_hvh_obkak.activeWeaponClass
 
-	return ang
+        if class == "weapon_pistol" or string.StartsWith(class, "m9k_") or string.StartsWith(class, "bb_") then return ang end
+
+        if wep.IsTFAWeapon and wep.GetViewPunchP and wep.GetViewPunchY then
+            ang.p = ang.p - wep:GetViewPunchP()
+            ang.y = ang.y - wep:GetViewPunchY()
+        elseif pLocalPlayer.GetViewPunchAngles then
+            ang = ang - pLocalPlayer:GetViewPunchAngles()
+        end
+
+        return ang
 end
 
-/*
-exechack_cc_hvh_obkak.ui.ComboBox( p, "Hitscan mode", { "Damage", "Safety", "Scale" }, "Hitscan mode" )
-
-*/
 
 function exechack_cc_hvh_obkak.ParseBones( ply, bone )
     local mdl = ply:GetModel()
@@ -5666,9 +5666,9 @@ function exechack_cc_hvh_obkak.Aim(cmd)
     if not exechack_cc_hvh_obkak.cfg.vars["Enable aimbot"] or not ply then return end
 
     local targetTime = ded.GetSimulationTime( ply:EntIndex() )
-    local timeOffset = ded.GetServerTime(cmd) - targetTime
+    local timeOffset = GetServerTime(cmd) - targetTime
 
-    local serverArriveTick = ded.GetServerTime(cmd) + ded.GetLatency(0) + ded.GetLatency(1)
+    local serverArriveTick = GetServerTime(cmd) + ded.GetLatency(0) + ded.GetLatency(1)
     local diff = serverArriveTick - targetTime
 
 
@@ -6956,18 +6956,18 @@ end
 if exechack_cc_hvh_obkak.cfg.vars["Lag fix"] then
     if exechack_cc_hvh_obkak.cfg.vars["Backshoot"] then
         local targetTime = ded.GetSimulationTime( ply:EntIndex() )
-        local timeOffset = ded.GetServerTime(cmd) - targetTime
+        local timeOffset = GetServerTime(cmd) - targetTime
 
         -- Check if we can backtrack without cl_interp
-        local serverArriveTick = ded.GetServerTime(cmd) + ded.GetLatency(0) + ded.GetLatency(1)
+        local serverArriveTick = GetServerTime(cmd) + ded.GetLatency(0) + ded.GetLatency(1)
         local diff = serverArriveTick - ply.aimshots.sw_backshoot_data.simTime
         if diff < 0.2 then 
             local tick = math.floor(0.5 + (targetTime + exechack_cc_hvh_obkak.GetLerpTime()) / flTickInterval)
             ded.SetCommandTick(cmd, tick)
         else
-            ded.SetTargetInterp(ded.GetServerTime(cmd) - targetTime)
+            ded.SetTargetInterp(GetServerTime(cmd) - targetTime)
 
-            local tick = math.floor(0.5 + ded.GetServerTime(cmd) / flTickInterval)
+            local tick = math.floor(0.5 + GetServerTime(cmd) / flTickInterval)
             ded.SetCommandTick(cmd, tick - 1)
         end
     else
@@ -7322,7 +7322,7 @@ function exechack_cc_hvh_obkak.CreateMove(cmd)
         return 
     end
 
-    exechack_cc_hvh_obkak.flServerTime = ded.GetServerTime( cmd )
+    exechack_cc_hvh_obkak.flServerTime = GetServerTime( cmd )
 
     //if ded.GetIsShifting() then exechack_cc_hvh_obkak.shiftedTicks = exechack_cc_hvh_obkak.shiftedTicks + 1 end
 
@@ -12131,3 +12131,5 @@ exechack_cc_hvh_obkak.AddHook( "SetupWorldFog" )
 exechack_cc_hvh_obkak.AddHook( "SetupSkyboxFog" )
 
 exechack_cc_hvh_obkak.AddHook( "ShouldDrawLocalPlayer" )
+
+
